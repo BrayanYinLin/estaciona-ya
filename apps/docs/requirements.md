@@ -113,7 +113,6 @@
 | HU-42      | Validar pago                         | 210           | Como arrendatario, quiero que el sistema valide mi transacción de pago para confirmar que fue exitosa.                 |
 | HU-43      | Registrar pago con reserva           | 215           | Como arrendatario, quiero que el sistema registre mi pago junto con la reserva para tener un comprobante.              |
 | HU-44      | Manejar errores de pago              | 220           | Como arrendatario, quiero recibir un mensaje de error claro si mi pago falla o se cancela.                             |
-| HU-45      | Ver política de cancelación          | 225           | Como arrendatario, quiero ver claramente la política de cancelación antes de reservar para saber mis derechos.         |
 | HU-46      | Calificar estacionamiento            | 230           | Como arrendatario, quiero dejar una calificación (1-5 estrellas) después de usar un estacionamiento.                   |
 | HU-47      | Escribir reseña                      | 235           | Como arrendatario, quiero escribir un comentario sobre mi experiencia para ayudar a futuros clientes.                  |
 | HU-48      | Mostrar calificación en perfil       | 240           | Como arrendatario, quiero que mi calificación se muestre en el perfil del propietario y del estacionamiento.           |
