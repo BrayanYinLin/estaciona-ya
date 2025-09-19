@@ -1,0 +1,13 @@
+{
+  "name": "estaciona-ya",
+  "version": "1.0.0",
+  "description": "Estaciona Ya es una plataforma web académica diseñada para facilitar la renta colaborativa de garajes y espacios de estacionamiento",
+  "main": "index.js",
+  "scripts": {
+    
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1"
+}

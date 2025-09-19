@@ -1,4 +1,4 @@
-🚗 Contribuyendo a **Estaciona Ya** 🚗
+# 🚗 Contribuyendo a **Estaciona Ya** 🚗
 
 Gracias por aportar tu tiempo y energía a este proyecto. Aquí dejamos las reglas básicas para que todos trabajemos alineados y en orden.
 
@@ -7,7 +7,7 @@ Gracias por aportar tu tiempo y energía a este proyecto. Aquí dejamos las regl
 ### 🔧 Flujo de trabajo
 
 1. **Clona** el repositorio:
-   `git clone https://github.com/tu-usuario/estaciona-ya.git`
+   `git clone https://github.com/BrayanYinLin/estaciona-ya.git`
    `cd estaciona-ya`
 
 2. **Crea tu rama** para cada cambio o feature:
@@ -50,17 +50,8 @@ Tipos principales:
 
 ### ✅ Buenas prácticas
 
-* Código **limpio y formateado** (ESLint + Prettier).
+* Código **limpio y formateado** (ESLint).
 * Commits **pequeños y descriptivos**.
 * Ramas **enfocadas en un cambio específico**.
 * Documenta lo necesario en tu PR para que otros entiendan rápido.
-
----
-
-### 🧪 Pruebas
-
-Antes de subir cambios:
-
-* Corre `npm test` para validar que todo sigue funcionando.
-* Si agregas funcionalidades nuevas, incluye pruebas que las respalden.
 
