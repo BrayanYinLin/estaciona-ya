@@ -1,0 +1,93 @@
+erDiagram
+    USERS {
+        uuid user_id PK
+        string user_name
+        string user_email
+        string user_password
+        string user_role
+        boolean user_state
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ROLES {
+       uuid role_id PK
+       varchar role_name UK
+    }
+
+    GARAGES {
+        uuid garage_id PK
+        uuid owner_id FK
+        uuid location_id
+        decimal garage_price
+        varchar garage_description
+        boolean garage_covered
+        boolean garage_has_cameras
+        varchar garage_restrictions
+        boolean garage_state
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    GARAGE_PHOTOS {
+        uuid garage_photo_id PK
+        uuid garage_id FK
+        varchar garage_url
+    }
+
+    BOOKINGS {
+        uuid booking_id PK
+        uuid garage_id FK
+        uuid owner_id FK
+        datetime start_dt
+        datetime end_dt
+        enum status
+        decimal total
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    PAYMENTS {
+        uuid payment_id PK
+        uudi booking_id FK
+        decimal amount
+        enum method_payment
+        varchar status
+        varchar boucher
+        datetime payment_date
+    }
+
+    REVIEWS {
+        int id PK
+        int booking_id FK
+        int renter_id FK
+        int rating
+        text comment
+    }
+
+    DISTRICTS {
+        uuid district_id PK
+        text district_name
+    }
+    
+    LOCATIONS {
+        uuid location_id PK
+        text location_adress
+        decimal location_latitude
+        decimal location_longitude
+        uuid district_id FK
+    }
+
+    USERS ||--o{ GARAGES : "publica"
+    USERS ||--o{ BOOKINGS : "realiza"
+    USERS  }|--|| ROLES: "tienen"
+    
+    GARAGES ||--o{ BOOKINGS : "recibe"
+    GARAGES ||--o{ GARAGE_PHOTOS : "tiene"
+    GARAGES ||--|| LOCATIONS : "reside"
+    
+    BOOKINGS ||--|| PAYMENTS : "tiene"
+    BOOKINGS ||--o{ REVIEWS : "genera"
+    USERS ||--o{ REVIEWS : "escribe"
+    LOCATIONS }|--|| DISTRICTS: "esta en"
+    
