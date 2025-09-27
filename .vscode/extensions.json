@@ -1,9 +1,10 @@
 {
   "recommendations": [
-    "vstirbu.vscode-mermaid-preview",
+    "MermaidChart.vscode-mermaid-chart",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
     "rangav.vscode-thunder-client",
-    "dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
+    "ms-vsliveshare.vsliveshare"
   ]
 }
