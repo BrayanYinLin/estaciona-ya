@@ -1,4 +1,4 @@
-import { Entity, OneToMany } from 'typeorm'
+import { Entity, OneToMany, PrimaryGeneratedColumn, Column } from 'typeorm'
 import { User } from '@auth/entities/user.entity'
 
 @Entity('tb_roles')

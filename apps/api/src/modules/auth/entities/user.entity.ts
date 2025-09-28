@@ -23,7 +23,7 @@ export class User {
   @Column({ type: 'varchar', name: 'user_password' })
   password!: string
 
-  @Column({ type: 'char', length: 8, name: 'user_password' })
+  @Column({ type: 'char', length: 8, name: 'user_dni' })
   dni!: string
 
   @ManyToOne(() => Role, (role) => role.users)
