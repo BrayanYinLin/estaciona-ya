@@ -1,24 +1,24 @@
 erDiagram
     USERS {
-        uuid user_id PK
+        int user_id PK
         string user_name
         string user_email
         string user_password
-        string user_role
+        string user_role_id
         boolean user_state
         timestamp created_at
         timestamp updated_at
     }
 
     ROLES {
-       uuid role_id PK
+       int role_id PK
        varchar role_name UK
     }
 
     GARAGES {
-        uuid garage_id PK
-        uuid owner_id FK
-        uuid location_id
+        int garage_id PK
+        int owner_id FK
+        int location_id
         decimal garage_price
         varchar garage_description
         boolean garage_covered
@@ -30,26 +30,26 @@ erDiagram
     }
 
     GARAGE_PHOTOS {
-        uuid garage_photo_id PK
-        uuid garage_id FK
+        int garage_photo_id PK
+        int garage_id FK
         varchar garage_url
     }
 
     BOOKINGS {
-        uuid booking_id PK
-        uuid garage_id FK
-        uuid owner_id FK
+        int booking_id PK
+        int garage_id FK
+        int owner_id FK
         datetime start_dt
         datetime end_dt
-        enum status
+        enum status "pending, rejected, unpaid, cancelled, paid, completed, expired"
         decimal total
         timestamp created_at
         timestamp updated_at
     }
 
     PAYMENTS {
-        uuid payment_id PK
-        uudi booking_id FK
+        int payment_id PK
+        int booking_id FK
         decimal amount
         enum method_payment
         varchar status
@@ -66,16 +66,16 @@ erDiagram
     }
 
     DISTRICTS {
-        uuid district_id PK
+        int district_id PK
         text district_name
     }
     
     LOCATIONS {
-        uuid location_id PK
+        int location_id PK
         text location_adress
         decimal location_latitude
         decimal location_longitude
-        uuid district_id FK
+        int district_id FK
     }
 
     USERS ||--o{ GARAGES : "publica"
