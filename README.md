@@ -21,6 +21,29 @@ La estructura de carpetas principal es la siguiente:
 
 Esta organización permite un desarrollo desacoplado entre el frontend y el backend, a la vez que mantiene toda la documentación y los recursos centralizados.
 
+## Variables de Entorno
+>[!note]
+>Crea un archivo punto .env y coloca los siguiente
+>Reemplaza por ejemplo <el host de tu db> por localhost
+
+```
+# Puerto para la API
+API_PORT=3000
+
+# Ambiente (librerías como vitest inyectan el valor "test")
+NODE_ENV=development
+
+# Encriptado de contraseñas
+BCRYPT_SALT_ROUNDS=10
+
+# Configuración de la Base de Datos
+HOST_DB=<el host de tu db>
+PORT_DB=<el puerto de tu mysql>
+DATABASE_DB=estacionaya_db
+USERNAME_DB=<tu usuario de la db (en caso tengas)>
+PASSWORD_DB=<tu password de la db (en caso tengas)>
+```
+
 ## Contribuciones
 
 ¡Toda contribución es bienvenida! Si deseas aportar al proyecto, es fundamental que leas nuestra guía de contribución en [CONTRIBUTING.md](CONTRIBUTING.md). Allí encontrarás todo lo necesario para comenzar, nuestro código de conducta y el proceso para enviar pull requests.

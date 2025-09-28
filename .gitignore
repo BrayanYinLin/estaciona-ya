@@ -18,11 +18,11 @@ dist-ssr/
 # ===============================
 # Environment variables
 # ===============================
-# .env
-# .env.local
-# .env.development
-# .env.test.local
-# .env.production
+.env
+.env.local
+.env.development
+.env.test.local
+.env.production
 
 # ===============================
 # Logs
