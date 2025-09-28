@@ -42,6 +42,9 @@ PORT_DB=<el puerto de tu mysql>
 DATABASE_DB=estacionaya_db
 USERNAME_DB=<tu usuario de la db (en caso tengas)>
 PASSWORD_DB=<tu password de la db (en caso tengas)>
+
+# Password para firmar los JWT
+JWT_SECRET=jEqanospuqasw17ustaw5trawrest8z27wad
 ```
 
 ## Contribuciones
