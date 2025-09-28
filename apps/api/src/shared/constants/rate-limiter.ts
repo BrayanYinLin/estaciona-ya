@@ -1,0 +1,6 @@
+const RATE_LIMITER_PARAMS = {
+  WINDOW_TIME: 15 * 60 * 1000, // 15 Minutos
+  REQUEST_LIMIT: 1000
+}
+
+export { RATE_LIMITER_PARAMS }
