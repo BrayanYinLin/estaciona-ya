@@ -1,0 +1,21 @@
+flowchart TD
+  subgraph Entrada
+    A[User fills tenant register form] --> B[POST /api/v1/tenant]
+    B --> D["Body: { name, mail, password, dni }"]
+  end
+
+  subgraph Middlewares
+    D --> G[Validation Middleware: Check body schema]
+    G --> |Valid| E["Continue to logic"]
+    G -->|Invalid| H[Return 400 Bad Request]
+  end
+
+  subgraph Lógica de Negocio
+    E --> I[Asign role Tenant]
+    I --> K[Insert user into DB]
+    K --> L[Return 201 Created]
+  end
+
+  subgraph Salida
+    L --> M[Goes to tenant dashboard]
+  end
