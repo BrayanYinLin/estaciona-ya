@@ -1,4 +1,4 @@
-import { AuthenticationTokens, AuthService } from '@auth/auth'
+import { AuthService, CreateUserResponseType } from '@auth/auth'
 import { type CreateUserDtoType } from '@auth/entities/dto/user.dto'
 import { User } from '@auth/entities/user.entity'
 import { Role } from '@roles/entities/role.entity'
@@ -14,7 +14,9 @@ export class AuthServiceImpl implements AuthService {
     private readonly roleRepository = AppDataSource.getRepository(Role)
   ) {}
 
-  async createTenant(tenant: CreateUserDtoType): Promise<AuthenticationTokens> {
+  async createTenant(
+    tenant: CreateUserDtoType
+  ): Promise<CreateUserResponseType> {
     const role = await this.roleRepository.findOne({
       where: {
         name: ROLES.TENANT
@@ -33,12 +35,21 @@ export class AuthServiceImpl implements AuthService {
       role: role
     })
 
-    const access_token = JwtUtils.generateAccessJwt({ id: userCreated.id })
+    const access_token = JwtUtils.generateAccessJwt({
+      id: userCreated.id,
+      role: { name: userCreated.role.name }
+    })
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userCreated.id })
 
     return {
       access_token,
-      refresh_token
+      refresh_token,
+      user: {
+        id: userCreated.id,
+        role: {
+          name: userCreated.role.name
+        }
+      }
     }
   }
 }
