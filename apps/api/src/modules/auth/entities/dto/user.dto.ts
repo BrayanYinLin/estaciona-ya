@@ -7,16 +7,21 @@ export const CreateUserDto = z.object({
   password: z.string().min(8),
   dni: z.string().length(8)
 })
+export type CreateUserDtoType = z.infer<typeof CreateUserDto>
 
 export const JwtUserAccessDto = z.object({
   id: z.number().positive(),
   role: JwtRoleDto
 })
+export type JwtUserAccessDtoType = z.infer<typeof JwtUserAccessDto>
 
 export const JwtUserRefreshDto = z.object({
   id: z.number().positive()
 })
-
-export type JwtUserAccessDtoType = z.infer<typeof JwtUserAccessDto>
 export type JwtUserRefreshDtoType = z.infer<typeof JwtUserRefreshDto>
-export type CreateUserDtoType = z.infer<typeof CreateUserDto>
+
+export const LoginUserDto = z.object({
+  email: z.email(),
+  password: z.string().min(8)
+})
+export type LoginUserDtoType = z.infer<typeof LoginUserDto>
