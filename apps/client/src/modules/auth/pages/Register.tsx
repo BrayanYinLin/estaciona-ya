@@ -59,7 +59,7 @@ export function Register() {
             labelContent="Contraseña"
             inputType="password"
             name="password"
-            placeholder=""
+            placeholder="Registra una contraseña"
           />
 
           <Input
