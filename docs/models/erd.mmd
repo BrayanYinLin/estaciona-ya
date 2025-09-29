@@ -36,13 +36,25 @@ erDiagram
         varchar garage_url
     }
 
-    BOOKINGS {
-        int booking_id PK
+    BOOKING_REQUESTS {
+        int request_id PK
         int garage_id FK
-        int owner_id FK
+        int renter_id FK
         datetime start_dt
         datetime end_dt
-        enum status "pending, rejected, unpaid, cancelled, paid, completed, expired"
+        enum status "pending, accepted, rejected"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    BOOKINGS {
+        int booking_id PK
+        int request_id FK
+        int garage_id FK
+        int renter_id FK
+        datetime start_dt
+        datetime end_dt
+        enum status "unpaid, paid, completed, expired, cancelled"
         decimal total
         timestamp created_at
         timestamp updated_at
@@ -80,15 +92,16 @@ erDiagram
     }
 
     USERS ||--o{ GARAGES : "publica"
-    USERS ||--o{ BOOKINGS : "realiza"
+    USERS ||--o{ BOOKING_REQUESTS : "solicita"
     USERS  }|--|| ROLES: "tienen"
     
-    GARAGES ||--o{ BOOKINGS : "recibe"
+    GARAGES ||--o{ BOOKING_REQUESTS : "recibe solicitud de"
     GARAGES ||--o{ GARAGE_PHOTOS : "tiene"
     GARAGES ||--|| LOCATIONS : "reside"
+
+    BOOKING_REQUESTS ||--|| BOOKINGS : "se convierte en"
     
     BOOKINGS ||--|| PAYMENTS : "tiene"
     BOOKINGS ||--o{ REVIEWS : "genera"
     USERS ||--o{ REVIEWS : "escribe"
     LOCATIONS }|--|| DISTRICTS: "esta en"
-    
