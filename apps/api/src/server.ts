@@ -5,6 +5,7 @@ import helmet from 'helmet'
 import { limiter } from './shared/middlewares/rate-limiter.middleware'
 import { ENDPOINTS } from '@shared/constants/endpoints'
 import { authRouter } from '@auth/routers/auth.router'
+import { errorMiddleware } from '@shared/middlewares/error.middleware'
 
 const app = express()
 
@@ -15,5 +16,7 @@ app.use(helmet())
 app.use(limiter)
 
 app.use(ENDPOINTS.AUTH, authRouter)
+
+app.use(errorMiddleware)
 
 export { app }
