@@ -1,4 +1,6 @@
 import { createRoot } from 'react-dom/client'
+import { RouterProvider } from 'react-router'
+import { routes } from './shared/routes'
 
 const root = document.getElementById('root')!
-createRoot(root).render(<h1>Hola Mundo</h1>)
+createRoot(root).render(<RouterProvider router={routes} />)
