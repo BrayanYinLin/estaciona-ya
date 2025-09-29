@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 export default function Hero() {
   return (
     <section className="bg-white dark:bg-gray-800">
@@ -69,7 +71,9 @@ export default function Hero() {
           </div>
 
           <div className="w-full mt-8">
-            <button className="btn btn-info btn-lg">Empezar</button>
+            <Link to="/sign-up">
+              <button className="btn btn-info btn-lg">Empezar</button>
+            </Link>
           </div>
         </div>
 

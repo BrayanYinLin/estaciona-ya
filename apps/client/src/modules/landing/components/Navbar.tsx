@@ -70,8 +70,11 @@ export function Navbar() {
           </li>
         </ul>
       </div> */}
-      <div className="navbar-end">
-        <Link to={'/sign-up'} className="btn">
+      <div className="navbar-end flex gap-2">
+        <Link to={'/sign-in'} className="btn btn-neutral btn-outline">
+          Iniciar Sesión
+        </Link>
+        <Link to={'/sign-up'} className="btn btn-info">
           Registrarse
         </Link>
       </div>
