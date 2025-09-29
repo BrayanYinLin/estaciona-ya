@@ -5,9 +5,12 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToMany
 } from 'typeorm'
 import { Role } from '@roles/entities/role.entity'
+import { Garage } from '@root/modules/garages/entities/garage.entity'
+import { Booking } from '@root/modules/bookings/entities/booking.entity'
 
 @Entity('tb_users')
 export class User {
@@ -38,4 +41,10 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date
+
+  @OneToMany(() => Garage, (garage) => garage.user)
+  garages!: Garage[]
+
+  @OneToMany(() => Booking, (booking) => booking.user)
+  bookings!: Booking[]
 }
