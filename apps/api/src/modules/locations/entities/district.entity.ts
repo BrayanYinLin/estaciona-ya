@@ -6,7 +6,7 @@ export class District {
   @PrimaryGeneratedColumn('increment', { name: 'district_id' })
   id!: number
 
-  @Column({ type: 'text', unique: true, name: 'district_name' })
+  @Column({ type: 'varchar', unique: true, name: 'district_name', length: 255 })
   name!: string
 
   @OneToMany(() => Location, (location) => location.district)

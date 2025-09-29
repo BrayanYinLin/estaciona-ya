@@ -12,7 +12,7 @@ export class AuthControllerImpl implements AuthController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const { access_token, refresh_token } =
+      const { access_token, refresh_token, user } =
         await this.authService.createTenant(req.body)
 
       return res
@@ -22,7 +22,7 @@ export class AuthControllerImpl implements AuthController {
           refresh_token,
           cookieOpt('refresh_token')
         )
-        .json({ access_token })
+        .json({ access_token, user })
     } catch (e) {
       next(e)
     }

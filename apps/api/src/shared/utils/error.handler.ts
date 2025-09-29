@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { AppError } from './error'
-import { JsonWebTokenError } from 'jsonwebtoken'
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import { HTTP_CODES } from '@shared/constants/http.codes'
 import { EntityNotFoundError, QueryFailedError } from 'typeorm'
 
@@ -40,13 +40,6 @@ export class ErrorHandler {
       })
     }
 
-    if (err instanceof JsonWebTokenError) {
-      return res.status(HTTP_CODES.UNAUTHORIZED).json({
-        status: HTTP_CODES.UNAUTHORIZED,
-        message: err.message
-      })
-    }
-
     return res.status(HTTP_CODES.INTERNAL).json({
       status: HTTP_CODES.INTERNAL,
       message: err.message ?? 'Internal Server Error.'
@@ -65,14 +58,23 @@ export class ErrorHandler {
     process.exit(1)
   }
 
-  private normalize(e: unknown): Error {
-    let err: Error
-    if (e instanceof AppError) {
-      return e
-    } else if (e instanceof Error) {
-      err = e
-    } else {
-      err = new Error(typeof e === 'string' ? e : JSON.stringify(e))
+  private normalize(err: unknown): Error {
+    if (err instanceof AppError) {
+      return err
+    }
+
+    if (err instanceof TokenExpiredError) {
+      return new AppError({
+        httpCode: HTTP_CODES.UNAUTHORIZED,
+        message: 'Token expirado'
+      })
+    }
+
+    if (err instanceof JsonWebTokenError) {
+      return new AppError({
+        httpCode: HTTP_CODES.UNAUTHORIZED,
+        message: 'JWT presenta errores'
+      })
     }
 
     if (err instanceof EntityNotFoundError) {
@@ -95,7 +97,12 @@ export class ErrorHandler {
       }
     }
 
-    return err
+    return new Error(
+      typeof err === 'string'
+        ? err
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ((err as any)?.message ?? 'Unexpected error')
+    )
   }
 }
 

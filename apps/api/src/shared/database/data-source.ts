@@ -9,6 +9,13 @@ import {
 } from '../config/env.config'
 import { User } from '@auth/entities/user.entity'
 import { Role } from '@roles/entities/role.entity'
+import { Garage } from '@root/modules/garages/entities/garage.entity'
+import { GaragePhoto } from '@root/modules/garages/entities/garage-photo.entity'
+import { Review } from '@root/modules/reviews/entities/review.entity'
+import { Booking } from '@root/modules/bookings/entities/booking.entity'
+import { BookingRequest } from '@root/modules/booking_requests/entities/booking-requests.entity'
+import { District } from '@root/modules/locations/entities/district.entity'
+import { Location } from '@root/modules/locations/entities/locations.entity'
 
 export const AppDataSource = new DataSource({
   connectorPackage: 'mysql2',
@@ -20,7 +27,18 @@ export const AppDataSource = new DataSource({
   database: env_database_db,
   synchronize: env_node === 'test',
   logging: true,
-  entities: [User, Role],
+  dropSchema: env_node === 'test',
+  entities: [
+    User,
+    Garage,
+    GaragePhoto,
+    Review,
+    Booking,
+    BookingRequest,
+    Location,
+    District,
+    Role
+  ],
   subscribers: [],
   migrations: []
 })
