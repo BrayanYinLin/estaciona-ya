@@ -1,0 +1,36 @@
+graph TD
+    subgraph Middleware
+        B[errorMiddleware];
+    end
+
+    subgraph "ErrorHandler Util"
+        C["ErrorHandler.handleError"]
+        D["Normalizar Error"]
+        E{"¿Es AppError?"}
+        G{"¿Es JsonWebTokenError?"}
+        I{"¿Es EntityNotFoundError?"}
+        K{"¿Es QueryFailedError con duplicado?"}
+        J["Crear AppError con 404 Not Found"]
+        L["Crear AppError con 409 Conflict"]
+    end
+
+    subgraph "HTTP Response"
+        F["Enviar respuesta HTTP con AppError.httpCode"]
+        H["Enviar respuesta HTTP con 401 Unauthorized"]
+        M["Enviar respuesta HTTP con 500 Internal Server Error"]
+    end
+
+    A["Error en la solicitud HTTP"] --> B
+    B --> C
+    C --> D
+    D --> E
+    E -- Sí --> F
+    E -- No --> G
+    G -- Sí --> H
+    G -- No --> I
+    I -- Sí --> J
+    J --> F
+    I -- No --> K
+    K -- Sí --> L
+    L --> F
+    K -- No --> M

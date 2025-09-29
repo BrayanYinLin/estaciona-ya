@@ -78,8 +78,7 @@ export class ErrorHandler {
     if (err instanceof EntityNotFoundError) {
       return new AppError({
         httpCode: HTTP_CODES.NOT_FOUND,
-        message: 'Recurso no encontrado',
-        isOperational: true
+        message: 'Recurso no encontrado'
       })
     }
 
@@ -91,8 +90,7 @@ export class ErrorHandler {
       if (code === 'ER_DUP_ENTRY' || errno === 1062) {
         return new AppError({
           httpCode: HTTP_CODES.CONFLICT,
-          message: 'Registro duplicado',
-          isOperational: true
+          message: 'Registro duplicado'
         })
       }
     }

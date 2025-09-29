@@ -4,12 +4,12 @@ type ErrorParams = {
   // code: Code
   httpCode?: HttpCode
   message: string
-  isOperational: boolean
+  isOperational?: boolean
 }
 
 export class AppError extends Error {
   public readonly httpCode?: HttpCode
-  public readonly isOperational: boolean
+  public readonly isOperational: boolean = true
 
   constructor({ httpCode, message, isOperational = true }: ErrorParams) {
     super(message)
