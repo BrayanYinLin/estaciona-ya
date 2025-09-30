@@ -12,5 +12,14 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  resolve: {
+    alias: {
+      '@shared': '/src/shared/',
+      '@landing': '/src/modules/landing/',
+      '@auth': '/src/modules/auth/',
+      '@modules': '/src/modules/',
+      '@': '/src/'
+    }
   }
 })

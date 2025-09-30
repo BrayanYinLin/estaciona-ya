@@ -21,7 +21,14 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@shared/*": ["./src/shared/*"],
+      "@landing/*": ["./src/modules/landing/*"],
+      "@auth/*": ["./src/modules/auth/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }

@@ -136,6 +136,9 @@ importers:
       tailwindcss:
         specifier: 4.1.13
         version: 4.1.13
+      zod:
+        specifier: 4.1.9
+        version: 4.1.9
       zustand:
         specifier: 5.0.8
         version: 5.0.8(@types/react@19.1.10)(react@19.1.1)
