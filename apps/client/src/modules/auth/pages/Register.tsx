@@ -1,27 +1,33 @@
 import type { FormEvent } from 'react'
-import { Input } from '../../../shared/components/Input'
-import { Select } from '../../../shared/components/Select'
-import { api } from '../../../shared/api/api'
-import { useAuthStore } from '../context/auth.context'
-import { ROLES } from '../../../shared/constants/roles'
+import { Input } from '@shared/components/Input'
+import { Select } from '@shared/components/Select'
+import { useAuthStore } from '@auth/context/auth.context'
+import { ROLES } from '@shared/constants/roles'
+import { useNavigate } from 'react-router'
+import { AuthService } from '@auth/services/auth.service'
 
 export function Register() {
   const { setAuth } = useAuthStore()
+  const navigate = useNavigate()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const endpoint =
-      formData.get('role') === ROLES.TENANT ? '/auth/tenant' : '/auth/lessor'
 
-    const { data } = await api.post(endpoint, {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      dni: formData.get('dni')
+    const { token, route } = await AuthService.signup({
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      dni: formData.get('dni') as string,
+      role: formData.get('role') as string
     })
 
-    setAuth(data.access_token)
+    if (token && route) {
+      setAuth(token)
+      navigate(route)
+    }
+
+    // TO-DO: feedback de usuario cuando se registra con datos invalidos
   }
 
   return (
