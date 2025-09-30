@@ -71,6 +71,28 @@ export class AuthServiceImpl implements AuthService {
       })
     }
 
+    const userFoundByEmail = await this.repository.findOneBy({
+      email: lessor.email
+    })
+
+    if (userFoundByEmail) {
+      throw new AppError({
+        httpCode: HTTP_CODES.CONFLICT,
+        message: 'El correo ya esta siendo utilizado'
+      })
+    }
+
+    const userFoundByDni = await this.repository.findOneBy({
+      email: lessor.dni
+    })
+
+    if (userFoundByDni) {
+      throw new AppError({
+        httpCode: HTTP_CODES.CONFLICT,
+        message: 'El documento ya esta siendo utilizado'
+      })
+    }
+
     const passwordHashed = await hash(lessor.password, env_bcrypt_salt_rounds)
 
     const userCreated = await this.repository.save({
@@ -106,6 +128,28 @@ export class AuthServiceImpl implements AuthService {
       throw new AppError({
         httpCode: 404,
         message: 'Role not encontrado'
+      })
+    }
+
+    const userFoundByEmail = await this.repository.findOneBy({
+      email: tenant.email
+    })
+
+    if (userFoundByEmail) {
+      throw new AppError({
+        httpCode: HTTP_CODES.CONFLICT,
+        message: 'El correo ya esta siendo utilizado'
+      })
+    }
+
+    const userFoundByDni = await this.repository.findOneBy({
+      email: tenant.dni
+    })
+
+    if (userFoundByDni) {
+      throw new AppError({
+        httpCode: HTTP_CODES.CONFLICT,
+        message: 'El documento ya esta siendo utilizado'
       })
     }
 
