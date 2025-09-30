@@ -3,7 +3,25 @@ import { Landing } from '../modules/landing/pages/Landing'
 import ErrorPage from './pages/ErrorPage'
 import { Register } from '../modules/auth/pages/Register'
 import { LogIn } from '../modules/auth/pages/LogIn'
-import { Dashboard } from '../modules/lessor/pages/Dashboard'
+import { RequestsLessor } from '@lessor/pages/RequestsLessor'
+import { BookingsLessor } from '@lessor/pages/BookingsLessor'
+import { GaragesLessor } from '@lessor/pages/GaragesLessor'
+import { Catalog } from '@tenant/pages/Catalog'
+
+export const FRONTEND_ROUTES = {
+  ROOT: '/',
+  SIGNUP: 'sign-up',
+  SIGNIN: 'sign-in',
+
+  TENANT: 'tenant',
+  TENANT_CATALOG: 'catalog',
+
+  LESSOR: 'lessor',
+  LESSOR_REQUEST: 'requests',
+  LESSOR_GARAGES: 'garages',
+  LESSOR_BOOKINGS: 'bookings',
+  LESSOR_GARAGES_NEW: 'garages/new'
+} as const
 
 export const routes = createBrowserRouter([
   {
@@ -15,16 +33,38 @@ export const routes = createBrowserRouter([
         element: <Landing />
       },
       {
-        path: 'sign-up',
+        path: FRONTEND_ROUTES.SIGNUP,
         element: <Register />
       },
       {
-        path: 'sign-in',
+        path: FRONTEND_ROUTES.SIGNIN,
         element: <LogIn />
       },
       {
-        path: 'dashboard/lessor',
-        element: <Dashboard />
+        path: FRONTEND_ROUTES.LESSOR,
+        children: [
+          {
+            path: FRONTEND_ROUTES.LESSOR_REQUEST,
+            element: <RequestsLessor />
+          },
+          {
+            path: FRONTEND_ROUTES.LESSOR_BOOKINGS,
+            element: <BookingsLessor />
+          },
+          {
+            path: FRONTEND_ROUTES.LESSOR_GARAGES,
+            element: <GaragesLessor />
+          }
+        ]
+      },
+      {
+        path: FRONTEND_ROUTES.TENANT,
+        children: [
+          {
+            path: FRONTEND_ROUTES.TENANT_CATALOG,
+            element: <Catalog />
+          }
+        ]
       }
     ]
   }

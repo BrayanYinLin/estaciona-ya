@@ -18,6 +18,8 @@ export default defineConfig({
       '@shared': '/src/shared/',
       '@landing': '/src/modules/landing/',
       '@auth': '/src/modules/auth/',
+      '@lessor': '/src/modules/lessor/',
+      '@tenant': '/src/modules/tenant/',
       '@modules': '/src/modules/',
       '@': '/src/'
     }

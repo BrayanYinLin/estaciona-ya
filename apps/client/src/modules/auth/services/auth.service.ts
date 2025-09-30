@@ -1,6 +1,7 @@
 import { api } from '@shared/api/api'
 import { ENDPOINTS } from '@shared/api/endpoints'
 import { API_ROLES, ROLES } from '@shared/constants/roles'
+import { FRONTEND_ROUTES } from '@shared/routes'
 import { AxiosError } from 'axios'
 import z from 'zod'
 
@@ -39,7 +40,11 @@ const signup = async ({ name, email, password, dni, role }: SignupType) => {
       route:
         data.user.role.name === API_ROLES.TENANT
           ? '/garages'
-          : '/dashboard/lessor'
+          : '/'.concat(
+              FRONTEND_ROUTES.LESSOR,
+              '/',
+              FRONTEND_ROUTES.LESSOR_REQUEST
+            )
     }
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -74,7 +79,11 @@ const login = async ({ email, password }: SigninType) => {
       route:
         data.user.role.name === API_ROLES.TENANT
           ? '/garages'
-          : '/dashboard/lessor'
+          : '/'.concat(
+              FRONTEND_ROUTES.LESSOR,
+              '/',
+              FRONTEND_ROUTES.LESSOR_REQUEST
+            )
     }
   } catch (error) {
     if (error instanceof AxiosError) {
