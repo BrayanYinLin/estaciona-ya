@@ -21,5 +21,6 @@ authRouter.post(
   checkSchema(LoginUserDto),
   controller.login.bind(controller)
 )
+authRouter.get('/refresh', controller.refresh.bind(controller))
 
 export { authRouter }

@@ -1,5 +1,10 @@
-import { AuthService, AuthenticationResponseType } from '@auth/auth'
 import {
+  AccessToken,
+  AuthService,
+  AuthenticationResponseType
+} from '@auth/auth'
+import {
+  JwtUserRefreshDtoType,
   LoginUserDtoType,
   type CreateUserDtoType
 } from '@auth/entities/dto/user.dto'
@@ -18,6 +23,29 @@ export class AuthServiceImpl implements AuthService {
     private readonly repository = AppDataSource.getRepository(User),
     private readonly roleRepository = AppDataSource.getRepository(Role)
   ) {}
+
+  async refresh(jwt: JwtUserRefreshDtoType): Promise<AccessToken> {
+    const userFound = await this.repository.findOne({
+      where: { id: jwt.id },
+      relations: ['role']
+    })
+
+    if (!userFound) {
+      throw new AppError({
+        httpCode: HTTP_CODES.NOT_FOUND,
+        message: 'User not found'
+      })
+    }
+
+    const access_token = JwtUtils.generateAccessJwt({
+      id: userFound.id,
+      role: { name: userFound.role.name }
+    })
+
+    return {
+      access_token
+    }
+  }
 
   async login(user: LoginUserDtoType): Promise<AuthenticationResponseType> {
     const userFound = await this.repository.findOne({

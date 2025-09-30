@@ -68,9 +68,28 @@ paths:
           description: Bad request
         '404':
           description: User not found
+  /auth/refresh:
+    get:
+      summary: Refreshes the access token
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Access token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
+        '401':
+          description: Unauthorized
 
 components:
   schemas:
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
     CreateUserDto:
       type: object
       properties:
