@@ -1,4 +1,5 @@
 import type { InputHTMLAttributes } from 'react'
+import { KeyIcon } from './KeyIcon'
 
 export type InputProps = {
   labelContent: string
@@ -13,55 +14,38 @@ export function Input({
   inputType,
   placeholder
 }: InputProps) {
-  return inputType === 'password' ? (
+  return (
     <fieldset className="fieldset">
       <legend className="fieldset-legend">{labelContent}</legend>
 
       <label className="input validator w-full">
-        <svg
-          className="h-[1em] opacity-50"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-        >
-          <g
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            strokeWidth="2.5"
-            fill="none"
-            stroke="currentColor"
-          >
-            <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-            <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-          </g>
-        </svg>
+        {inputType === 'password' && <KeyIcon />}
         <input
-          type="password"
+          type={inputType}
           name={name}
           required
           placeholder={placeholder}
-          minLength={8}
-          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-          title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
           className="w-full"
+          {...(inputType === 'password'
+            ? {
+                minLength: 8,
+                pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+                title:
+                  'Must be more than 8 characters, including number, lowercase letter, uppercase letter'
+              }
+            : {})}
         />
       </label>
-      <p className="validator-hint hidden">
-        Must be more than 8 characters, including
-        <br />
-        At least one number <br />
-        At least one lowercase letter <br />
-        At least one uppercase letter
-      </p>
-    </fieldset>
-  ) : (
-    <fieldset className="fieldset">
-      <legend className="fieldset-legend">{labelContent}</legend>
-      <input
-        type={inputType}
-        name={name}
-        className="input md:w-full"
-        placeholder={placeholder}
-      />
+      {inputType === 'password' && (
+        <p className="validator-hint hidden">
+          La contraseña debe tener más de 8 caracteres incluyendo:
+          <br />
+          Al menos un número
+          <br />
+          Al menos una letra minúscula <br />
+          Al menos una letra mayúscula
+        </p>
+      )}
     </fieldset>
   )
 }

@@ -1,6 +1,6 @@
 {
   "[typescriptreact]": {
-    "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
