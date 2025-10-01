@@ -1,40 +1,60 @@
-import type { InputHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, ReactNode } from 'react'
 import { KeyIcon } from './KeyIcon'
 
-export type InputProps = {
-  labelContent: string
-  name: string
+type NativeInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>
+
+export type InputProps = NativeInputProps & {
+  labelContent?: string
   inputType: InputHTMLAttributes<HTMLInputElement>['type']
-  placeholder: string
+  inputClassName?: string
+  wrapperClassName?: string
+  leftIcon?: ReactNode
+  rightSlot?: ReactNode
 }
 
 export function Input({
   labelContent,
-  name,
   inputType,
-  placeholder
+  className,
+  inputClassName,
+  wrapperClassName,
+  leftIcon,
+  rightSlot,
+  readOnly = false,
+  required,
+  ...rest
 }: InputProps) {
-  return (
-    <fieldset className="fieldset">
-      <legend className="fieldset-legend">{labelContent}</legend>
+  const appliedRequired = required ?? !readOnly
+  const fieldsetClasses = ['fieldset', wrapperClassName, className]
+    .filter(Boolean)
+    .join(' ')
+  const inputClasses = ['w-full', inputClassName].filter(Boolean).join(' ')
+  const showPasswordIcon = inputType === 'password' && !leftIcon
 
-      <label className="input validator w-full">
-        {inputType === 'password' && <KeyIcon />}
+  return (
+    <fieldset className={fieldsetClasses}>
+      {labelContent ? (
+        <legend className="fieldset-legend">{labelContent}</legend>
+      ) : null}
+
+      <label className="input validator w-full items-center gap-2">
+        {leftIcon ?? (showPasswordIcon ? <KeyIcon /> : null)}
         <input
           type={inputType}
-          name={name}
-          required
-          placeholder={placeholder}
-          className="w-full"
+          readOnly={readOnly}
+          required={appliedRequired}
+          className={inputClasses}
           {...(inputType === 'password'
             ? {
                 minLength: 8,
                 pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
                 title:
-                  'Must be more than 8 characters, including number, lowercase letter, uppercase letter'
+                  'Debe tener más de 8 caracteres e incluir número, letra minúscula y letra mayúscula'
               }
             : {})}
+          {...rest}
         />
+        {rightSlot}
       </label>
       {inputType === 'password' && (
         <p className="validator-hint hidden">

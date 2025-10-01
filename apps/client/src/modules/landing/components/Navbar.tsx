@@ -24,24 +24,17 @@ export function Navbar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow gap-2"
           >
             <li>
-              <a>Item 1</a>
+              <Link to={'/sign-in'} className="btn btn-neutral btn-outline">
+                Iniciar Sesión
+              </Link>
             </li>
             <li>
-              <a>Parent</a>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>Item 3</a>
+              <Link to={'/sign-up'} className="btn btn-info">
+                Registrarse
+              </Link>
             </li>
           </ul>
         </div>
@@ -71,10 +64,13 @@ export function Navbar() {
         </ul>
       </div> */}
       <div className="navbar-end flex gap-2">
-        <Link to={'/sign-in'} className="btn btn-neutral btn-outline">
+        <Link
+          to={'/sign-in'}
+          className="btn btn-neutral btn-outline hidden md:inline-flex"
+        >
           Iniciar Sesión
         </Link>
-        <Link to={'/sign-up'} className="btn btn-info">
+        <Link to={'/sign-up'} className="btn btn-info hidden md:inline-flex">
           Registrarse
         </Link>
       </div>
