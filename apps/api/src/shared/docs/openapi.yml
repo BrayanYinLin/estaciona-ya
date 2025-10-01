@@ -87,8 +87,14 @@ paths:
       summary: Obtiene el perfil del usuario
       tags:
         - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: http
       security:
-        - bearerAuth: []
+        - BearerAuth: []
       responses:
         '200':
           description: Perfil del usuario obtenido correctamente
@@ -103,10 +109,11 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
     ResponseUserProfile:
       type: object
@@ -121,6 +128,8 @@ components:
         dni:
           type: string
           maxLength: 8
+        state:
+          type: boolean
         role:
           type: string
     AccessToken:

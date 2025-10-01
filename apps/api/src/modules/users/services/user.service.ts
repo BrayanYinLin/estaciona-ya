@@ -30,13 +30,14 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    const { id, name, email, dni, role } = userFound
+    const { id, name, email, dni, role, state } = userFound
 
     return {
       id,
       name,
       email,
       dni,
+      state,
       role: role.name
     }
   }
