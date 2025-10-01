@@ -1,3 +1,4 @@
 export const ENDPOINTS = {
-  AUTH: '/api/auth'
+  AUTH: '/api/auth',
+  USER: '/api/user'
 } as const

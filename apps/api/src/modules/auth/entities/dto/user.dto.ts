@@ -25,3 +25,12 @@ export const LoginUserDto = z.object({
   password: z.string().min(8)
 })
 export type LoginUserDtoType = z.infer<typeof LoginUserDto>
+
+export const ResponseUserProfile = z.object({
+  id: z.number().positive(),
+  name: z.string(),
+  email: z.email(),
+  dni: z.string().length(8),
+  role: z.string()
+})
+export type ResponseUserProfileType = z.infer<typeof ResponseUserProfile>

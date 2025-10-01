@@ -82,9 +82,47 @@ paths:
                 $ref: '#/components/schemas/AccessToken'
         '401':
           description: Unauthorized
+  /user:
+    get:
+      summary: Obtiene el perfil del usuario
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Perfil del usuario obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserProfile'
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
+    ResponseUserProfile:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        dni:
+          type: string
+          maxLength: 8
+        role:
+          type: string
     AccessToken:
       type: object
       properties:

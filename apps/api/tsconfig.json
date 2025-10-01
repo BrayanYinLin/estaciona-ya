@@ -34,6 +34,12 @@
     "paths": {
       "@auth/*": ["./src/modules/auth/*"],
       "@roles/*": ["./src/modules/roles/*"],
+      "@users/*": ["./src/modules/users/*"],
+      "@bookings/*": ["./src/modules/bookings/*"],
+      "@locations/*": ["./src/modules/locations/*"],
+      "@garages/*": ["./src/modules/garages/*"],
+      "@booking_requests/*": ["./src/modules/booking_requests/*"],
+      "@reviews/*": ["./src/modules/reviews/*"],
       "@shared/*": ["./src/shared/*"],
       "@tests/*": ["./src/tests/*"],
       "@root/*": ["./src/*"]
