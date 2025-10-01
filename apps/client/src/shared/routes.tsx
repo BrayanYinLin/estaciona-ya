@@ -7,6 +7,7 @@ import { RequestsLessor } from '@lessor/pages/RequestsLessor'
 import { BookingsLessor } from '@lessor/pages/BookingsLessor'
 import { GaragesLessor } from '@lessor/pages/GaragesLessor'
 import { Catalog } from '@tenant/pages/Catalog'
+import { UserProfile } from '@modules/user/pages/UserProfile'
 
 export const FRONTEND_ROUTES = {
   ROOT: '/',
@@ -20,7 +21,9 @@ export const FRONTEND_ROUTES = {
   LESSOR_REQUEST: 'requests',
   LESSOR_GARAGES: 'garages',
   LESSOR_BOOKINGS: 'bookings',
-  LESSOR_GARAGES_NEW: 'garages/new'
+  LESSOR_GARAGES_NEW: 'garages/new',
+
+  USER_PROFILE: 'profile'
 } as const
 
 export const routes = createBrowserRouter([
@@ -65,6 +68,10 @@ export const routes = createBrowserRouter([
             element: <Catalog />
           }
         ]
+      },
+      {
+        path: FRONTEND_ROUTES.USER_PROFILE,
+        element: <UserProfile />
       }
     ]
   }
