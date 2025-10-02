@@ -4,9 +4,8 @@ import {
   AuthenticationResponseType
 } from '@auth/auth'
 import {
-  JwtUserRefreshDtoType,
   LoginUserDtoType,
-  type CreateUserDtoType
+  CreateUserDtoType
 } from '@auth/entities/dto/user.dto'
 import { User } from '@auth/entities/user.entity'
 import { Role } from '@roles/entities/role.entity'
@@ -17,6 +16,7 @@ import { compare, hash } from 'bcrypt'
 import { env_bcrypt_salt_rounds } from '@shared/config/env.config'
 import { AppError } from '@shared/utils/error'
 import { HTTP_CODES } from '@shared/constants/http.codes'
+import { RefreshTokenPayload } from '@auth/entities/dto/user-token.dto'
 
 export class AuthServiceImpl implements AuthService {
   constructor(
@@ -24,7 +24,7 @@ export class AuthServiceImpl implements AuthService {
     private readonly roleRepository = AppDataSource.getRepository(Role)
   ) {}
 
-  async refresh(jwt: JwtUserRefreshDtoType): Promise<AccessToken> {
+  async refresh(jwt: RefreshTokenPayload): Promise<AccessToken> {
     const userFound = await this.repository.findOne({
       where: { id: jwt.id },
       relations: ['role']

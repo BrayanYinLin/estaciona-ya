@@ -1,7 +1,7 @@
 import z from 'zod'
 
-export const JwtRoleDto = z.object({
+export const roleTokenPayloadSchema = z.object({
   name: z.string()
 })
 
-export type JwtRoleDtoType = z.infer<typeof JwtRoleDto>
+export type RoleTokenPayload = z.infer<typeof roleTokenPayloadSchema>

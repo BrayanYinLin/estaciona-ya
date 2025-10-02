@@ -6,13 +6,34 @@ import { Request, Response, NextFunction } from 'express'
 export class UserControllerImpl implements UserController {
   constructor(private readonly userService = new UserServiceImpl()) {}
 
+  async deactivateAccount(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const authorization = req.headers.authorization
+      const payload =
+        AuthorizationUtils.extractAuthorizationToken(authorization)
+      await this.userService.deactivateAccount({
+        id: payload.id
+      })
+
+      return res.status(204).end()
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async findProfile(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const payload = AuthorizationUtils.extractAuthorizationToken(req)
+      const authorization = req.headers.authorization
+      const payload =
+        AuthorizationUtils.extractAuthorizationToken(authorization)
       const user = await this.userService.findProfile(payload)
 
       return res.status(200).json(user)

@@ -14,7 +14,7 @@ export class AuthControllerImpl implements AuthController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const payload = JwtUtils.extractRefreshToken(req)
+      const payload = JwtUtils.extractRefreshToken(req.cookies.refresh_token)
       const { access_token } = await this.authService.refresh(payload)
 
       return res.status(HTTP_CODES.OK).json({ access_token })
