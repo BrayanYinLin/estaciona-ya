@@ -10,6 +10,7 @@ export type InputProps = NativeInputProps & {
   wrapperClassName?: string
   leftIcon?: ReactNode
   rightSlot?: ReactNode
+  disablePasswordValidator?: boolean
 }
 
 export function Input({
@@ -22,13 +23,25 @@ export function Input({
   rightSlot,
   readOnly = false,
   required,
+  disablePasswordValidator = false,
   ...rest
 }: InputProps) {
   const appliedRequired = required ?? !readOnly
-  const fieldsetClasses = ['fieldset', wrapperClassName, className]
+  const fieldsetClasses = [
+    'fieldset',
+    wrapperClassName,
+    className,
+    disablePasswordValidator ? '' : 'validator-enabled' // Clase condicional
+  ]
     .filter(Boolean)
     .join(' ')
-  const inputClasses = ['w-full', inputClassName].filter(Boolean).join(' ')
+  const inputClasses = [
+    'w-full',
+    inputClassName,
+    disablePasswordValidator ? '' : 'input-validator' // Clase condicional
+  ]
+    .filter(Boolean)
+    .join(' ')
   const showPasswordIcon = inputType === 'password' && !leftIcon
 
   return (
@@ -37,14 +50,21 @@ export function Input({
         <legend className="fieldset-legend">{labelContent}</legend>
       ) : null}
 
-      <label className="input validator w-full items-center gap-2">
+      <label
+        className={[
+          'input w-full items-center gap-2',
+          disablePasswordValidator ? '' : 'validator'
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         {leftIcon ?? (showPasswordIcon ? <KeyIcon /> : null)}
         <input
           type={inputType}
           readOnly={readOnly}
           required={appliedRequired}
           className={inputClasses}
-          {...(inputType === 'password'
+          {...(inputType === 'password' && !disablePasswordValidator
             ? {
                 minLength: 8,
                 pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
@@ -56,7 +76,7 @@ export function Input({
         />
         {rightSlot}
       </label>
-      {inputType === 'password' && (
+      {inputType === 'password' && !disablePasswordValidator && (
         <p className="validator-hint hidden">
           La contraseña debe tener más de 8 caracteres incluyendo:
           <br />

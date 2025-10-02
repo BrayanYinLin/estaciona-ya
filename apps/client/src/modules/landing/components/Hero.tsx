@@ -2,11 +2,11 @@ import { Link } from 'react-router'
 
 export default function Hero() {
   return (
-    <section className="bg-white dark:bg-gray-800">
+    <section className="bg-[url(/img/hero_bg.jpg)] bg-cover bg-center lg:bg-none lg:bg-gray-900 text-shadow-lg/50">
       <div className="container flex flex-col px-20 py-10 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
         <div className="w-full lg:w-1/2">
           <div className="lg:max-w-lg">
-            <h1 className="text-3xl font-bold tracking-wide text-gray-800 dark:text-white lg:text-5xl">
+            <h1 className="text-3xl font-bold tracking-wide text-gray-800 dark:text-white lg:text-5xl ">
               Renta tu estacionamiento fácil y rápido
             </h1>
 
@@ -77,7 +77,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center w-full h-96 lg:w-1/2">
+        <div className="items-center justify-center w-full h-96 lg:w-1/2 hidden lg:flex">
           <img
             className="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl"
             src="/img/hero_bg.jpg"
