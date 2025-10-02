@@ -1,5 +1,7 @@
 export const ENDPOINTS = {
   TENANT: '/auth/tenant',
   LESSOR: '/auth/lessor',
-  LOGIN: '/auth/login'
+  LOGIN: '/auth/login',
+  REFRESH: '/auth/refresh',
+  USER: '/user'
 }
