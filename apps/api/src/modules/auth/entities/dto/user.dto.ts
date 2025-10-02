@@ -27,6 +27,7 @@ export const ResponseUserProfile = z.object({
   email: z.email(),
   dni: z.string().length(8),
   state: z.boolean(),
-  role: z.string()
+  role: z.string(),
+  photo: z.string().nullable()
 })
 export type ResponseUserProfileType = z.infer<typeof ResponseUserProfile>

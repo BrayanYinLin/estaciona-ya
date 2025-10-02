@@ -43,7 +43,7 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    const { id, name, email, dni, role, state } = userFound
+    const { id, name, email, dni, role, state, photo } = userFound
 
     return {
       id,
@@ -51,7 +51,8 @@ export class UserServiceImpl implements UserService {
       email,
       dni,
       state,
-      role: role.name
+      role: role.name,
+      photo
     }
   }
 
@@ -70,7 +71,7 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    const { id, name, email, dni, role, state } = userFound
+    const { id, name, email, dni, role, state, photo } = userFound
 
     return {
       id,
@@ -78,7 +79,8 @@ export class UserServiceImpl implements UserService {
       email,
       dni,
       state,
-      role: role.name
+      role: role.name,
+      photo
     }
   }
 }

@@ -26,6 +26,9 @@ export class User {
   @Column({ type: 'varchar', name: 'user_password' })
   password!: string
 
+  @Column({ type: 'varchar', name: 'user_photo_url', nullable: true })
+  photo: string | null = null
+
   @Column({ type: 'char', unique: true, length: 8, name: 'user_dni' })
   dni!: string
 
