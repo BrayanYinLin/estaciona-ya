@@ -20,6 +20,7 @@ export default defineConfig({
       '@auth': '/src/modules/auth/',
       '@lessor': '/src/modules/lessor/',
       '@tenant': '/src/modules/tenant/',
+      '@user': '/src/modules/user/',
       '@modules': '/src/modules/',
       '@': '/src/'
     }
