@@ -12,6 +12,7 @@ export function PasswordSection() {
         inputType={inputType}
         name="currentPassword"
         placeholder="Ingresa tu contraseña actual"
+        disablePasswordValidator={true}
       />
 
       <div className="flex flex-col gap-1">
