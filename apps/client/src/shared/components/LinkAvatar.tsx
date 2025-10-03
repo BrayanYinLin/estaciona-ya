@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 
 export type AvatarProps = {
   photo: string | null
-  className: HTMLAttributes<HTMLElementType>['className']
+  className?: HTMLAttributes<HTMLElementType>['className']
 }
 
 export function LinkAvatar({ photo, className }: AvatarProps) {
