@@ -15,7 +15,7 @@ export function ProfileHeader({
         className="rounded-full h-16 w-16 object-cover"
       />
       <h1 className="text-2xl font-semibold">{name}</h1>
-      <span className="text-sm text-base-content/60">{role}</span>
+      <div className="badge badge-neutral">{role}</div>
     </div>
   )
 }
