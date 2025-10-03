@@ -18,4 +18,16 @@ export class UserService {
       throw new Error('Error desconocido al obtener el perfil')
     }
   }
+  static async deactivateProfile() {
+    try {
+      await api.delete(ENDPOINTS.USER)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.message || 'Error al obtener el perfil'
+        )
+      }
+      throw new Error('Error desconocido al obtener el perfil')
+    }
+  }
 }

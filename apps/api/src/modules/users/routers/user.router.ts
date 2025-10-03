@@ -5,6 +5,6 @@ const userRouter = Router()
 const controller = new UserControllerImpl()
 
 userRouter.get('/', controller.findProfile.bind(controller))
-userRouter.get('/:userId', controller.deactivateAccount.bind(controller))
+userRouter.delete('/', controller.deactivateAccount.bind(controller))
 
 export { userRouter }

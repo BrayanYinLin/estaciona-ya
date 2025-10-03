@@ -14,7 +14,8 @@ export class UserServiceImpl implements UserService {
     const userFound = await this.userRepository.findOne({
       where: {
         id: user.id
-      }
+      },
+      relations: ['role']
     })
 
     if (!userFound) {
