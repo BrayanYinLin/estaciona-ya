@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { UserService } from '../services/user.service'
 
-type UserProfile = {
+export type UserProfile = {
   id: number
   name: string
   email: string
@@ -16,6 +16,7 @@ interface UserStore {
   loading: boolean
   error: string | null
   recoverUser: () => Promise<void>
+  deactiveUser: () => Promise<void>
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -32,6 +33,17 @@ export const useUserStore = create<UserStore>((set) => ({
         set({ user: null, loading: false, error: err.message })
       } else {
         set({ user: null, loading: false, error: 'Error inesperado' })
+      }
+    }
+  },
+  deactiveUser: async () => {
+    try {
+      await UserService.deactivateProfile()
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        set({ error: error.message })
+      } else {
+        set({ error: 'Error inesperado' })
       }
     }
   }

@@ -69,7 +69,7 @@ export function Input({
                 minLength: 8,
                 pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
                 title:
-                  'Debe tener más de 8 caracteres e incluir número, letra minúscula y letra mayúscula'
+                  'Debe tener mínimo 8 caracteres e incluir número, letra minúscula y letra mayúscula'
               }
             : {})}
           {...rest}
@@ -78,7 +78,7 @@ export function Input({
       </label>
       {inputType === 'password' && !disablePasswordValidator && (
         <p className="validator-hint hidden">
-          La contraseña debe tener más de 8 caracteres incluyendo:
+          La contraseña debe tener mínimo 8 caracteres incluyendo:
           <br />
           Al menos un número
           <br />

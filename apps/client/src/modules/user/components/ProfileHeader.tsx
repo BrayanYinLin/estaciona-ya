@@ -5,12 +5,12 @@ export function ProfileHeader({
 }: {
   name: string
   role: string
-  profilePic: string
+  profilePic: string | null
 }) {
   return (
     <div className="flex items-center gap-4">
       <img
-        src={profilePic}
+        src={profilePic ?? 'https://placehold.co/150x150'}
         alt=""
         className="rounded-full h-16 w-16 object-cover"
       />

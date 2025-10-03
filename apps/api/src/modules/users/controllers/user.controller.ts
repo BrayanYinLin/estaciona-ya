@@ -15,6 +15,7 @@ export class UserControllerImpl implements UserController {
       const authorization = req.headers.authorization
       const payload =
         AuthorizationUtils.extractAuthorizationToken(authorization)
+      console.log(payload)
       await this.userService.deactivateAccount({
         id: payload.id
       })

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 
-export function PhotoUploader() {
+export type PhotoUploaderProps = {
+  defaultPreview: string | null
+}
+export function PhotoUploader({ defaultPreview }: PhotoUploaderProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(defaultPreview)
 
   useEffect(() => {
     return () => {
