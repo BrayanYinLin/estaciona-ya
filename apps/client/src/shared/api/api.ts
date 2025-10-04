@@ -42,13 +42,11 @@ api.interceptors.response.use(
         )
         useAuthStore.getState().setAuth(data.access_token)
 
-        console.log('Recovering token ' + data.access_token)
         originalRequest.headers = {
           ...originalRequest.headers,
           Authorization: `Bearer ${useAuthStore.getState().access_token}`
         }
 
-        console.log('Resending request')
         return api(originalRequest)
       } catch (e) {
         return Promise.reject(e)
