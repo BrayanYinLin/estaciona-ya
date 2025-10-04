@@ -22,6 +22,9 @@ export function PasswordSection() {
           name="newPassword"
           placeholder="Ingresa tu nueva contraseña"
           required={false}
+          minLength={8} // Validación explícita
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" // Validación explícita
+          title="Debe tener mínimo 8 caracteres e incluir número, letra minúscula y letra mayúscula"
         />
         <span className="text-xs text-base-content/60">
           Este campo debe estar vacío si no deseas actualizarla.
