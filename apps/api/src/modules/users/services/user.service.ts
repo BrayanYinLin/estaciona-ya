@@ -10,13 +10,28 @@ import { AppDataSource } from '@shared/database/data-source'
 import { AppError, DomainError } from '@shared/utils/error'
 import { UserId, UserService } from '@users/user'
 import { randomUUID } from 'node:crypto'
-import { writeFile, unlink } from 'node:fs/promises'
+import { writeFile, unlink, access, constants } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 
 export class UserServiceImpl implements UserService {
   constructor(
     private readonly userRepository = AppDataSource.getRepository(User)
   ) {}
+
+  async findPhoto(filename: string): Promise<string> {
+    try {
+      const rutaFoto = join(process.cwd(), FILES_ROUTE, filename)
+
+      await access(rutaFoto, constants.F_OK)
+
+      return rutaFoto
+    } catch {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.PHOTO_ERROR.code,
+        message: DOMAIN_ERRORS.PHOTO_ERROR.code
+      })
+    }
+  }
 
   async updateProfile(
     dto: UpdateUserDtoType,

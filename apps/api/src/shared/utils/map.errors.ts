@@ -33,6 +33,21 @@ export const mapDomainToHttp = (error: DomainError): AppError => {
         message: error.message,
         httpCode: HTTP_CODES.INTERNAL
       })
+    case 'TOKEN_MISSING':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.UNAUTHORIZED
+      })
+    case 'TOKEN_ERROR':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.UNAUTHORIZED
+      })
+    case 'PHOTO_ERROR':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.NOT_FOUND
+      })
     default:
       return new AppError({
         message: error.message,

@@ -15,6 +15,7 @@ export interface UserService {
     dto: UpdateUserDtoType,
     urlForPhoto: string
   ): Promise<ResponseUserProfileType>
+  findPhoto(filename: string): Promise<string>
 }
 
 export interface UserController {
@@ -29,6 +30,11 @@ export interface UserController {
     next: NextFunction
   ): Promise<Response | void>
   updateProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  findPhoto(
     req: Request,
     res: Response,
     next: NextFunction

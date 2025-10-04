@@ -30,6 +30,10 @@ export const DOMAIN_ERRORS = {
   TOKEN_MISSING: {
     code: 'TOKEN_MISSING',
     message: 'No se proporcionó token de autenticación'
+  },
+  PHOTO_ERROR: {
+    code: 'PHOTO_ERROR',
+    message: 'Foto no encontrada'
   }
 } as const
 

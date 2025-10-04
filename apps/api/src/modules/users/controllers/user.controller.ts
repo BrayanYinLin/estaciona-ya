@@ -1,3 +1,4 @@
+import { ENDPOINTS } from '@shared/constants/endpoints'
 import { AuthorizationUtils } from '@shared/utils/authorization.utils'
 import { UserServiceImpl } from '@users/services/user.service'
 import { UserController } from '@users/user'
@@ -5,6 +6,21 @@ import { Request, Response, NextFunction } from 'express'
 
 export class UserControllerImpl implements UserController {
   constructor(private readonly userService = new UserServiceImpl()) {}
+
+  async findPhoto(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const photo = req.params.photoId
+      const url = await this.userService.findPhoto(photo)
+
+      return res.sendFile(url)
+    } catch (e) {
+      next(e)
+    }
+  }
 
   async updateProfile(
     req: Request,
@@ -21,7 +37,7 @@ export class UserControllerImpl implements UserController {
             buffer: req.file?.buffer
           }
         },
-        `${req.protocol}://${req.get('host')}/api/user/photo/`
+        ENDPOINTS.USER.concat('/photo/')
       )
 
       return res.json(user)
