@@ -4,7 +4,7 @@ export function DangerZone() {
   const { deactiveUser } = useUserStore()
 
   return (
-    <section className="flex flex-col gap-3 mt-8">
+    <section className="flex flex-col gap-3">
       <p className="text-sm text-base-content/70">
         Desactivar tu cuenta eliminará el acceso de inmediato.
       </p>
