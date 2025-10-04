@@ -1,13 +1,26 @@
 import { Input } from '@shared/components/Input'
 import { PasswordSection } from './PasswordSection'
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { DangerZone } from './DangerZone'
 import { PhotoUploader } from './PhotoUploader'
-import type { UserProfile } from '@user/context/user.context'
+import { type UserProfile, useUserStore } from '@user/context/user.context'
 
 export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState<FormData>(new FormData())
+  const { updateProfile } = useUserStore()
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const newForm = new FormData()
+    if ((formData.get('photo') as File) !== null) {
+      newForm.append('photo', formData.get('photo') as File)
+    }
+    newForm.append('name', data.get('name') as string)
+    newForm.append('email', data.get('email') as string)
+    newForm.append('dni', data.get('dni') as string)
+
+    await updateProfile(newForm)
   }
 
   const handlePasswordChange = (event: FormEvent<HTMLFormElement>) => {
@@ -56,7 +69,11 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
         </section>
 
         <div className="flex flex-col gap-8 mt-5 lg:mt-0 col-span-1">
-          <PhotoUploader defaultPreview={photo} />
+          <PhotoUploader
+            defaultPreview={photo}
+            formData={formData}
+            setFormData={setFormData}
+          />
         </div>
         <div className="col-span-2 row-span-1 row-start-2 h-auto">
           <button type="submit" className="btn btn-outline btn-primary w-fit">

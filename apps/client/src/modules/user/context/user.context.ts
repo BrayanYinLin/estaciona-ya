@@ -18,6 +18,7 @@ interface UserStore {
   error: string | null
   recoverUser: () => Promise<void>
   deactiveUser: () => Promise<void>
+  updateProfile: (formData: FormData) => Promise<void>
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -45,6 +46,19 @@ export const useUserStore = create<UserStore>((set) => ({
         set({ error: error.message })
       } else {
         set({ error: 'Error inesperado' })
+      }
+    }
+  },
+  updateProfile: async (formData: FormData) => {
+    set({ loading: true, error: null })
+    try {
+      const user = await UserService.updateProfile(formData)
+      set({ user, loading: false })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        set({ user: null, loading: false, error: err.message })
+      } else {
+        set({ user: null, loading: false, error: 'Error inesperado' })
       }
     }
   }

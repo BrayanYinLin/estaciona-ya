@@ -28,14 +28,19 @@ export class UserControllerImpl implements UserController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
+      const file =
+        req.file?.originalname !== undefined
+          ? {
+              originalname: req.file?.originalname,
+              mimetype: req.file?.mimetype,
+              buffer: req.file?.buffer
+            }
+          : undefined
+
       const user = await this.userService.updateProfile(
         {
           ...req.body,
-          photo: {
-            originalname: req.file?.originalname,
-            mimetype: req.file?.mimetype,
-            buffer: req.file?.buffer
-          }
+          photo: file
         },
         ENDPOINTS.USER.concat('/photo/')
       )

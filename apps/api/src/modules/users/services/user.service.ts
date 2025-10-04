@@ -37,6 +37,7 @@ export class UserServiceImpl implements UserService {
     dto: UpdateUserDtoType,
     urlForPhoto: string
   ): Promise<ResponseUserProfileType> {
+    console.log(dto.photo)
     const userRecoveredForPhoto = await this.userRepository.findOne({
       where: { id: dto.id }
     })
