@@ -64,7 +64,7 @@ export class AuthServiceImpl implements AuthService {
 
     if (!isCorrect) {
       throw new AppError({
-        httpCode: HTTP_CODES.BAD_GATEWAY,
+        httpCode: HTTP_CODES.BAD_REQUEST,
         message: 'Contraseña incorrecta'
       })
     }

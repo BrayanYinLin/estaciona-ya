@@ -22,5 +22,6 @@ authRouter.post(
   controller.login.bind(controller)
 )
 authRouter.get('/refresh', controller.refresh.bind(controller))
+authRouter.get('/logout', controller.logout.bind(controller))
 
 export { authRouter }

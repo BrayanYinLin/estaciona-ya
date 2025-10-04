@@ -82,6 +82,16 @@ paths:
                 $ref: '#/components/schemas/AccessToken'
         '401':
           description: Unauthorized
+  /auth/logout:
+    get:
+      summary: Cierra la sesión del usuario
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Sesión cerrada correctamente
+        '401':
+          description: Unauthorized
   /user:
     get:
       summary: Obtiene el perfil del usuario
@@ -106,7 +116,7 @@ paths:
           description: Unauthorized
         '404':
           description: User not found
-  delete:
+    delete:
       summary: Desactivar el usuario
       tags:
         - User
@@ -129,6 +139,59 @@ paths:
           description: Unauthorized
         '404':
           description: User not found
+  /user/me:
+    patch:
+      summary: Actualiza el perfil del usuario
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                dni:
+                  type: string
+                  maxLength: 8
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Perfil del usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserProfile'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+  /user/photo/{photoId}:
+    get:
+      summary: Obtiene la foto de un usuario
+      tags:
+        - User
+      parameters:
+        - name: photoId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Foto del usuario obtenida correctamente
+          content:
+            image/*: {}
+        '404':
+          description: Foto no encontrada
 
 components:
   securitySchemes:
