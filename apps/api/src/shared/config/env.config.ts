@@ -6,7 +6,6 @@ const env_path_variables = join(cwd(), '../../.env')
 process.loadEnvFile(env_path_variables)
 
 const env = envSchema.parse(process.env)
-// console.log(env)
 
 export const {
   API_PORT: env_api_port,

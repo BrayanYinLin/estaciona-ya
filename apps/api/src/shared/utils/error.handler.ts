@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
-import { AppError } from './error'
+import { AppError, DomainError } from './error'
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import { HTTP_CODES } from '@shared/constants/http.codes'
 import { EntityNotFoundError, QueryFailedError } from 'typeorm'
+import { mapDomainToHttp } from './map.errors'
 
 export const ERROR_SOURCE = {
   HTTP: 'http',
@@ -59,6 +60,10 @@ export class ErrorHandler {
   }
 
   private normalize(err: unknown): Error {
+    if (err instanceof DomainError) {
+      return mapDomainToHttp(err)
+    }
+
     if (err instanceof AppError) {
       return err
     }

@@ -48,7 +48,7 @@ const signup = async ({ name, email, password, dni, role }: SignupType) => {
     }
   } catch (error) {
     if (error instanceof AxiosError) {
-      console.log(error.response?.data)
+      console.error(error.response?.data)
       return {
         status: error.response?.data.status,
         message: error.response?.data.message
@@ -87,7 +87,7 @@ const login = async ({ email, password }: SigninType) => {
     }
   } catch (error) {
     if (error instanceof AxiosError) {
-      console.log(error.response?.data)
+      console.error(error.response?.data)
       return {
         status: error.response?.data.status,
         message: error.response?.data.message

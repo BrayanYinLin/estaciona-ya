@@ -9,8 +9,13 @@ import { errorMiddleware } from '@shared/middlewares/error.middleware'
 import swaggerUI from 'swagger-ui-express'
 import { swaggerDocs } from '@shared/docs/parse.docs'
 import { userRouter } from '@users/routers/user.router'
+import { join } from 'node:path'
+import { mkdirSync } from 'node:fs'
+import { FILES_ROUTE } from '@shared/constants/files.route'
 
 const app = express()
+const uploadDir = join(process.cwd(), FILES_ROUTE)
+mkdirSync(uploadDir, { recursive: true })
 
 app.use(express.json())
 app.use(morgan('dev'))

@@ -11,7 +11,7 @@ export const checkSchema = <T>(schema: ZodType<T>) => {
       return next(
         new AppError({
           httpCode: HTTP_CODES.BAD_REQUEST,
-          message: 'Datos incorrectos'
+          message: error.message
         })
       )
     }

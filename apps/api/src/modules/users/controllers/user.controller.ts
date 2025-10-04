@@ -1,3 +1,4 @@
+import { ENDPOINTS } from '@shared/constants/endpoints'
 import { AuthorizationUtils } from '@shared/utils/authorization.utils'
 import { UserServiceImpl } from '@users/services/user.service'
 import { UserController } from '@users/user'
@@ -5,6 +6,45 @@ import { Request, Response, NextFunction } from 'express'
 
 export class UserControllerImpl implements UserController {
   constructor(private readonly userService = new UserServiceImpl()) {}
+
+  async findPhoto(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const photo = req.params.photoId
+      const url = await this.userService.findPhoto(photo)
+
+      return res.sendFile(url)
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  async updateProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const user = await this.userService.updateProfile(
+        {
+          ...req.body,
+          photo: {
+            originalname: req.file?.originalname,
+            mimetype: req.file?.mimetype,
+            buffer: req.file?.buffer
+          }
+        },
+        ENDPOINTS.USER.concat('/photo/')
+      )
+
+      return res.json(user)
+    } catch (e) {
+      next(e)
+    }
+  }
 
   async deactivateAccount(
     req: Request,
@@ -15,7 +55,6 @@ export class UserControllerImpl implements UserController {
       const authorization = req.headers.authorization
       const payload =
         AuthorizationUtils.extractAuthorizationToken(authorization)
-      console.log(payload)
       await this.userService.deactivateAccount({
         id: payload.id
       })
