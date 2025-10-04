@@ -1,4 +1,7 @@
-import { ResponseUserProfileType } from '@auth/entities/dto/user.dto'
+import {
+  ResponseUserProfileType,
+  UpdateUserDtoType
+} from '@auth/entities/dto/user.dto'
 import { NextFunction, Request, Response } from 'express'
 
 export type UserId = {
@@ -8,6 +11,10 @@ export type UserId = {
 export interface UserService {
   findProfile(user: UserId): Promise<ResponseUserProfileType>
   deactivateAccount(user: UserId): Promise<ResponseUserProfileType>
+  updateProfile(
+    dto: UpdateUserDtoType,
+    urlForPhoto: string
+  ): Promise<ResponseUserProfileType>
 }
 
 export interface UserController {
@@ -17,6 +24,11 @@ export interface UserController {
     next: NextFunction
   ): Promise<Response | void>
   deactivateAccount(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  updateProfile(
     req: Request,
     res: Response,
     next: NextFunction

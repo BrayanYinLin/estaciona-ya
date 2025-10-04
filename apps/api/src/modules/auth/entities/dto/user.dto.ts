@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+export const UserIdentifierSchema = z.number().positive()
+
 export const PasswordSchema = z
   .string()
   .min(8, 'Password must be 8 characters length')
@@ -22,7 +24,7 @@ export const LoginUserDto = z.object({
 export type LoginUserDtoType = z.infer<typeof LoginUserDto>
 
 export const ResponseUserProfile = z.object({
-  id: z.number().positive(),
+  id: UserIdentifierSchema,
   name: z.string(),
   email: z.email(),
   dni: z.string().length(8),
@@ -31,3 +33,19 @@ export const ResponseUserProfile = z.object({
   photo: z.string().nullable()
 })
 export type ResponseUserProfileType = z.infer<typeof ResponseUserProfile>
+
+export const uploadFileSchema = z.object({
+  originalname: z.string(),
+  mimetype: z.string(),
+  buffer: z.instanceof(Buffer)
+})
+
+export const UpdateUserDto = z.object({
+  id: UserIdentifierSchema,
+  name: z.string().optional(),
+  email: z.email().optional(),
+  dni: z.string().length(8).optional(),
+  state: z.boolean().optional(),
+  photo: uploadFileSchema.optional()
+})
+export type UpdateUserDtoType = z.infer<typeof UpdateUserDto>

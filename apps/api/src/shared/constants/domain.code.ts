@@ -22,6 +22,14 @@ export const DOMAIN_ERRORS = {
   INTERNAL_ERROR: {
     code: 'INTERNAL_ERROR',
     message: 'Ocurrió un error inesperado en la lógica de dominio'
+  },
+  TOKEN_ERROR: {
+    code: 'TOKEN_ERROR',
+    message: 'No se pudo verificar la autenticación: token inválido o expirado'
+  },
+  TOKEN_MISSING: {
+    code: 'TOKEN_MISSING',
+    message: 'No se proporcionó token de autenticación'
   }
 } as const
 

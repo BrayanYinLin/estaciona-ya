@@ -45,3 +45,8 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# ===============================
+# Fotos que se guardan en la API
+# ===============================
+uploads/
