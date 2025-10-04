@@ -1,9 +1,21 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction
+} from 'react'
 
 export type PhotoUploaderProps = {
   defaultPreview: string | null
+  formData: FormData
+  setFormData: Dispatch<SetStateAction<FormData>>
 }
-export function PhotoUploader({ defaultPreview }: PhotoUploaderProps) {
+export function PhotoUploader({
+  defaultPreview,
+  setFormData
+}: PhotoUploaderProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [preview, setPreview] = useState<string | null>(defaultPreview)
 
@@ -25,6 +37,11 @@ export function PhotoUploader({ defaultPreview }: PhotoUploaderProps) {
       setPreview(null)
       return
     }
+
+    setFormData((prev) => {
+      prev.append('photo', file)
+      return prev
+    })
 
     const nextPreview = URL.createObjectURL(file)
     setPreview((current) => {
@@ -53,6 +70,7 @@ export function PhotoUploader({ defaultPreview }: PhotoUploaderProps) {
           accept="image/*"
           ref={inputRef}
           className="hidden"
+          name="photo"
           onChange={handleFileChange}
         />
       </div>

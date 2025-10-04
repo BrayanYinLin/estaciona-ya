@@ -18,6 +18,7 @@ export class UserService {
       throw new Error('Error desconocido al obtener el perfil')
     }
   }
+
   static async deactivateProfile() {
     try {
       await api.delete(ENDPOINTS.USER)
@@ -28,6 +29,24 @@ export class UserService {
         )
       }
       throw new Error('Error desconocido al obtener el perfil')
+    }
+  }
+
+  static async updateProfile(formData: FormData) {
+    try {
+      const { data } = await api.patch<UserResponseProfile>(
+        ENDPOINTS.USER.concat('/me'),
+        formData
+      )
+
+      return data
+    } catch (e: unknown) {
+      if (e instanceof AxiosError) {
+        throw new Error(
+          e.response?.data?.message || 'Error actualizando perfil'
+        )
+      }
+      throw new Error('Error desconocido al actualizar el perfil')
     }
   }
 }
