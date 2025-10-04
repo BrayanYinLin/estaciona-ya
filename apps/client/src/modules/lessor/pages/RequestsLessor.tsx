@@ -1,4 +1,4 @@
-import { LessorNavbar } from '@lessor/components/LessorNavbar'
+import { UserNavBar } from '@shared/components/UserNavBar'
 import { useUserStore } from '@user/context/user.context'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
@@ -17,9 +17,13 @@ export function RequestsLessor() {
     }
   }, [loading, error])
 
+  if (user === null) {
+    return <main>Ha ocurrido algo</main>
+  }
+
   return (
     <main>
-      <LessorNavbar profilePic={user?.photo ?? null} />
+      <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
     </main>
   )
 }

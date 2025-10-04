@@ -31,7 +31,7 @@ export function UserProfile() {
       <div className="flex flex-wrap px-4 justify-start w-full lg:w-[1000px]">
         <ProfileHeader
           name={user.name}
-          role={user.role === 'lessor' ? 'Arrendador' : 'Arrendatario'}
+          role={user.role}
           profilePic={user.photo}
         />
         {/* <SettingsButton /> */}

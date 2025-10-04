@@ -1,13 +1,14 @@
 import { create } from 'zustand'
 import { UserService } from '../services/user.service'
 
+export type UserRole = 'lessor' | 'tenant'
 export type UserProfile = {
   id: number
   name: string
   email: string
   dni: string
   state: boolean
-  role: 'lessor' | 'tenant'
+  role: UserRole
   photo: null | string
 }
 
