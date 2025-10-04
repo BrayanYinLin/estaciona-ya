@@ -19,6 +19,7 @@ interface UserStore {
   recoverUser: () => Promise<void>
   deactiveUser: () => Promise<void>
   updateProfile: (formData: FormData) => Promise<void>
+  logOutUser: () => void
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -61,5 +62,6 @@ export const useUserStore = create<UserStore>((set) => ({
         set({ user: null, loading: false, error: 'Error inesperado' })
       }
     }
-  }
+  },
+  logOutUser: () => set({ user: null })
 }))
