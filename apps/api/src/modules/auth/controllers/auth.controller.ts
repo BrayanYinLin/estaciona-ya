@@ -8,6 +8,21 @@ import { Request, Response, NextFunction } from 'express'
 export class AuthControllerImpl implements AuthController {
   constructor(private readonly authService = new AuthServiceImpl()) {}
 
+  async logout(
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      return res
+        .status(HTTP_CODES.OK)
+        .clearCookie(COOKIES.REFRESH_TOKEN, cookieOpt('refresh_token'))
+        .end()
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async refresh(
     req: Request,
     res: Response,
