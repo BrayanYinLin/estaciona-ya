@@ -3,7 +3,7 @@ import { Input } from '@shared/components/Input'
 import { Select } from '@shared/components/Select'
 import { useAuthStore } from '@auth/context/auth.context'
 import { ROLES } from '@shared/constants/roles'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { AuthService } from '@auth/services/auth.service'
 
 export function Register() {
@@ -34,18 +34,23 @@ export function Register() {
     <>
       <main className="flex lg:grid lg:grid-cols-2">
         <img
-          src="https://placehold.co/600x700"
+          src="/img/signup_pic.webp"
           alt=""
-          className="hidden lg:block"
+          className="hidden lg:block object-contain p-30"
         />
 
         <form
           className="h-full w-full flex flex-col justify-center gap-6 px-8"
           onSubmit={handleSubmit}
         >
-          <h1 className="text-md lg:text-3xl font-semibold">
-            ¡Bienvenido, registrate aquí!
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="text-md lg:text-3xl font-semibold">
+              ¡Bienvenido, registrate aquí!
+            </h1>
+            <Link to={'/'} className="btn btn-outline">
+              Regresar
+            </Link>
+          </div>
 
           <Input
             labelContent="Nombre"

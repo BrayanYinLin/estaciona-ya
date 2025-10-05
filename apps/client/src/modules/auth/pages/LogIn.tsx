@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react'
 import { Input } from '@shared/components/Input'
 import { useAuthStore } from '@auth/context/auth.context'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { AuthService } from '@auth/services/auth.service'
 
 export function LogIn() {
@@ -29,18 +29,24 @@ export function LogIn() {
     <>
       <main className="flex lg:grid lg:grid-cols-2">
         <img
-          src="https://placehold.co/600x700"
+          src="/img/login_pic.webp"
           alt=""
-          className="hidden lg:block max-h-screen object-none"
+          className="hidden lg:block max-h-screen object-contain p-5"
         />
 
         <form
           className="h-full w-full flex flex-col justify-center gap-6 px-8"
           onSubmit={handleSubmit}
         >
-          <h1 className="text-md lg:text-3xl font-semibold">
-            ¡Bienvenido de vuelta, inicia sesión!
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="text-md lg:text-3xl font-semibold">
+              ¡Bienvenido de vuelta, inicia sesión!
+            </h1>
+            <Link to={'/'} className="btn btn-outline">
+              Regresar
+            </Link>
+          </div>
+
           <Input
             labelContent="Correo"
             inputType="email"
