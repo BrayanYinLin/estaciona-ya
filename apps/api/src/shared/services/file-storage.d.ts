@@ -1,6 +1,7 @@
-import { UploadFile } from '@auth/entities/dto/user.dto'
+import { FilePayload } from './file.dto'
 
 export interface FileStorageService {
-  save(file: UploadFile): Promise<string>
+  save(file: FilePayload): Promise<string>
   sendPhotoPath(photoId: string): Promise<string>
+  delete(path: string): Promise<void>
 }
