@@ -11,8 +11,7 @@ import { FileStorageService } from '@shared/services/file-storage'
 import { AppError, DomainError } from '@shared/utils/error'
 import { UserId, UserService } from '@users/user'
 import { randomUUID } from 'node:crypto'
-import { writeFile, unlink } from 'node:fs/promises'
-import { extname, join } from 'node:path'
+import { join } from 'node:path'
 import { Repository } from 'typeorm'
 
 export class UserServiceImpl implements UserService {
@@ -43,24 +42,27 @@ export class UserServiceImpl implements UserService {
     }
 
     const filename = randomUUID()
+    let photoLink = null
 
     if (dto.photo !== undefined) {
-      if (userRecoveredForPhoto.photo) {
-        const file = userRecoveredForPhoto.photo.split('/')
-        await unlink(join(process.cwd(), FILES_ROUTE, file[file.length - 1]))
-      }
-
-      const ext = extname(dto.photo.originalname)
-      await writeFile(
-        join(process.cwd(), FILES_ROUTE, filename.concat(ext)),
-        dto.photo.buffer
-      )
+      photoLink = await this.photoService.save({
+        url: urlForPhoto,
+        saveName: filename,
+        originalname: dto.photo.originalname,
+        buffer: dto.photo.buffer
+      })
     }
 
-    const photoLink =
-      dto.photo !== undefined
-        ? urlForPhoto.concat(filename, extname(dto.photo.originalname))
-        : null
+    if (userRecoveredForPhoto.photo && dto.photo !== undefined) {
+      const file = userRecoveredForPhoto.photo.split('/')
+      const path = join(process.cwd(), FILES_ROUTE, file[file.length - 1])
+      await this.photoService.delete(path)
+    }
+
+    // const photoLink =
+    //   dto.photo !== undefined
+    //     ? urlForPhoto.concat(filename, extname(dto.photo.originalname))
+    //     : null
 
     const newDto = {
       ...dto,

@@ -1,15 +1,33 @@
-import { UploadFile } from '@auth/entities/dto/user.dto'
 import { FileStorageService } from './file-storage'
-import { join } from 'node:path'
+import { extname, join } from 'node:path'
 import { FILES_ROUTE } from '@shared/constants/files.route'
 import constants from 'node:constants'
-import { access } from 'node:fs/promises'
+import { access, unlink, writeFile } from 'node:fs/promises'
 import { DomainError } from '@shared/utils/error'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
+import { FilePayload } from './file.dto'
 
 export class LocalFileStorageService implements FileStorageService {
-  async save(file: UploadFile): Promise<string> {
-    return file.originalname
+  async delete(path: string): Promise<void> {
+    await unlink(path)
+  }
+
+  async save({
+    url,
+    saveName,
+    originalname,
+    buffer
+  }: FilePayload): Promise<string> {
+    const ext = extname(originalname)
+
+    await writeFile(
+      join(process.cwd(), FILES_ROUTE, saveName.concat(ext)),
+      buffer
+    )
+
+    const path = url.concat(saveName, extname(originalname))
+
+    return path
   }
 
   async sendPhotoPath(photoId: string): Promise<string> {
