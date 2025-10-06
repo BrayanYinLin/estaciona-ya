@@ -7,37 +7,30 @@ import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { FILES_ROUTE } from '@shared/constants/files.route'
 import { HTTP_CODES } from '@shared/constants/http.codes'
 import { AppDataSource } from '@shared/database/data-source'
+import { FileStorageService } from '@shared/services/file-storage'
 import { AppError, DomainError } from '@shared/utils/error'
 import { UserId, UserService } from '@users/user'
 import { randomUUID } from 'node:crypto'
-import { writeFile, unlink, access, constants } from 'node:fs/promises'
+import { writeFile, unlink } from 'node:fs/promises'
 import { extname, join } from 'node:path'
+import { Repository } from 'typeorm'
 
 export class UserServiceImpl implements UserService {
   constructor(
-    private readonly userRepository = AppDataSource.getRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly photoService: FileStorageService
   ) {}
 
-  async findPhoto(filename: string): Promise<string> {
-    try {
-      const rutaFoto = join(process.cwd(), FILES_ROUTE, filename)
-
-      await access(rutaFoto, constants.F_OK)
-
-      return rutaFoto
-    } catch {
-      throw new DomainError({
-        code: DOMAIN_ERRORS.PHOTO_ERROR.code,
-        message: DOMAIN_ERRORS.PHOTO_ERROR.code
-      })
-    }
+  async findPhoto(photoId: string): Promise<string> {
+    const path = await this.photoService.sendPhotoPath(photoId)
+    console.log(path)
+    return path
   }
 
   async updateProfile(
     dto: UpdateUserDtoType,
     urlForPhoto: string
   ): Promise<ResponseUserProfileType> {
-    console.log(dto.photo)
     const userRecoveredForPhoto = await this.userRepository.findOne({
       where: { id: dto.id }
     })
