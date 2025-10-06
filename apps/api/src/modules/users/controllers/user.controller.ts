@@ -1,11 +1,10 @@
 import { ENDPOINTS } from '@shared/constants/endpoints'
 import { AuthorizationUtils } from '@shared/utils/authorization.utils'
-import { UserServiceImpl } from '@users/services/user.service'
-import { UserController } from '@users/user'
+import { UserController, UserService } from '@users/user'
 import { Request, Response, NextFunction } from 'express'
 
 export class UserControllerImpl implements UserController {
-  constructor(private readonly userService = new UserServiceImpl()) {}
+  constructor(private readonly userService: UserService) {}
 
   async findPhoto(
     req: Request,
@@ -28,14 +27,12 @@ export class UserControllerImpl implements UserController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const file =
-        req.file?.originalname !== undefined
-          ? {
-              originalname: req.file?.originalname,
-              mimetype: req.file?.mimetype,
-              buffer: req.file?.buffer
-            }
-          : undefined
+      const file = req.file
+        ? {
+            originalname: req.file.originalname,
+            buffer: req.file.buffer
+          }
+        : undefined
 
       const user = await this.userService.updateProfile(
         {

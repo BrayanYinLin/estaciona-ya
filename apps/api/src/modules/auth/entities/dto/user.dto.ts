@@ -36,9 +36,9 @@ export type ResponseUserProfileType = z.infer<typeof ResponseUserProfile>
 
 export const uploadFileSchema = z.object({
   originalname: z.string(),
-  mimetype: z.string(),
   buffer: z.instanceof(Buffer)
 })
+export type UploadFile = z.infer<typeof uploadFileSchema>
 
 export const UpdateUserDto = z.object({
   id: UserIdentifierSchema,
