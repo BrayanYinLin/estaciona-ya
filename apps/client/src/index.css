@@ -4,3 +4,15 @@
 @theme {
     --shadow-custom: 0 0 20px oklch(91.7% 0.08 205.041);
 }
+
+/* Quita las flechitas en navegadores WebKit (Chrome, Safari, Edge) */
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Quita las flechitas en Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

@@ -1,9 +1,11 @@
-import { Input } from '@shared/components/Input'
+import { InputPassword } from '@shared/components/InputPassword'
 import { PasswordSection } from './PasswordSection'
 import { useState, type FormEvent } from 'react'
 import { DangerZone } from './DangerZone'
 import { PhotoUploader } from './PhotoUploader'
 import { type UserProfile, useUserStore } from '@user/context/user.context'
+import { DniInput } from '@shared/components/DniInput'
+import { EmailInput } from '@shared/components/EmailInput'
 
 export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
   const [formData, setFormData] = useState<FormData>(new FormData())
@@ -35,31 +37,33 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
         onSubmit={handleSubmit}
       >
         <section className="lg:col-span-1">
-          <Input
-            labelContent="Nombre"
-            inputType="text"
-            name="name"
-            placeholder="Tu nombre"
-            defaultValue={name}
-          />
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Nombre</legend>
+            <input
+              type="text"
+              className="input w-full"
+              placeholder="Tu nombre"
+              name="name"
+              defaultValue={name}
+            />
+          </fieldset>
 
-          <Input
+          <EmailInput
             labelContent="Correo"
-            inputType="email"
             name="email"
             placeholder="juan.perez@email.com"
             defaultValue={email}
           />
 
-          <Input
+          <DniInput
             labelContent="Documento de identificación"
-            inputType="text"
             name="dni"
             placeholder="Ingresa tu documento"
             defaultValue={dni}
+            isRequired
           />
 
-          <Input
+          <InputPassword
             labelContent="Rol"
             inputType="text"
             name="role"

@@ -13,13 +13,13 @@ export type InputProps = NativeInputProps & {
   disablePasswordValidator?: boolean
 }
 
-export function Input({
+export function InputPassword({
   labelContent,
   inputType,
   className,
   inputClassName,
   wrapperClassName,
-  leftIcon,
+  // leftIcon,
   rightSlot,
   readOnly = false,
   required,
@@ -42,7 +42,7 @@ export function Input({
   ]
     .filter(Boolean)
     .join(' ')
-  const showPasswordIcon = inputType === 'password' && !leftIcon
+  // const showPasswordIcon = inputType === 'password' && !leftIcon
 
   return (
     <fieldset className={fieldsetClasses}>
@@ -58,13 +58,13 @@ export function Input({
           .filter(Boolean)
           .join(' ')}
       >
-        {leftIcon ?? (showPasswordIcon ? <KeyIcon /> : null)}
+        <KeyIcon />
         <input
           type={inputType}
           readOnly={readOnly}
           required={appliedRequired}
           className={inputClasses}
-          {...(inputType === 'password' && !disablePasswordValidator
+          {...(!disablePasswordValidator
             ? {
                 minLength: 8,
                 pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',

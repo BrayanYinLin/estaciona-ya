@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from 'react'
-import { Input } from '@shared/components/Input'
+import { InputPassword } from '@shared/components/InputPassword'
 import { Select } from '@shared/components/Select'
 import { useAuthStore } from '@auth/context/auth.context'
 import { ROLES } from '@shared/constants/roles'
 import { Link, useNavigate } from 'react-router'
 import { AuthService } from '@auth/services/auth.service'
+import { DniInput } from '@shared/components/DniInput'
+import { EmailInput } from '@shared/components/EmailInput'
 
 export function Register() {
   const { setAuth } = useAuthStore()
@@ -54,30 +56,31 @@ export function Register() {
             </Link>
           </div>
 
-          <Input
-            labelContent="Nombre"
-            inputType="text"
-            name="name"
-            placeholder="Ingresa tu nombre"
-          />
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Nombre</legend>
+            <input
+              type="text"
+              className="input w-full"
+              placeholder="Ingresa tu nombre"
+              name="name"
+            />
+          </fieldset>
 
-          <Input
+          <EmailInput
             labelContent="Correo"
-            inputType="email"
             name="email"
             placeholder="Ingresa tu correo"
           />
 
-          <Input
-            labelContent="Nueva contraseña"
+          <InputPassword
+            labelContent="Contraseña"
             inputType={inputType}
             name="password"
             placeholder="Ingresa tu contraseña"
-            required={true}
             minLength={8} // Validación explícita
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" // Validación explícita
-            title="Debe tener mínimo 8 caracteres e incluir número, letra minúscula y letra mayúscula"
+            required
           />
+
           <label className="flex items-center gap-2 text-sm text-base-content/80">
             <input
               type="checkbox"
@@ -88,9 +91,14 @@ export function Register() {
             Mostrar contraseña
           </label>
 
-          <Input
+          {/* <Input
             labelContent="Documento de identificación"
             inputType="text"
+            name="dni"
+            placeholder="Ingresa tu documento de identificación"
+          /> */}
+          <DniInput
+            labelContent="Documento de identificación"
             name="dni"
             placeholder="Ingresa tu documento de identificación"
           />

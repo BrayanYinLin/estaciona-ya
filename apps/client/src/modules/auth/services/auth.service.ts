@@ -2,7 +2,7 @@ import { api } from '@shared/api/api'
 import { ENDPOINTS } from '@shared/api/endpoints'
 import { ROLES } from '@shared/constants/roles'
 import { FRONTEND_ROUTES } from '@shared/routes'
-import { AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import z from 'zod'
 
 export const signupSchema = z.object({
@@ -62,26 +62,28 @@ export type SigninType = z.infer<typeof signinSchema>
 
 const login = async ({ email, password }: SigninType) => {
   try {
-    const { data } = await api.post<RegisterResponseDto>(ENDPOINTS.LOGIN, {
+    const response = await api.post<RegisterResponseDto>(ENDPOINTS.LOGIN, {
       email,
       password
     })
 
     return {
-      token: data.access_token,
+      token: response.data.access_token,
       route: '/'.concat(FRONTEND_ROUTES.USER_PROFILE)
     }
   } catch (error) {
-    if (error instanceof AxiosError) {
-      console.error(error.response?.data)
-      return {
-        status: error.response?.data.status,
-        message: error.response?.data.message
-      }
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status ?? 0
+      const message =
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (error.response?.data as any)?.message ??
+        error.message ??
+        'Unexpected error'
+      return { status, message }
     }
     return {
-      status: 400,
-      message: 'Unexpected error'
+      status: 0,
+      message: (error as Error)?.message ?? 'Unexpected error'
     }
   }
 }
