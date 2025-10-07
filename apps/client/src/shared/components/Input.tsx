@@ -76,7 +76,7 @@ export function Input({
         />
         {rightSlot}
       </label>
-      {inputType === 'password' && !disablePasswordValidator && (
+      {!disablePasswordValidator && (
         <p className="validator-hint hidden">
           La contraseña debe tener mínimo 8 caracteres incluyendo:
           <br />

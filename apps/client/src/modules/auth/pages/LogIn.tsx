@@ -1,12 +1,14 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Input } from '@shared/components/Input'
 import { useAuthStore } from '@auth/context/auth.context'
 import { Link, useNavigate } from 'react-router'
 import { AuthService } from '@auth/services/auth.service'
+import { LoginInputPassword } from '@shared/components/LoginInputPassword'
 
 export function LogIn() {
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -54,12 +56,17 @@ export function LogIn() {
             placeholder="Ingresa tu correo"
           />
 
-          <Input
-            labelContent="Contraseña"
-            inputType="password"
-            name="password"
-            placeholder="Ingresa tu contraseña"
-          />
+          <LoginInputPassword showPassword={showPassword} />
+
+          <label className="flex items-center gap-2 text-sm text-base-content/80">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-sm"
+              checked={showPassword}
+              onChange={() => setShowPassword((prev) => !prev)}
+            />
+            Mostrar contraseña
+          </label>
 
           <button type="submit" className="btn btn-info">
             Ingresar

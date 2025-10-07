@@ -91,7 +91,7 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
         <div className="flex flex-col gap-5 mt-5 lg:mt-0 col-span-1">
           <PasswordSection />
           <button type="submit" className="btn btn-outline btn-primary w-fit">
-            Guardar cambios
+            Cambiar contraseña
           </button>
         </div>
       </form>
