@@ -1,4 +1,7 @@
-import { UpdateUserDto } from '@auth/entities/dto/user.dto'
+import {
+  ChangePasswordDtoSchema,
+  UpdateUserDto
+} from '@auth/entities/dto/user.dto'
 import { User } from '@auth/entities/user.entity'
 import { AppDataSource } from '@shared/database/data-source'
 import { checkSchema } from '@shared/middlewares/check-schema.middleware'
@@ -27,6 +30,12 @@ userRouter.patch(
   inyectUserFromToken(),
   checkSchema(UpdateUserDto),
   controller.updateProfile.bind(controller)
+)
+userRouter.patch(
+  '/me/password',
+  inyectUserFromToken(),
+  checkSchema(ChangePasswordDtoSchema),
+  controller.changePassword.bind(controller)
 )
 
 export { userRouter }

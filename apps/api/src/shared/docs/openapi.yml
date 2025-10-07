@@ -144,6 +144,12 @@ paths:
       summary: Actualiza el perfil del usuario
       tags:
         - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: http
       security:
         - BearerAuth: []
       requestBody:
@@ -192,6 +198,32 @@ paths:
             image/*: {}
         '404':
           description: Foto no encontrada
+  /user/me/password:
+    patch:
+      summary: Cambia la contraseña del usuario
+      tags:
+        - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: http
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordDto'
+      responses:
+        '204':
+          description: Contraseña actualizada correctamente
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
 
 components:
   securitySchemes:
@@ -256,6 +288,23 @@ components:
       required:
         - email
         - password
+    ChangePasswordDto:
+      type: object
+      properties:
+        id:
+          type: string
+        oldPassword:
+          type: string
+          format: password
+          minLength: 8
+        newPassword:
+          type: string
+          format: password
+          minLength: 8
+      required:
+        - id
+        - oldPassword
+        - newPassword
     AuthResponse:
       type: object
       properties:

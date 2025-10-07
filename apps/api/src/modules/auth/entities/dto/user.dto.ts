@@ -48,3 +48,10 @@ export const UpdateUserDto = z.object({
   photo: uploadFileSchema.optional()
 })
 export type UpdateUserDtoType = z.infer<typeof UpdateUserDto>
+
+export const ChangePasswordDtoSchema = z.object({
+  id: UserIdentifierSchema,
+  oldPassword: PasswordSchema,
+  newPassword: PasswordSchema
+})
+export type ChangePasswordDto = z.infer<typeof ChangePasswordDtoSchema>
