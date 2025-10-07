@@ -7,18 +7,20 @@ import { Link, useNavigate } from 'react-router'
 import { AuthService } from '@auth/services/auth.service'
 import { DniInput } from '@shared/components/DniInput'
 import { EmailInput } from '@shared/components/EmailInput'
+import { ErrorAlert } from '@shared/components/ErrorAlert'
 
 export function Register() {
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const inputType = showPassword ? 'text' : 'password'
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
 
-    const { token, route } = await AuthService.signup({
+    const { token, route, status, message } = await AuthService.signup({
       name: formData.get('name') as string,
       email: formData.get('email') as string,
       password: formData.get('password') as string,
@@ -29,6 +31,10 @@ export function Register() {
     if (token && route) {
       setAuth(token)
       navigate(route)
+    }
+
+    if (status && message) {
+      setErrorMessage(message)
     }
 
     // TO-DO: feedback de usuario cuando se registra con datos invalidos
@@ -109,6 +115,7 @@ export function Register() {
             defaultValue="Escoge tu rol"
             options={ROLES}
           />
+          {errorMessage && <ErrorAlert message={errorMessage} />}
           <button type="submit" className="btn btn-info">
             Registrar
           </button>

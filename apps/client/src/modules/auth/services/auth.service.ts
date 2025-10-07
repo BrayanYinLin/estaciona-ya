@@ -41,7 +41,6 @@ const signup = async ({ name, email, password, dni, role }: SignupType) => {
     }
   } catch (error) {
     if (error instanceof AxiosError) {
-      console.error(error.response?.data)
       return {
         status: error.response?.data.status,
         message: error.response?.data.message
