@@ -32,6 +32,8 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
   return (
     <>
       {/* Sección para editar el perfil */}
+      <h2 className="mt-5 text-2xl font-semibold">Editar perfil</h2>
+
       <form
         className="lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] gap-4 flex flex-col w-full"
         onSubmit={handleSubmit}
