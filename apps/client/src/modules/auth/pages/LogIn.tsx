@@ -1,21 +1,23 @@
 import { useState, type FormEvent } from 'react'
-import { Input } from '@shared/components/Input'
 import { useAuthStore } from '@auth/context/auth.context'
 import { Link, useNavigate } from 'react-router'
 import { AuthService } from '@auth/services/auth.service'
 import { LoginInputPassword } from '@shared/components/LoginInputPassword'
+import { ErrorAlert } from '@shared/components/ErrorAlert'
+import { EmailInput } from '@shared/components/EmailInput'
 
 export function LogIn() {
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
 
-    const { token, route } = await AuthService.login({
+    const { token, route, status, message } = await AuthService.login({
       email: formData.get('email') as string,
       password: formData.get('password') as string
     })
@@ -25,7 +27,9 @@ export function LogIn() {
       navigate(route)
     }
 
-    // TO-DO: feedback de usuario cuando escribe mal su contraseña
+    if (status && message) {
+      setErrorMessage(message)
+    }
   }
   return (
     <>
@@ -49,11 +53,16 @@ export function LogIn() {
             </Link>
           </div>
 
-          <Input
+          {/* <Input
             labelContent="Correo"
             inputType="email"
             name="email"
             placeholder="Ingresa tu correo"
+          /> */}
+          <EmailInput
+            name="email"
+            placeholder="Ingresa tu correo"
+            labelContent="Correo"
           />
 
           <LoginInputPassword showPassword={showPassword} />
@@ -67,6 +76,7 @@ export function LogIn() {
             />
             Mostrar contraseña
           </label>
+          {errorMessage && <ErrorAlert message={errorMessage} />}
 
           <button type="submit" className="btn btn-info">
             Ingresar

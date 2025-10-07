@@ -19,7 +19,7 @@ export type CreateUserDtoType = z.infer<typeof CreateUserDto>
 
 export const LoginUserDto = z.object({
   email: z.email(),
-  password: PasswordSchema
+  password: z.string().nonempty()
 })
 export type LoginUserDtoType = z.infer<typeof LoginUserDto>
 

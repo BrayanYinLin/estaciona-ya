@@ -1,5 +1,6 @@
+import { InputPassword } from '@shared/components/InputPassword'
+import { LoginInputPassword } from '@shared/components/LoginInputPassword'
 import { useState } from 'react'
-import { Input } from '@shared/components/Input'
 
 export function PasswordSection() {
   const [showPasswords, setShowPasswords] = useState(false)
@@ -7,28 +8,16 @@ export function PasswordSection() {
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <Input
-        labelContent="Contraseña actual"
-        inputType={inputType}
-        name="currentPassword"
-        placeholder="Ingresa tu contraseña actual"
-        disablePasswordValidator={true}
-      />
+      <LoginInputPassword showPassword={showPasswords} />
 
       <div className="flex flex-col gap-1">
-        <Input
-          labelContent="Nueva contraseña"
+        <InputPassword
           inputType={inputType}
-          name="newPassword"
+          labelContent="Nueva contraseña"
           placeholder="Ingresa tu nueva contraseña"
-          required={false}
-          minLength={8} // Validación explícita
-          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" // Validación explícita
-          title="Debe tener mínimo 8 caracteres e incluir número, letra minúscula y letra mayúscula"
+          name="newPassword"
+          required
         />
-        <span className="text-xs text-base-content/60">
-          Este campo debe estar vacío si no deseas actualizarla.
-        </span>
       </div>
 
       <label className="flex items-center gap-2 text-sm text-base-content/80">
