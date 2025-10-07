@@ -1,4 +1,5 @@
 import {
+  ChangePasswordDto,
   ResponseUserProfileType,
   UpdateUserDtoType
 } from '@auth/entities/dto/user.dto'
@@ -16,6 +17,11 @@ export interface UserService {
     urlForPhoto: string
   ): Promise<ResponseUserProfileType>
   findPhoto(photoId: string): Promise<string>
+  changePassword({
+    id,
+    oldPassword,
+    newPassword
+  }: ChangePasswordDto): Promise<void>
 }
 
 export interface UserController {
@@ -35,6 +41,11 @@ export interface UserController {
     next: NextFunction
   ): Promise<Response | void>
   findPhoto(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  changePassword(
     req: Request,
     res: Response,
     next: NextFunction

@@ -1,8 +1,10 @@
 import {
+  ChangePasswordDto,
   ResponseUserProfileType,
   UpdateUserDtoType
 } from '@auth/entities/dto/user.dto'
 import { User } from '@auth/entities/user.entity'
+import { env_bcrypt_salt_rounds } from '@shared/config/env.config'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { FILES_ROUTE } from '@shared/constants/files.route'
 import { HTTP_CODES } from '@shared/constants/http.codes'
@@ -10,6 +12,7 @@ import { AppDataSource } from '@shared/database/data-source'
 import { FileStorageService } from '@shared/services/file-storage'
 import { AppError, DomainError } from '@shared/utils/error'
 import { UserId, UserService } from '@users/user'
+import { compare, hash } from 'bcrypt'
 import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
 import { Repository } from 'typeorm'
@@ -19,6 +22,46 @@ export class UserServiceImpl implements UserService {
     private readonly userRepository: Repository<User>,
     private readonly photoService: FileStorageService
   ) {}
+
+  async changePassword({
+    id,
+    oldPassword,
+    newPassword
+  }: ChangePasswordDto): Promise<void> {
+    const userFound = await this.userRepository.findOneBy({ id: id })
+
+    if (!userFound) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: DOMAIN_ERRORS.ENTITY_NOT_FOUND.message
+      })
+    }
+
+    const { password } = userFound
+    const validPassword = await compare(oldPassword, password)
+
+    if (!validPassword) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.INCORRECT_PASSWORD.code,
+        message: DOMAIN_ERRORS.INCORRECT_PASSWORD.message
+      })
+    }
+
+    const newPasswordHashed = await hash(newPassword, env_bcrypt_salt_rounds)
+
+    const { affected } = await AppDataSource.createQueryBuilder()
+      .update(User)
+      .set({ password: newPasswordHashed })
+      .where('id = :id', { id: userFound.id })
+      .execute()
+
+    if (!affected) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.CONFLICT.code,
+        message: DOMAIN_ERRORS.CONFLICT.message
+      })
+    }
+  }
 
   async findPhoto(photoId: string): Promise<string> {
     const path = await this.photoService.sendPhotoPath(photoId)

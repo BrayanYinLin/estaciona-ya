@@ -6,6 +6,20 @@ import { Request, Response, NextFunction } from 'express'
 export class UserControllerImpl implements UserController {
   constructor(private readonly userService: UserService) {}
 
+  async changePassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      await this.userService.changePassword(req.body)
+
+      return res.status(204).end()
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async findPhoto(
     req: Request,
     res: Response,

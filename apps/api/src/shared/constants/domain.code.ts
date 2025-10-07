@@ -34,6 +34,10 @@ export const DOMAIN_ERRORS = {
   PHOTO_ERROR: {
     code: 'PHOTO_ERROR',
     message: 'Foto no encontrada'
+  },
+  INCORRECT_PASSWORD: {
+    code: 'INCORRECT_PASSWORD',
+    message: 'La contraseña que ingresaste es incorrecta'
   }
 } as const
 
