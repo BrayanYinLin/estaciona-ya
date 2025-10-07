@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Input } from '@shared/components/Input'
 import { Select } from '@shared/components/Select'
 import { useAuthStore } from '@auth/context/auth.context'
@@ -9,6 +9,8 @@ import { AuthService } from '@auth/services/auth.service'
 export function Register() {
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+  const inputType = showPassword ? 'text' : 'password'
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -67,11 +69,24 @@ export function Register() {
           />
 
           <Input
-            labelContent="Contraseña"
-            inputType="password"
+            labelContent="Nueva contraseña"
+            inputType={inputType}
             name="password"
-            placeholder="Registra una contraseña"
+            placeholder="Ingresa tu contraseña"
+            required={true}
+            minLength={8} // Validación explícita
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" // Validación explícita
+            title="Debe tener mínimo 8 caracteres e incluir número, letra minúscula y letra mayúscula"
           />
+          <label className="flex items-center gap-2 text-sm text-base-content/80">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-sm"
+              checked={showPassword}
+              onChange={() => setShowPassword((prev) => !prev)}
+            />
+            Mostrar contraseña
+          </label>
 
           <Input
             labelContent="Documento de identificación"
