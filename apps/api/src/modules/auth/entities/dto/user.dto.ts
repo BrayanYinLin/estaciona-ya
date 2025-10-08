@@ -51,7 +51,7 @@ export type UpdateUserDtoType = z.infer<typeof UpdateUserDto>
 
 export const ChangePasswordDtoSchema = z.object({
   id: UserIdentifierSchema,
-  oldPassword: PasswordSchema,
+  oldPassword: z.string(),
   newPassword: PasswordSchema
 })
 export type ChangePasswordDto = z.infer<typeof ChangePasswordDtoSchema>

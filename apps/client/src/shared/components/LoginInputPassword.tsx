@@ -1,10 +1,16 @@
+import type { InputHTMLAttributes } from 'react'
 import { KeyIcon } from './KeyIcon'
 
-export function LoginInputPassword({
-  showPassword
-}: {
+type NativeInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>
+
+export type LoginInputPasswordProps = NativeInputProps & {
   showPassword: boolean
-}) {
+}
+
+export function LoginInputPassword({
+  name,
+  showPassword
+}: LoginInputPasswordProps) {
   const inputType = showPassword ? 'text' : 'password'
   return (
     <>
@@ -14,7 +20,7 @@ export function LoginInputPassword({
           {<KeyIcon />}
           <input
             type={inputType}
-            name="password"
+            name={name}
             required
             className="w-full"
             placeholder="Ingresa tu contraseña"

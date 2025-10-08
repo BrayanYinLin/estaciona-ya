@@ -8,7 +8,7 @@ export function PasswordSection() {
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <LoginInputPassword showPassword={showPasswords} />
+      <LoginInputPassword showPassword={showPasswords} name="oldPassword" />
 
       <div className="flex flex-col gap-1">
         <InputPassword
