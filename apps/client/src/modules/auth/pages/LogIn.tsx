@@ -65,7 +65,7 @@ export function LogIn() {
             labelContent="Correo"
           />
 
-          <LoginInputPassword showPassword={showPassword} />
+          <LoginInputPassword showPassword={showPassword} name="password" />
 
           <label className="flex items-center gap-2 text-sm text-base-content/80">
             <input

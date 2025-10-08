@@ -1,15 +1,25 @@
 import { InputPassword } from '@shared/components/InputPassword'
 import { PasswordSection } from './PasswordSection'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { DangerZone } from './DangerZone'
 import { PhotoUploader } from './PhotoUploader'
 import { type UserProfile, useUserStore } from '@user/context/user.context'
 import { DniInput } from '@shared/components/DniInput'
 import { EmailInput } from '@shared/components/EmailInput'
+import { UserService } from '@user/services/user.service'
 
 export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
   const [formData, setFormData] = useState<FormData>(new FormData())
   const { updateProfile } = useUserStore()
+  const [success, setSuccess] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(false)
+      }, 3000)
+    }
+  }, [success])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -25,8 +35,17 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
     await updateProfile(newForm)
   }
 
-  const handlePasswordChange = (event: FormEvent<HTMLFormElement>) => {
+  const handlePasswordChange = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const oldPassword = data.get('oldPassword') as string
+    const newPassword = data.get('newPassword') as string
+
+    const result = await UserService.changePassword({
+      oldPassword,
+      newPassword
+    })
+    setSuccess(result)
   }
 
   return (
@@ -96,6 +115,11 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
       >
         <div className="flex flex-col gap-5 mt-5 lg:mt-0 col-span-1">
           <PasswordSection />
+          {success && (
+            <div role="alert" className="alert alert-info alert-soft">
+              <span>Se restableció la contraseña correctamente.</span>
+            </div>
+          )}
           <button type="submit" className="btn btn-outline btn-primary w-fit">
             Cambiar contraseña
           </button>
