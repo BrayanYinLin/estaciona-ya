@@ -109,7 +109,7 @@ export class UserServiceImpl implements UserService {
 
     const newDto = {
       ...dto,
-      photo: photoLink
+      photo: photoLink ?? userRecoveredForPhoto.photo
     }
 
     await this.userRepository.update(

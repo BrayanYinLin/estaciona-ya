@@ -1,4 +1,4 @@
-import { ZodType } from 'zod'
+import z, { ZodType } from 'zod'
 import { Request, Response, NextFunction } from 'express'
 import { AppError } from '@shared/utils/error'
 import { HTTP_CODES } from '@shared/constants/http.codes'
@@ -11,7 +11,17 @@ export const checkSchema = <T>(schema: ZodType<T>) => {
       return next(
         new AppError({
           httpCode: HTTP_CODES.BAD_REQUEST,
-          message: error.message
+          message: z
+            .prettifyError(error)
+            .split('\n')
+            .map((line) =>
+              line
+                .replace(/^✖\s*/, '')
+                .replace(/→.*$/, '')
+                .trim()
+            )
+            .filter((line) => line.length > 0)
+            .join('\n')
         })
       )
     }

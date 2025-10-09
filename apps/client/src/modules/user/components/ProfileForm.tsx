@@ -79,6 +79,7 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
               placeholder="Tu nombre"
               name="name"
               defaultValue={name}
+              required
             />
           </fieldset>
 
@@ -87,6 +88,7 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
             name="email"
             placeholder="juan.perez@email.com"
             defaultValue={email}
+            isRequired
           />
 
           <DniInput
@@ -95,6 +97,7 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
             placeholder="Ingresa tu documento"
             defaultValue={dni}
             isRequired
+            required
           />
 
           <InputPassword
