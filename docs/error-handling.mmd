@@ -1,0 +1,49 @@
+flowchart TD
+
+    subgraph Filosofía
+        A1["🎯 Objetivo 1: Robustez en el Backend<br/>→ Capturar, clasificar y responder errores sin exponer detalles internos"]
+        A2["🎯 Objetivo 2: Claridad en el Frontend<br/>→ Mostrar mensajes comprensibles y útiles al usuario"]
+    end
+
+    subgraph Backend["🧩 Manejo de Errores en la API (Backend)"]
+        B1["🔧 Clases de Error"]
+        B2["DomainError<br/>(Errores de lógica de negocio)<br/>Ej: Usuario ya existe, Contraseña incorrecta"]
+        B3["AppError<br/>(Errores listos para HTTP)<br/>Contiene httpCode + mensaje legible"]
+        
+        B4["⚙️ Middleware de Error<br/>(shared/middlewares/error.middleware.ts)<br/>→ Usa next(error) para pasar el control"]
+        B5["🧠 ErrorHandler<br/>(shared/utils/error.handler.ts)"]
+
+        B6["normalize(error):<br/>Convierte errores desconocidos a tipos conocidos"]
+        B7["mapDomainToHttp:<br/>Traduce DomainError a AppError según el contexto HTTP"]
+        B8["sendHttpResponse:<br/>Devuelve JSON con httpCode + mensaje"]
+
+        B1 --> B2
+        B1 --> B3
+        B4 --> B5
+        B5 --> B6
+        B6 --> B7
+        B7 --> B8
+    end
+
+    subgraph Flujo_Backend["📤 Flujo del Error en Backend"]
+        F1["Origen del Error<br/>(Servicio, Middleware, ORM, etc.)"]
+        F2["next(error) → Middleware Global"]
+        F3["ErrorHandler.normalize()"]
+        F4["mapDomainToHttp()"]
+        F5["sendHttpResponse() → Cliente"]
+
+        F1 --> F2 --> F3 --> F4 --> F5
+    end
+
+    subgraph Frontend["💻 Manejo de Errores en el Cliente (Frontend)"]
+        C1["ErrorPage.tsx<br/>(404 Page not found actual)"]
+        C2["🚀 Mejoras propuestas:"]
+        C3["Interceptor de API<br/>(axios/fetch) para capturar errores 4xx/5xx"]
+        C4["Notificaciones (alerts)<br/>para errores no críticos"]
+        C5["Página de Error Dinámica<br/>con mensajes personalizados según código HTTP"]
+
+        C1 --> C2
+        C2 --> C3
+        C2 --> C4
+        C2 --> C5
+    end

@@ -1,0 +1,27 @@
+graph TD
+  subgraph Cliente
+      A(Formulario de Registro)
+  end
+
+  subgraph API
+      B{1. Validar Datos de Entrada} --> C{2. Hashear Contraseña};
+      C --> D{3. Crear Registro de Usuario};
+      D --> E{4. Generar Token JWT};
+  end
+
+  subgraph Base de Datos
+      F[(Tabla de Usuarios)]
+  end
+
+  Usuario -- Rellena con sus datos --> A;
+  A -- Envía datos (nombre, email, DNI, password) --> B;
+  B -- Datos inválidos --> A;
+  B -- Datos válidos --> C;
+  D -- Inserta nuevo usuario --> F;
+  F -- Confirma inserción --> D;
+  D -- Pasa datos de usuario --> E;
+  E -- Devuelve token y perfil --> A;
+  A -- Muestra sesión iniciada --> Usuario;
+
+  style A fill:#61DAFB,stroke:#000,stroke-width:2px
+  style F fill:#336791,stroke:#000,stroke-width:2px
