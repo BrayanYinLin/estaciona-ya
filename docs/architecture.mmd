@@ -1,0 +1,24 @@
+graph TD
+    subgraph "Usuario"
+        U(Usuario Final)
+    end
+
+    subgraph "Cliente (Frontend)"
+        direction LR
+        C["React + Vite"]
+    end
+
+    subgraph "Servidor (Backend)"
+        direction LR
+        A["API - Node.js + Express"]
+    end
+
+    subgraph "Base de Datos"
+        direction LR
+        DB[(PostgreSQL)]
+    end
+
+    U -->|Accede a| C
+    C -->|"Realiza peticiones HTTP"| A
+    A -->|"Lee/Escribe en"| DB
+    A -->|"Responde a"| C

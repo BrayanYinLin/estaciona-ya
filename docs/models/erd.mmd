@@ -12,8 +12,10 @@ erDiagram
     }
 
     ROLES {
-       int role_id PK
-       varchar role_name UK
+        int role_id PK
+        varchar role_name UK
+        timestamp created_at
+        timestamp updated_at
     }
 
     GARAGES {
@@ -34,6 +36,8 @@ erDiagram
         int garage_photo_id PK
         int garage_id FK
         varchar garage_url
+        timestamp created_at
+        timestamp updated_at
     }
 
     BOOKING_REQUESTS {
@@ -75,11 +79,15 @@ erDiagram
         int booking_id FK
         int rating
         text comment
+        timestamp created_at
+        timestamp updated_at
     }
 
     DISTRICTS {
         int district_id PK
         text district_name
+        timestamp created_at
+        timestamp updated_at
     }
     
     LOCATIONS {

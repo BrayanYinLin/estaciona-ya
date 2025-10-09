@@ -12,14 +12,23 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
   const [formData, setFormData] = useState<FormData>(new FormData())
   const { updateProfile } = useUserStore()
   const [success, setSuccess] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
     if (success) {
       setTimeout(() => {
         setSuccess(false)
-      }, 3000)
+      }, 2000)
     }
-  }, [success])
+
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 2000)
+    }
+  }, [errorMessage])
+
+  useEffect(() => {}, [errorMessage])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -41,11 +50,15 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
     const oldPassword = data.get('oldPassword') as string
     const newPassword = data.get('newPassword') as string
 
-    const result = await UserService.changePassword({
-      oldPassword,
-      newPassword
-    })
-    setSuccess(result)
+    try {
+      const result = await UserService.changePassword({
+        oldPassword,
+        newPassword
+      })
+      setSuccess(result)
+    } catch (e: unknown) {
+      setErrorMessage((e as Error).message)
+    }
   }
 
   return (
@@ -118,6 +131,11 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
           {success && (
             <div role="alert" className="alert alert-info alert-soft">
               <span>Se restableció la contraseña correctamente.</span>
+            </div>
+          )}
+          {errorMessage && (
+            <div role="alert" className="alert alert-error alert-soft">
+              <span>{errorMessage}</span>
             </div>
           )}
           <button type="submit" className="btn btn-outline btn-primary w-fit">
