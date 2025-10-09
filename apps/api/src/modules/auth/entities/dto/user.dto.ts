@@ -43,9 +43,14 @@ export const uploadFileSchema = z.object({
 
 export const UpdateUserDto = z.object({
   id: UserIdentifierSchema,
-  name: z.string().optional(),
-  email: z.email().optional(),
-  dni: z.string().length(8).optional(),
+  name: z.string({ error: 'El nombre no puede estar vacio' }).optional(),
+  email: z
+    .email({ error: 'El correo debe cumplir con el formato adecuado' })
+    .optional(),
+  dni: z
+    .string()
+    .length(8, { error: 'El documento no puede contener menos de 8 digitos' })
+    .optional(),
   state: z.boolean().optional(),
   photo: uploadFileSchema.optional()
 })

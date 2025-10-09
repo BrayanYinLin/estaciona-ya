@@ -10,9 +10,10 @@ import { UserService } from '@user/services/user.service'
 
 export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
   const [formData, setFormData] = useState<FormData>(new FormData())
-  const { updateProfile } = useUserStore()
+  const { recoverUser } = useUserStore()
   const [success, setSuccess] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [userUpdateError, setUserUpdateError] = useState<string | null>(null)
 
   useEffect(() => {
     if (success) {
@@ -41,7 +42,12 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
     newForm.append('email', data.get('email') as string)
     newForm.append('dni', data.get('dni') as string)
 
-    await updateProfile(newForm)
+    try {
+      await UserService.updateProfile(newForm)
+      await recoverUser()
+    } catch (e) {
+      setUserUpdateError((e as Error).message)
+    }
   }
 
   const handlePasswordChange = async (event: FormEvent<HTMLFormElement>) => {
@@ -107,6 +113,12 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
             defaultValue={role === 'lessor' ? 'Arrendador' : 'Arrendatario'}
             readOnly
           />
+
+          {userUpdateError && (
+            <div role="alert" className="alert alert-error alert-soft my-4">
+              <span>{userUpdateError}</span>
+            </div>
+          )}
         </section>
 
         <div className="flex flex-col gap-8 mt-5 lg:mt-0 col-span-1">

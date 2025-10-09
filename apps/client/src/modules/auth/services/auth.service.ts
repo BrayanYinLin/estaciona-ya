@@ -26,6 +26,9 @@ export type RegisterResponseDto = {
 
 const signup = async ({ name, email, password, dni, role }: SignupType) => {
   try {
+    if (!role) {
+      throw new Error('Escoge un rol para la plataforma')
+    }
     const endpoint = role === ROLES.TENANT ? ENDPOINTS.TENANT : ENDPOINTS.LESSOR
 
     const { data } = await api.post<RegisterResponseDto>(endpoint, {
@@ -46,6 +49,14 @@ const signup = async ({ name, email, password, dni, role }: SignupType) => {
         message: error.response?.data.message
       }
     }
+
+    if (error instanceof Error) {
+      return {
+        status: 400,
+        message: error.message
+      }
+    }
+
     return {
       status: 400,
       message: 'Unexpected error'
