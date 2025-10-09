@@ -1,12 +1,14 @@
+%% https://www.mermaidchart.com/play?utm_source=mermaid_live_editor&utm_medium=toggle#pako:eNp9U-1u2jAUfRXL_VOkEOUDaJNKlSCBrZM6VRPbpC37YcilWHVsZCe0DPEwe4D9mPYIfbFdG9LCJi2_Yt9zzj0-197SuSqBpvRes9WSTPNCEmKa2X6ZCQ6yBrtnv-H5ROmqEUxzRUogH-Cem1qrjgWALAt5wh7e3bTM0bagoU8-McFLpknOamWswljWmpWsoDvS7V6TDGGRT94yswSEZcqWDTz_soirVixz2ByxsU8ybZGtE6v50TTW4DEjd4wxMno-eQMSNHKm6gEkefd52iL_PcEIm1tJ57cVm3w9n7KZYEe9TOfbicBhG7uiMyFAMjJXEnXx0O7o1s7QNR1a0Fiun3-yQ-1cqmqmwSNQMS48kr-_8ciKGfOodNlx1JGjjix1HyVHgR-Y7Yn0Uf2kmrmqzYTcSAO6ZkQ2sFakebF9TSYONLEgHMOC64phF0TP-fNvuZ_Aq84dM619TOVYZ-xAY2cF1g2INZDaJb8hK9ALLv4O47YBHCUjBoxrxSWfc7wkDndI9uowqHojAFmoItKzQZgPJyPP3oMHSM-CIDj8dx95WS_TaPX0SpocSHE8uEjC_5Koh6-DlzStdQMerQCzsEu6tXIFrZdQQUFT_C1hwRpRF7SQO6StmPyiVNUytWrulzRdMGFw1awwMMg5w7tWvexqvESgM9XImqb9MHEiNN3SJ5qGQehfBr0k6CcXUTRA23RD025v4MdR3EuiqNe_uIwvo_7Oo99d39APBlESJXGUJFhP4tijUPJa6dv9s3evf_cHPqdDTA
+
 graph TD
   subgraph Cliente
       A(Formulario de Registro)
   end
 
   subgraph API
-      B{1. Validar Datos de Entrada} --> C{2. Hashear Contraseña};
-      C --> D{3. Crear Registro de Usuario};
-      D --> E{4. Generar Token JWT};
+      B{"Validar Datos de Entrada"} --> C{"Hashear Contraseña"};
+      C --> D{"Crear Registro de Usuario"};
+      D --> E{"Generar Token JWT"};
   end
 
   subgraph Base de Datos
