@@ -1,16 +1,14 @@
-import {
-  ChangePasswordDto,
-  ResponseUserProfileType,
-  UpdateUserDtoType
-} from '@auth/entities/dto/user.dto'
 import { NextFunction, Request, Response } from 'express'
 import {
   ResponseProfileDto,
   ResponseUserDto
 } from './schemas/response_user.schema'
 import { UserIdentifierDto } from './schemas/user.schema'
-import { UpdatePasswordDto } from './schemas/change_password.schema'
-import { UpdateUserDto } from './schemas/update_user.schema'
+import {
+  ChangePasswordDto,
+  UpdatePasswordDto
+} from './schemas/change_password.schema'
+import { UpdateUserDto, UpdateUserFormDto } from './schemas/update_user.schema'
 
 export type UserId = {
   id: number
@@ -25,12 +23,12 @@ export interface UserRepository {
 }
 
 export interface UserService {
-  findProfile(user: UserId): Promise<ResponseUserProfileType>
-  deactivateAccount(user: UserId): Promise<ResponseUserProfileType>
+  findProfile(user: UserId): Promise<ResponseProfileDto>
+  deactivateAccount(user: UserId): Promise<ResponseProfileDto>
   updateProfile(
-    dto: UpdateUserDtoType,
+    dto: UpdateUserFormDto,
     urlForPhoto: string
-  ): Promise<ResponseUserProfileType>
+  ): Promise<ResponseProfileDto>
   findPhoto(photoId: string): Promise<string>
   changePassword({
     id,

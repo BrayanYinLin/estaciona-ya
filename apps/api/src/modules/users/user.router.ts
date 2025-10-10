@@ -1,7 +1,3 @@
-import {
-  ChangePasswordDtoSchema,
-  UpdateUserDto
-} from '@auth/entities/dto/user.dto'
 import { User } from '@users/entities/user.entity'
 import { AppDataSource } from '@shared/database/data-source'
 import { checkSchema } from '@shared/middlewares/check-schema.middleware'
@@ -12,6 +8,8 @@ import { UserControllerImpl } from '@users/user.controller'
 import { UserServiceImpl } from '@users/user.service'
 import { Router } from 'express'
 import { UserRepositoryImpl } from './user.repository'
+import { ChangePasswordSchema } from './schemas/change_password.schema'
+import { UpdateUserFormSchema } from './schemas/update_user.schema'
 
 const userRouter = Router()
 
@@ -29,13 +27,13 @@ userRouter.patch(
   '/me',
   upload.single('photo'),
   inyectUserFromToken(),
-  checkSchema(UpdateUserDto),
+  checkSchema(UpdateUserFormSchema),
   controller.updateProfile.bind(controller)
 )
 userRouter.patch(
   '/me/password',
   inyectUserFromToken(),
-  checkSchema(ChangePasswordDtoSchema),
+  checkSchema(ChangePasswordSchema),
   controller.changePassword.bind(controller)
 )
 
