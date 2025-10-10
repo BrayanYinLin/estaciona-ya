@@ -2,19 +2,20 @@ import {
   ChangePasswordDtoSchema,
   UpdateUserDto
 } from '@auth/entities/dto/user.dto'
-import { User } from '@auth/entities/user.entity'
+import { User } from '@users/entities/user.entity'
 import { AppDataSource } from '@shared/database/data-source'
 import { checkSchema } from '@shared/middlewares/check-schema.middleware'
 import { inyectUserFromToken } from '@shared/middlewares/inyect-user-from-token.middleware'
 import { upload } from '@shared/middlewares/uploader.middleware'
 import { LocalFileStorageService } from '@shared/services/local-file-storage.service'
-import { UserControllerImpl } from '@users/controllers/user.controller'
-import { UserServiceImpl } from '@users/services/user.service'
+import { UserControllerImpl } from '@users/user.controller'
+import { UserServiceImpl } from '@users/user.service'
 import { Router } from 'express'
+import { UserRepositoryImpl } from './user.repository'
 
 const userRouter = Router()
 
-const userRepository = AppDataSource.getRepository(User)
+const userRepository = new UserRepositoryImpl(AppDataSource.getRepository(User))
 
 const fileService = new LocalFileStorageService()
 const userService = new UserServiceImpl(userRepository, fileService)

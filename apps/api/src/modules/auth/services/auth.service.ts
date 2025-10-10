@@ -7,7 +7,7 @@ import {
   LoginUserDtoType,
   CreateUserDtoType
 } from '@auth/entities/dto/user.dto'
-import { User } from '@auth/entities/user.entity'
+import { User } from '@users/entities/user.entity'
 import { Role } from '@roles/entities/role.entity'
 import { AppDataSource } from '@shared/database/data-source'
 import { ROLES } from '@shared/constants/roles'

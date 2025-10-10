@@ -7,7 +7,7 @@ import {
   env_port_db,
   env_username_db
 } from '../config/env.config'
-import { User } from '@auth/entities/user.entity'
+import { User } from '@users/entities/user.entity'
 import { Role } from '@roles/entities/role.entity'
 import { Garage } from '@root/modules/garages/entities/garage.entity'
 import { GaragePhoto } from '@root/modules/garages/entities/garage-photo.entity'
