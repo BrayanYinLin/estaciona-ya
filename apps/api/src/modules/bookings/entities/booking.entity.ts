@@ -1,4 +1,4 @@
-import { User } from '@auth/entities/user.entity'
+import { User } from '@users/entities/user.entity'
 import { Garage } from '@root/modules/garages/entities/garage.entity'
 import {
   Column,

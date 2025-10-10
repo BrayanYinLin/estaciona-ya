@@ -4,9 +4,24 @@ import {
   UpdateUserDtoType
 } from '@auth/entities/dto/user.dto'
 import { NextFunction, Request, Response } from 'express'
+import {
+  ResponseProfileDto,
+  ResponseUserDto
+} from './schemas/response_user.schema'
+import { UserIdentifierDto } from './schemas/user.schema'
+import { UpdatePasswordDto } from './schemas/change_password.schema'
+import { UpdateUserDto } from './schemas/update_user.schema'
 
 export type UserId = {
   id: number
+}
+
+export interface UserRepository {
+  findProfileById(id: UserIdentifierDto): Promise<ResponseProfileDto | null>
+  findUserById(id: UserIdentifierDto): Promise<ResponseUserDto | null>
+  updateUserPassword(password: UpdatePasswordDto): Promise<boolean>
+  updateUser(user: UpdateUserDto): Promise<void>
+  deactivateUser(id: UserIdentifierDto): Promise<void>
 }
 
 export interface UserService {

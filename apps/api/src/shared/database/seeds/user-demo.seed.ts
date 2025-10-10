@@ -1,6 +1,6 @@
 import { Role } from '@roles/entities/role.entity'
 import { AppDataSource } from '../data-source'
-import { User } from '@auth/entities/user.entity'
+import { User } from '@users/entities/user.entity'
 import { ROLES } from '@shared/constants/roles'
 import { hash } from 'bcrypt'
 import { env_bcrypt_salt_rounds } from '@shared/config/env.config'

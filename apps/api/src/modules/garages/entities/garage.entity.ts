@@ -9,7 +9,7 @@ import {
   JoinColumn
 } from 'typeorm'
 import { GaragePhoto } from './garage-photo.entity'
-import { User } from '@auth/entities/user.entity'
+import { User } from '@users/entities/user.entity'
 import { BookingRequest } from '@root/modules/booking_requests/entities/booking-requests.entity'
 
 @Entity('tb_garages')

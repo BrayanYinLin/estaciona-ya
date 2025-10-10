@@ -3,23 +3,20 @@ import {
   ResponseUserProfileType,
   UpdateUserDtoType
 } from '@auth/entities/dto/user.dto'
-import { User } from '@auth/entities/user.entity'
 import { env_bcrypt_salt_rounds } from '@shared/config/env.config'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { FILES_ROUTE } from '@shared/constants/files.route'
 import { HTTP_CODES } from '@shared/constants/http.codes'
-import { AppDataSource } from '@shared/database/data-source'
 import { FileStorageService } from '@shared/services/file-storage'
 import { AppError, DomainError } from '@shared/utils/error'
-import { UserId, UserService } from '@users/user'
+import { UserId, UserRepository, UserService } from '@users/user'
 import { compare, hash } from 'bcrypt'
 import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
-import { Repository } from 'typeorm'
 
 export class UserServiceImpl implements UserService {
   constructor(
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
     private readonly photoService: FileStorageService
   ) {}
 
@@ -28,7 +25,7 @@ export class UserServiceImpl implements UserService {
     oldPassword,
     newPassword
   }: ChangePasswordDto): Promise<void> {
-    const userFound = await this.userRepository.findOneBy({ id: id })
+    const userFound = await this.userRepository.findUserById(id)
 
     if (!userFound) {
       throw new DomainError({
@@ -49,13 +46,12 @@ export class UserServiceImpl implements UserService {
 
     const newPasswordHashed = await hash(newPassword, env_bcrypt_salt_rounds)
 
-    const { affected } = await AppDataSource.createQueryBuilder()
-      .update(User)
-      .set({ password: newPasswordHashed })
-      .where('id = :id', { id: userFound.id })
-      .execute()
+    const updated = await this.userRepository.updateUserPassword({
+      id: userFound.id,
+      newPassword: newPasswordHashed
+    })
 
-    if (!affected) {
+    if (!updated) {
       throw new DomainError({
         code: DOMAIN_ERRORS.CONFLICT.code,
         message: DOMAIN_ERRORS.CONFLICT.message
@@ -65,7 +61,6 @@ export class UserServiceImpl implements UserService {
 
   async findPhoto(photoId: string): Promise<string> {
     const path = await this.photoService.sendPhotoPath(photoId)
-    console.log(path)
     return path
   }
 
@@ -73,9 +68,9 @@ export class UserServiceImpl implements UserService {
     dto: UpdateUserDtoType,
     urlForPhoto: string
   ): Promise<ResponseUserProfileType> {
-    const userRecoveredForPhoto = await this.userRepository.findOne({
-      where: { id: dto.id }
-    })
+    const userRecoveredForPhoto = await this.userRepository.findProfileById(
+      dto.id
+    )
 
     if (!userRecoveredForPhoto) {
       throw new DomainError({
@@ -102,27 +97,16 @@ export class UserServiceImpl implements UserService {
       await this.photoService.delete(path)
     }
 
-    // const photoLink =
-    //   dto.photo !== undefined
-    //     ? urlForPhoto.concat(filename, extname(dto.photo.originalname))
-    //     : null
-
     const newDto = {
       ...dto,
       photo: photoLink ?? userRecoveredForPhoto.photo
     }
 
-    await this.userRepository.update(
-      { id: dto.id },
-      {
-        ...newDto
-      }
-    )
-
-    const userFound = await this.userRepository.findOne({
-      where: { id: dto.id },
-      relations: ['role']
+    await this.userRepository.updateUser({
+      ...newDto
     })
+
+    const userFound = await this.userRepository.findProfileById(dto.id)
 
     if (!userFound) {
       throw new DomainError({
@@ -139,18 +123,13 @@ export class UserServiceImpl implements UserService {
       email,
       dni,
       state,
-      role: role.name,
+      role,
       photo
     }
   }
 
   async deactivateAccount(user: UserId): Promise<ResponseUserProfileType> {
-    const userFound = await this.userRepository.findOne({
-      where: {
-        id: user.id
-      },
-      relations: ['role']
-    })
+    const userFound = await this.userRepository.findProfileById(user.id)
 
     if (!userFound) {
       throw new AppError({
@@ -159,17 +138,9 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    await AppDataSource.createQueryBuilder()
-      .update(User)
-      .set({ state: false })
-      .where('id = :id', { id: user.id })
-      .execute()
+    await this.userRepository.deactivateUser(user.id)
 
-    const userRecovered = await this.userRepository.findOne({
-      where: {
-        id: user.id
-      }
-    })
+    const userRecovered = await this.userRepository.findProfileById(user.id)
 
     if (!userRecovered) {
       throw new AppError({
@@ -186,18 +157,13 @@ export class UserServiceImpl implements UserService {
       email,
       dni,
       state,
-      role: role.name,
+      role,
       photo
     }
   }
 
   async findProfile(user: UserId): Promise<ResponseUserProfileType> {
-    const userFound = await this.userRepository.findOne({
-      where: {
-        id: user.id
-      },
-      relations: ['role']
-    })
+    const userFound = await this.userRepository.findProfileById(user.id)
 
     if (!userFound) {
       throw new AppError({
@@ -214,7 +180,7 @@ export class UserServiceImpl implements UserService {
       email,
       dni,
       state,
-      role: role.name,
+      role,
       photo
     }
   }
