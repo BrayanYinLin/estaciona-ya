@@ -8,7 +8,7 @@ import { User } from './entities/user.entity'
 import { UserIdentifierDto } from './schemas/user.schema'
 import { UpdatePasswordDto } from './schemas/change_password.schema'
 import { AppDataSource } from '@shared/database/data-source'
-import { UpdateUserDto } from './schemas/update_user.schema'
+import { UpdateUserFormSchema } from './schemas/update_user.schema'
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly repository: Repository<User>) {}
@@ -82,7 +82,7 @@ export class UserRepositoryImpl implements UserRepository {
     dni,
     photo,
     state
-  }: UpdateUserDto): Promise<void> {
+  }: UpdateUserFormSchema): Promise<void> {
     await this.repository.update(
       { id: id },
       {

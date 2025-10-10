@@ -1,8 +1,3 @@
-import {
-  ChangePasswordDto,
-  ResponseUserProfileType,
-  UpdateUserDtoType
-} from '@auth/entities/dto/user.dto'
 import { env_bcrypt_salt_rounds } from '@shared/config/env.config'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { FILES_ROUTE } from '@shared/constants/files.route'
@@ -13,6 +8,9 @@ import { UserId, UserRepository, UserService } from '@users/user'
 import { compare, hash } from 'bcrypt'
 import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
+import { UpdateUserFormDto } from './schemas/update_user.schema'
+import { ChangePasswordDto } from './schemas/change_password.schema'
+import { ResponseProfileDto } from './schemas/response_user.schema'
 
 export class UserServiceImpl implements UserService {
   constructor(
@@ -65,9 +63,9 @@ export class UserServiceImpl implements UserService {
   }
 
   async updateProfile(
-    dto: UpdateUserDtoType,
+    dto: UpdateUserFormDto,
     urlForPhoto: string
-  ): Promise<ResponseUserProfileType> {
+  ): Promise<ResponseProfileDto> {
     const userRecoveredForPhoto = await this.userRepository.findProfileById(
       dto.id
     )
@@ -128,7 +126,7 @@ export class UserServiceImpl implements UserService {
     }
   }
 
-  async deactivateAccount(user: UserId): Promise<ResponseUserProfileType> {
+  async deactivateAccount(user: UserId): Promise<ResponseProfileDto> {
     const userFound = await this.userRepository.findProfileById(user.id)
 
     if (!userFound) {
@@ -162,7 +160,7 @@ export class UserServiceImpl implements UserService {
     }
   }
 
-  async findProfile(user: UserId): Promise<ResponseUserProfileType> {
+  async findProfile(user: UserId): Promise<ResponseProfileDto> {
     const userFound = await this.userRepository.findProfileById(user.id)
 
     if (!userFound) {
