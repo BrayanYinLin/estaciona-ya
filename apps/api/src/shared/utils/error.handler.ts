@@ -43,7 +43,7 @@ export class ErrorHandler {
 
     return res.status(HTTP_CODES.INTERNAL).json({
       status: HTTP_CODES.INTERNAL,
-      message: err.message ?? 'Internal Server Error.'
+      message: 'Error inesperado'
     })
   }
 

@@ -1,5 +1,9 @@
 import z from 'zod'
 import { UserIdentifierSchema } from './user.schema'
+import {
+  ResponseRoleSchema,
+  RoleSchema
+} from '@roles/schemas/response_role.schema'
 
 export const ResponseProfileSchema = z.object({
   id: UserIdentifierSchema,
@@ -7,7 +11,7 @@ export const ResponseProfileSchema = z.object({
   email: z.email(),
   dni: z.string().length(8),
   state: z.boolean(),
-  role: z.string(),
+  role: ResponseRoleSchema,
   photo: z.string().nullable()
 })
 
@@ -20,7 +24,7 @@ export const ResponseUserSchema = z.object({
   password: z.string(),
   dni: z.string().length(8),
   state: z.boolean(),
-  role: z.string(),
+  role: RoleSchema,
   photo: z.string().nullable()
 })
 

@@ -6,7 +6,7 @@ import { HTTP_CODES } from '@shared/constants/http.codes'
 import {
   AccessTokenPayload,
   RefreshTokenPayload
-} from '@auth/entities/dto/user-token.dto'
+} from '@auth/schemas/token.schema'
 
 export class JwtUtils {
   static generateAccessJwt(user: AccessTokenPayload) {

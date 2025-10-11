@@ -8,7 +8,8 @@ import { User } from './entities/user.entity'
 import { UserIdentifierDto } from './schemas/user.schema'
 import { UpdatePasswordDto } from './schemas/change_password.schema'
 import { AppDataSource } from '@shared/database/data-source'
-import { UpdateUserFormSchema } from './schemas/update_user.schema'
+import { UpdateUserDto } from './schemas/update_user.schema'
+import { CreateUserDto } from './schemas/create_user.schema'
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly repository: Repository<User>) {}
@@ -33,7 +34,9 @@ export class UserRepositoryImpl implements UserRepository {
       email,
       dni,
       state,
-      role: role.name,
+      role: {
+        name: role.name
+      },
       photo
     }
   }
@@ -57,7 +60,10 @@ export class UserRepositoryImpl implements UserRepository {
       password,
       dni,
       state,
-      role: role.name,
+      role: {
+        id: role.id,
+        name: role.name
+      },
       photo
     }
   }
@@ -82,7 +88,7 @@ export class UserRepositoryImpl implements UserRepository {
     dni,
     photo,
     state
-  }: UpdateUserFormSchema): Promise<void> {
+  }: UpdateUserDto): Promise<void> {
     await this.repository.update(
       { id: id },
       {
@@ -101,5 +107,95 @@ export class UserRepositoryImpl implements UserRepository {
       .set({ state: false })
       .where('id = :id', { id })
       .execute()
+  }
+
+  async findUserByEmail(email: string): Promise<ResponseUserDto | null> {
+    const user = await this.repository.findOne({
+      where: {
+        email: email
+      },
+      relations: ['role']
+    })
+
+    if (!user) return null
+
+    const {
+      id,
+      name,
+      email: emailRecovered,
+      password,
+      dni,
+      state,
+      role,
+      photo
+    } = user
+
+    return {
+      id,
+      name,
+      email: emailRecovered,
+      password,
+      dni,
+      state,
+      role: {
+        id: role.id,
+        name: role.name
+      },
+      photo
+    }
+  }
+
+  async findUserByDni(dni: string): Promise<ResponseUserDto | null> {
+    const user = await this.repository.findOne({
+      where: {
+        dni: dni
+      },
+      relations: ['role']
+    })
+
+    if (!user) return null
+
+    const {
+      id,
+      name,
+      email,
+      password,
+      dni: dniRecovered,
+      state,
+      role,
+      photo
+    } = user
+
+    return {
+      id,
+      name,
+      email,
+      password,
+      dni: dniRecovered,
+      state,
+      role: {
+        id: role.id,
+        name: role.name
+      },
+      photo
+    }
+  }
+
+  async saveUser({
+    name,
+    email,
+    password,
+    dni,
+    role
+  }: CreateUserDto): Promise<ResponseUserDto> {
+    const userCreated = await this.repository.save({
+      name,
+      email,
+      password,
+      dni,
+      role
+    })
+
+    return userCreated
   }
 }
