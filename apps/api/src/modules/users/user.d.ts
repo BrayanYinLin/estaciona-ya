@@ -9,6 +9,7 @@ import {
   UpdatePasswordDto
 } from './schemas/change_password.schema'
 import { UpdateUserDto, UpdateUserFormDto } from './schemas/update_user.schema'
+import { CreateUserDto } from './schemas/create_user.schema'
 
 export type UserId = {
   id: number
@@ -17,8 +18,11 @@ export type UserId = {
 export interface UserRepository {
   findProfileById(id: UserIdentifierDto): Promise<ResponseProfileDto | null>
   findUserById(id: UserIdentifierDto): Promise<ResponseUserDto | null>
+  findUserByEmail(email: string): Promise<ResponseUserDto | null>
+  findUserByDni(dni: string): Promise<ResponseUserDto | null>
   updateUserPassword(password: UpdatePasswordDto): Promise<boolean>
   updateUser(user: UpdateUserDto): Promise<void>
+  saveUser(user: CreateUserDto): Promise<ResponseUserDto>
   deactivateUser(id: UserIdentifierDto): Promise<void>
 }
 

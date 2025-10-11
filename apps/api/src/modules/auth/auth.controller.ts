@@ -1,12 +1,11 @@
-import { AuthController } from '@auth/auth'
-import { AuthServiceImpl } from '@auth/services/auth.service'
+import { AuthController, AuthService } from '@auth/auth'
 import { JwtUtils } from '@auth/utils/jwt.utils'
 import { cookieOpt, COOKIES } from '@shared/constants/cookies'
 import { HTTP_CODES } from '@shared/constants/http.codes'
 import { Request, Response, NextFunction } from 'express'
 
 export class AuthControllerImpl implements AuthController {
-  constructor(private readonly authService = new AuthServiceImpl()) {}
+  constructor(private readonly authService: AuthService) {}
 
   async logout(
     _req: Request,

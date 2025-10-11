@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import { CreateUserDtoType, LoginUserDtoType } from './entities/dto/user.dto'
-import {
-  AccessTokenPayload,
-  RefreshTokenPayload
-} from './entities/dto/user-token.dto'
+import { RegisterUserDto } from './schemas/register_user.schema'
+import { LoginUserDto } from './schemas/login_user.schema'
+import { AccessTokenPayload, RefreshTokenPayload } from './schemas/token.schema'
 
 export type AccessToken = {
   access_token: string
@@ -20,9 +18,9 @@ export type AuthenticationResponseType = AuthenticationTokens & {
 }
 
 export interface AuthService {
-  createTenant(tenant: CreateUserDtoType): Promise<AuthenticationResponseType>
-  createLessor(lessor: CreateUserDtoType): Promise<AuthenticationResponseType>
-  login(user: LoginUserDtoType): Promise<AuthenticationResponseType>
+  createTenant(tenant: RegisterUserDto): Promise<AuthenticationResponseType>
+  createLessor(lessor: RegisterUserDto): Promise<AuthenticationResponseType>
+  login(user: LoginUserDto): Promise<AuthenticationResponseType>
   refresh(jwt: RefreshTokenPayload): Promise<AccessToken>
 }
 

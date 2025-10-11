@@ -3,43 +3,39 @@ import {
   AuthService,
   AuthenticationResponseType
 } from '@auth/auth'
-import {
-  LoginUserDtoType,
-  CreateUserDtoType
-} from '@auth/entities/dto/user.dto'
-import { User } from '@users/entities/user.entity'
-import { Role } from '@roles/entities/role.entity'
-import { AppDataSource } from '@shared/database/data-source'
 import { ROLES } from '@shared/constants/roles'
 import { JwtUtils } from '@auth/utils/jwt.utils'
 import { compare, hash } from 'bcrypt'
 import { env_bcrypt_salt_rounds } from '@shared/config/env.config'
-import { AppError } from '@shared/utils/error'
-import { HTTP_CODES } from '@shared/constants/http.codes'
-import { RefreshTokenPayload } from '@auth/entities/dto/user-token.dto'
+import { DomainError } from '@shared/utils/error'
+import { LoginUserDto } from './schemas/login_user.schema'
+import { RegisterUserDto } from './schemas/register_user.schema'
+import { UserRepository } from '@users/user'
+import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
+import { RoleRepository } from '@roles/role'
+import { RefreshTokenPayload } from './schemas/token.schema'
 
 export class AuthServiceImpl implements AuthService {
   constructor(
-    private readonly repository = AppDataSource.getRepository(User),
-    private readonly roleRepository = AppDataSource.getRepository(Role)
+    private readonly userRepository: UserRepository,
+    private readonly roleRepository: RoleRepository
   ) {}
 
   async refresh(jwt: RefreshTokenPayload): Promise<AccessToken> {
-    const userFound = await this.repository.findOne({
-      where: { id: jwt.id },
-      relations: ['role']
-    })
+    const userFound = await this.userRepository.findUserById(jwt.id)
 
     if (!userFound) {
-      throw new AppError({
-        httpCode: HTTP_CODES.NOT_FOUND,
-        message: 'User not found'
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Usuario not encontrado'
       })
     }
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userFound.id,
-      role: { name: userFound.role.name }
+      role: {
+        name: userFound.role.name
+      }
     })
 
     return {
@@ -47,31 +43,30 @@ export class AuthServiceImpl implements AuthService {
     }
   }
 
-  async login(user: LoginUserDtoType): Promise<AuthenticationResponseType> {
-    const userFound = await this.repository.findOne({
-      where: { email: user.email },
-      relations: ['role']
-    })
+  async login(user: LoginUserDto): Promise<AuthenticationResponseType> {
+    const userFound = await this.userRepository.findUserByEmail(user.email)
 
     if (!userFound) {
-      throw new AppError({
-        httpCode: 404,
-        message: 'Usuario no encontrado'
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Usuario not encontrado'
       })
     }
 
     const isCorrect = await compare(user.password, userFound.password)
 
     if (!isCorrect) {
-      throw new AppError({
-        httpCode: HTTP_CODES.BAD_REQUEST,
+      throw new DomainError({
+        code: DOMAIN_ERRORS.INCORRECT_PASSWORD.code,
         message: 'Contraseña incorrecta'
       })
     }
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userFound.id,
-      role: { name: userFound.role.name }
+      role: {
+        name: userFound.role.name
+      }
     })
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userFound.id })
 
@@ -88,42 +83,40 @@ export class AuthServiceImpl implements AuthService {
   }
 
   async createLessor(
-    lessor: CreateUserDtoType
+    lessor: RegisterUserDto
   ): Promise<AuthenticationResponseType> {
-    const role = await this.roleRepository.findOneBy({ name: ROLES.LESSOR })
+    const role = await this.roleRepository.findRoleByName(ROLES.LESSOR)
 
     if (!role) {
-      throw new AppError({
-        httpCode: 404,
-        message: 'Role not encontrado'
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Rol not encontrado'
       })
     }
 
-    const userFoundByEmail = await this.repository.findOneBy({
-      email: lessor.email
-    })
+    const userFoundByEmail = await this.userRepository.findUserByEmail(
+      lessor.email
+    )
 
     if (userFoundByEmail) {
-      throw new AppError({
-        httpCode: HTTP_CODES.CONFLICT,
+      throw new DomainError({
+        code: DOMAIN_ERRORS.CONFLICT.code,
         message: 'El correo ya esta siendo utilizado'
       })
     }
 
-    const userFoundByDni = await this.repository.findOneBy({
-      email: lessor.dni
-    })
+    const userFoundByDni = await this.userRepository.findUserByDni(lessor.dni)
 
     if (userFoundByDni) {
-      throw new AppError({
-        httpCode: HTTP_CODES.CONFLICT,
+      throw new DomainError({
+        code: DOMAIN_ERRORS.CONFLICT.code,
         message: 'El documento ya esta siendo utilizado'
       })
     }
 
     const passwordHashed = await hash(lessor.password, env_bcrypt_salt_rounds)
 
-    const userCreated = await this.repository.save({
+    const userCreated = await this.userRepository.saveUser({
       ...lessor,
       password: passwordHashed,
       role: role
@@ -131,7 +124,9 @@ export class AuthServiceImpl implements AuthService {
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userCreated.id,
-      role: { name: userCreated.role.name }
+      role: {
+        name: userCreated.role.name
+      }
     })
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userCreated.id })
 
@@ -148,42 +143,39 @@ export class AuthServiceImpl implements AuthService {
   }
 
   async createTenant(
-    tenant: CreateUserDtoType
+    tenant: RegisterUserDto
   ): Promise<AuthenticationResponseType> {
-    const role = await this.roleRepository.findOneBy({ name: ROLES.TENANT })
-
+    const role = await this.roleRepository.findRoleByName(ROLES.TENANT)
     if (!role) {
-      throw new AppError({
-        httpCode: 404,
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
         message: 'Role not encontrado'
       })
     }
 
-    const userFoundByEmail = await this.repository.findOneBy({
-      email: tenant.email
-    })
+    const userFoundByEmail = await this.userRepository.findUserByEmail(
+      tenant.email
+    )
 
     if (userFoundByEmail) {
-      throw new AppError({
-        httpCode: HTTP_CODES.CONFLICT,
+      throw new DomainError({
+        code: DOMAIN_ERRORS.CONFLICT.code,
         message: 'El correo ya esta siendo utilizado'
       })
     }
 
-    const userFoundByDni = await this.repository.findOneBy({
-      email: tenant.dni
-    })
+    const userFoundByDni = await this.userRepository.findUserByDni(tenant.dni)
 
     if (userFoundByDni) {
-      throw new AppError({
-        httpCode: HTTP_CODES.CONFLICT,
+      throw new DomainError({
+        code: DOMAIN_ERRORS.CONFLICT.code,
         message: 'El documento ya esta siendo utilizado'
       })
     }
 
     const passwordHashed = await hash(tenant.password, env_bcrypt_salt_rounds)
 
-    const userCreated = await this.repository.save({
+    const userCreated = await this.userRepository.saveUser({
       ...tenant,
       password: passwordHashed,
       role: role
@@ -191,7 +183,9 @@ export class AuthServiceImpl implements AuthService {
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userCreated.id,
-      role: { name: userCreated.role.name }
+      role: {
+        name: userCreated.role.name
+      }
     })
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userCreated.id })
 
