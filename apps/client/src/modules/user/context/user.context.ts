@@ -1,7 +1,10 @@
 import { create } from 'zustand'
 import { UserService } from '../services/user.service'
 
-export type UserRole = 'lessor' | 'tenant'
+export type UserRole = {
+  name: 'lessor' | 'tenant'
+}
+
 export type UserProfile = {
   id: number
   name: string
@@ -22,7 +25,7 @@ interface UserStore {
   logOutUser: () => void
 }
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set, get) => ({
   user: null,
   loading: false,
   error: null,
@@ -37,17 +40,22 @@ export const useUserStore = create<UserStore>((set) => ({
       } else {
         set({ user: null, loading: false, error: 'Error inesperado' })
       }
+    } finally {
+      set({ loading: false })
     }
   },
   deactiveUser: async () => {
     try {
       await UserService.deactivateProfile()
+      await get().recoverUser()
     } catch (error: unknown) {
       if (error instanceof Error) {
         set({ error: error.message })
       } else {
         set({ error: 'Error inesperado' })
       }
+    } finally {
+      set({ loading: false })
     }
   },
   updateProfile: async (formData: FormData) => {
@@ -61,6 +69,8 @@ export const useUserStore = create<UserStore>((set) => ({
       } else {
         set({ user: null, loading: false, error: 'Error inesperado' })
       }
+    } finally {
+      set({ loading: false })
     }
   },
   logOutUser: () => set({ user: null })

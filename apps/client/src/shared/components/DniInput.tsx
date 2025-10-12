@@ -4,7 +4,7 @@ type NativeInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>
 
 export type DniInputProps = NativeInputProps & {
   labelContent?: string
-  inputClassName?: string
+  className?: InputHTMLAttributes<HTMLInputElement>['name']
   isRequired?: boolean
   name: InputHTMLAttributes<HTMLInputElement>['name']
   placeholder: InputHTMLAttributes<HTMLInputElement>['placeholder']
@@ -13,7 +13,7 @@ export type DniInputProps = NativeInputProps & {
 }
 export function DniInput({
   labelContent,
-  inputClassName,
+  className,
   isRequired,
   name,
   placeholder,
@@ -25,25 +25,21 @@ export function DniInput({
       <fieldset>
         <legend className="fieldset-legend text-xs">{labelContent}</legend>
 
-        <label className="input w-full items-center gap-2">
-          <input
-            type="text"
-            name={name}
-            required={isRequired}
-            className={inputClassName}
-            placeholder={placeholder}
-            maxLength={8}
-            inputMode="numeric"
-            pattern="\d*"
-            defaultValue={defaultValue}
-            readOnly={readOnly}
-            // Asegura que solo se puedan ingresar números
-            onInput={(e) => {
-              // Filtra cualquier caracter no numérico
-              e.currentTarget.value = e.currentTarget.value.replace(/\D+/g, '')
-            }}
-          />
-        </label>
+        <input
+          type="text"
+          name={name}
+          required={isRequired}
+          className={`input w-full items-center focus:outline-0 focus:outline-none ${className}`}
+          placeholder={placeholder}
+          maxLength={8}
+          inputMode="numeric"
+          pattern="\d*"
+          defaultValue={defaultValue}
+          readOnly={readOnly}
+          onInput={(e) => {
+            e.currentTarget.value = e.currentTarget.value.replace(/\D+/g, '')
+          }}
+        />
       </fieldset>
     </>
   )
