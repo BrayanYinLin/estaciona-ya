@@ -1,75 +1,29 @@
-import { InputPassword } from '@shared/components/InputPassword'
-import { PasswordSection } from './PasswordSection'
-import { useEffect, useState, type FormEvent } from 'react'
-import { DangerZone } from './DangerZone'
+import { type FormEvent } from 'react'
 import { PhotoUploader } from './PhotoUploader'
 import { type UserProfile, useUserStore } from '@user/context/user.context'
 import { DniInput } from '@shared/components/DniInput'
 import { EmailInput } from '@shared/components/EmailInput'
-import { UserService } from '@user/services/user.service'
+import { AlertError } from '@shared/components/AlertError'
 
 export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
-  const [formData, setFormData] = useState<FormData>(new FormData())
-  const { recoverUser } = useUserStore()
-  const [success, setSuccess] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [userUpdateError, setUserUpdateError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (success) {
-      setTimeout(() => {
-        setSuccess(false)
-      }, 2000)
-    }
-
-    if (errorMessage) {
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 2000)
-    }
-  }, [errorMessage])
-
-  useEffect(() => {}, [errorMessage])
+  const { updateProfile, error } = useUserStore()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const newForm = new FormData()
-    if ((formData.get('photo') as File) !== null) {
-      newForm.append('photo', formData.get('photo') as File)
+    if ((data.get('photo') as File) !== null) {
+      newForm.append('photo', data.get('photo') as File)
     }
     newForm.append('name', data.get('name') as string)
     newForm.append('email', data.get('email') as string)
     newForm.append('dni', data.get('dni') as string)
 
-    try {
-      await UserService.updateProfile(newForm)
-      await recoverUser()
-    } catch (e) {
-      setUserUpdateError((e as Error).message)
-    }
-  }
-
-  const handlePasswordChange = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const oldPassword = data.get('oldPassword') as string
-    const newPassword = data.get('newPassword') as string
-
-    try {
-      const result = await UserService.changePassword({
-        oldPassword,
-        newPassword
-      })
-      setSuccess(result)
-    } catch (e: unknown) {
-      setErrorMessage((e as Error).message)
-    }
+    await updateProfile(newForm)
   }
 
   return (
     <>
-      {/* Sección para editar el perfil */}
       <h2 className="mt-5 text-2xl font-semibold">Editar perfil</h2>
 
       <form
@@ -102,66 +56,40 @@ export function ProfileForm({ name, email, dni, role, photo }: UserProfile) {
             name="dni"
             placeholder="Ingresa tu documento"
             defaultValue={dni}
+            className="focus:outline-none"
+            readOnly
             isRequired
             required
           />
 
-          <InputPassword
-            labelContent="Rol"
-            inputType="text"
-            name="role"
-            defaultValue={role === 'lessor' ? 'Arrendador' : 'Arrendatario'}
-            readOnly
-          />
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Rol</legend>
+            <input
+              type="text"
+              className="input w-full focus:outline-none"
+              placeholder="Tu nombre"
+              name="role"
+              defaultValue={
+                role.name === 'lessor' ? 'Arrendador' : 'Arrendatario'
+              }
+              required
+              readOnly
+            />
+          </fieldset>
 
-          {userUpdateError && (
-            <div role="alert" className="alert alert-error alert-soft my-4">
-              <span>{userUpdateError}</span>
-            </div>
-          )}
+          {error && <AlertError message={error} className="my-4" />}
         </section>
 
         <div className="flex flex-col gap-8 mt-5 lg:mt-0 col-span-1">
-          <PhotoUploader
-            defaultPreview={photo}
-            formData={formData}
-            setFormData={setFormData}
-          />
+          <PhotoUploader defaultPreview={photo} />
         </div>
+
         <div className="col-span-2 row-span-1 row-start-2 h-auto">
           <button type="submit" className="btn btn-outline btn-primary w-fit">
             Guardar cambios
           </button>
         </div>
       </form>
-
-      {/* Sección para cambiar la contraseña */}
-      <h2 className="mt-5 text-2xl font-semibold">Cambiar contraseña</h2>
-      <form
-        className="lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] gap-4 flex flex-col w-full"
-        onSubmit={handlePasswordChange}
-      >
-        <div className="flex flex-col gap-5 mt-5 lg:mt-0 col-span-1">
-          <PasswordSection />
-          {success && (
-            <div role="alert" className="alert alert-info alert-soft">
-              <span>Se restableció la contraseña correctamente.</span>
-            </div>
-          )}
-          {errorMessage && (
-            <div role="alert" className="alert alert-error alert-soft">
-              <span>{errorMessage}</span>
-            </div>
-          )}
-          <button type="submit" className="btn btn-outline btn-primary w-fit">
-            Cambiar contraseña
-          </button>
-        </div>
-      </form>
-
-      {/* Sección para desactivar la cuenta */}
-      <h2 className="text-2xl font-semibold">Desactivar cuenta</h2>
-      <DangerZone />
     </>
   )
 }

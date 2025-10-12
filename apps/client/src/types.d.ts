@@ -4,6 +4,8 @@ export type UserResponseProfile = {
   email: string
   dni: string
   state: boolean
-  role: 'lessor' | 'tenant'
+  role: {
+    name: 'lessor' | 'tenant'
+  }
   photo: null | string
 }

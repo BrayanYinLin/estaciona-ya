@@ -7,7 +7,7 @@ export type NavbarLinksProps = {
 }
 
 export function NavBarLinks({ role }: NavbarLinksProps) {
-  if (role === 'lessor') {
+  if (role.name === 'lessor') {
     return (
       <>
         <nav className="hidden md:block flex-none">
