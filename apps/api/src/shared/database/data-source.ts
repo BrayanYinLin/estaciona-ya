@@ -16,6 +16,7 @@ import { Booking } from '@root/modules/bookings/entities/booking.entity'
 import { BookingRequest } from '@root/modules/booking_requests/entities/booking-requests.entity'
 import { District } from '@root/modules/locations/entities/district.entity'
 import { Location } from '@root/modules/locations/entities/locations.entity'
+import { RentMode } from '@garages/entities/rent_modes.entity'
 
 export const AppDataSource = new DataSource({
   connectorPackage: 'mysql2',
@@ -37,7 +38,8 @@ export const AppDataSource = new DataSource({
     BookingRequest,
     Location,
     District,
-    Role
+    Role,
+    RentMode
   ],
   subscribers: [],
   migrations: []

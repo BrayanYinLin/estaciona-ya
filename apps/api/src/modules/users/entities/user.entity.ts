@@ -32,6 +32,9 @@ export class User {
   @Column({ type: 'char', unique: true, length: 8, name: 'user_dni' })
   dni!: string
 
+  @Column({ type: 'boolean', default: false, name: 'user_validated_account' })
+  validatedAccount!: boolean
+
   @ManyToOne(() => Role, (role) => role.users)
   @JoinColumn({ name: 'user_role_id' })
   role!: Role

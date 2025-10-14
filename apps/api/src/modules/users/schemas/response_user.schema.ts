@@ -12,7 +12,8 @@ export const ResponseProfileSchema = z.object({
   dni: z.string().length(8),
   state: z.boolean(),
   role: ResponseRoleSchema,
-  photo: z.string().nullable()
+  photo: z.string().nullable(),
+  validatedAccount: z.boolean()
 })
 
 export type ResponseProfileDto = z.infer<typeof ResponseProfileSchema>

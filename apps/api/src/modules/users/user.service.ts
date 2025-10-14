@@ -113,7 +113,8 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    const { id, name, email, dni, state, role, photo } = userFound
+    const { id, name, email, dni, state, role, photo, validatedAccount } =
+      userFound
 
     return {
       id,
@@ -122,7 +123,8 @@ export class UserServiceImpl implements UserService {
       dni,
       state,
       role,
-      photo
+      photo,
+      validatedAccount
     }
   }
 
@@ -147,7 +149,8 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    const { id, name, email, dni, role, state, photo } = userFound
+    const { id, name, email, dni, role, state, photo, validatedAccount } =
+      userFound
 
     return {
       id,
@@ -156,7 +159,8 @@ export class UserServiceImpl implements UserService {
       dni,
       state,
       role,
-      photo
+      photo,
+      validatedAccount
     }
   }
 
@@ -170,7 +174,8 @@ export class UserServiceImpl implements UserService {
       })
     }
 
-    const { id, name, email, dni, role, state, photo } = userFound
+    const { id, name, email, dni, role, state, photo, validatedAccount } =
+      userFound
 
     return {
       id,
@@ -179,7 +184,8 @@ export class UserServiceImpl implements UserService {
       dni,
       state,
       role,
-      photo
+      photo,
+      validatedAccount
     }
   }
 }

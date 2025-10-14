@@ -41,7 +41,7 @@ export function UserProfile() {
         {!user.state && (
           <div
             role="alert"
-            className="alert alert-warning alert-outline mt-5 mb-[-25px] w-full"
+            className="alert alert-error alert-outline mt-5 mb-[-25px] w-full"
           >
             <WarningIcon />
             <span>
@@ -50,10 +50,24 @@ export function UserProfile() {
             </span>
           </div>
         )}
+        {!user.validatedAccount && (
+          <div
+            role="alert"
+            className="alert alert-warning alert-outline mb-[-25px] w-full mt-[35px]"
+          >
+            <WarningIcon />
+            <span>
+              Tu cuenta no está validada, no podrás acceder a las
+              funcionalidades.
+            </span>
+            <button className="btn btn-dash btn-warning">Validar Cuenta</button>
+          </div>
+        )}
       </div>
 
       <div className="pb-8 px-4 justify-start w-full flex flex-col gap-2 lg:w-[1000px]">
         <ProfileForm
+          validatedAccount={user.validatedAccount}
           id={user.id}
           name={user.name}
           email={user.email}
