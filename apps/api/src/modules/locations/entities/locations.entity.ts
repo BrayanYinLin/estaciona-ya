@@ -16,7 +16,7 @@ export class Location {
   address!: string
 
   @Column({ type: 'decimal', name: 'location_latitude' })
-  city!: number
+  latitude!: number
 
   @Column({ type: 'decimal', name: 'location_longitude' })
   longitude!: number
