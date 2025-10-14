@@ -2,7 +2,7 @@ import type { InputHTMLAttributes } from 'react'
 
 type NativeInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>
 
-export type MailInputProps = NativeInputProps & {
+export type TextAreaInputProps = NativeInputProps & {
   labelContent?: string
   inputClassName?: string
   wrapperClassName?: string
@@ -12,28 +12,24 @@ export type MailInputProps = NativeInputProps & {
   defaultValue?: InputHTMLAttributes<HTMLInputElement>['value']
 }
 
-export function EmailInput({
+export function InputTextArea({
   labelContent,
   inputClassName,
   isRequired,
   name,
   placeholder,
   defaultValue
-}: MailInputProps) {
+}: TextAreaInputProps) {
   return (
-    <fieldset>
-      <legend className="fieldset-legend text-xs">{labelContent}</legend>
-
-      <label className="input w-full items-center gap-2">
-        <input
-          type="email"
-          name={name}
-          required={isRequired}
-          className={inputClassName}
-          placeholder={placeholder}
-          defaultValue={defaultValue}
-        />
-      </label>
+    <fieldset className="fieldset">
+      <legend className="fieldset-legend">{labelContent}</legend>
+      <textarea
+        className={`textarea ${inputClassName}`}
+        placeholder={placeholder}
+        required={isRequired}
+        name={name}
+        defaultValue={defaultValue}
+      ></textarea>
     </fieldset>
   )
 }
