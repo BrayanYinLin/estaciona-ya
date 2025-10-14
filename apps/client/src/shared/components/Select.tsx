@@ -18,7 +18,7 @@ export function Select({
         <select
           defaultValue={defaultValue}
           name={name}
-          className="select md:w-full"
+          className="select w-full"
         >
           <option disabled={true} value={defaultValue}>
             {defaultValue}
