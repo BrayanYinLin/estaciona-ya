@@ -13,6 +13,7 @@ export type UserProfile = {
   state: boolean
   role: UserRole
   photo: null | string
+  validatedAccount: boolean
 }
 
 interface UserStore {

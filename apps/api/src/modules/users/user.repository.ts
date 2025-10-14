@@ -26,7 +26,16 @@ export class UserRepositoryImpl implements UserRepository {
 
     if (!user) return null
 
-    const { id: userId, name, email, dni, state, role, photo } = user
+    const {
+      id: userId,
+      name,
+      email,
+      dni,
+      state,
+      role,
+      photo,
+      validatedAccount
+    } = user
 
     return {
       id: userId,
@@ -37,7 +46,8 @@ export class UserRepositoryImpl implements UserRepository {
       role: {
         name: role.name
       },
-      photo
+      photo,
+      validatedAccount
     }
   }
 

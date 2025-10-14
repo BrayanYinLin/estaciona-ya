@@ -8,4 +8,5 @@ export type UserResponseProfile = {
     name: 'lessor' | 'tenant'
   }
   photo: null | string
+  validatedAccount: boolean
 }
