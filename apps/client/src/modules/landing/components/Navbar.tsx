@@ -38,7 +38,7 @@ export function Navbar() {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">EstacionaYa</a>
+        <a className="text-xl font-semibold px-6">EstacionaYa</a>
       </div>
       {/* <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
