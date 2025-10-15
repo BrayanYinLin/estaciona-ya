@@ -4,10 +4,12 @@ import { app } from './server'
 import { env_api_port } from '@shared/config/env.config'
 import { seedRoles } from '@shared/database/seeds/role.seed'
 import { seedUserLessor } from '@shared/database/seeds/user-demo.seed'
+import { seedDistricts } from '@shared/database/seeds/district.seed'
 
 const init = async () => {
   await AppDataSource.initialize()
   await seedRoles()
+  await seedDistricts()
   await seedUserLessor()
 
   app.listen(env_api_port, () => {

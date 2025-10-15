@@ -27,8 +27,7 @@ app.use(limiter)
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 app.use(ENDPOINTS.AUTH, authRouter)
 app.use(ENDPOINTS.USER, userRouter)
-//Ruta para mostrar todos los distritos
-app.use('/api/districts', districtRouter)
+app.use(ENDPOINTS.DISTRICTS, districtRouter)
 
 app.use(errorMiddleware)
 
