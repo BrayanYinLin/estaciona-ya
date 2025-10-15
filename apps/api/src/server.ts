@@ -12,6 +12,7 @@ import { userRouter } from '@users/user.router'
 import { join } from 'node:path'
 import { mkdirSync } from 'node:fs'
 import { FILES_ROUTE } from '@shared/constants/files.route'
+import districtRouter from '@locations/routers/district.router'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -26,6 +27,8 @@ app.use(limiter)
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 app.use(ENDPOINTS.AUTH, authRouter)
 app.use(ENDPOINTS.USER, userRouter)
+//Ruta para mostrar todos los distritos
+app.use('/api/districts', districtRouter)
 
 app.use(errorMiddleware)
 
