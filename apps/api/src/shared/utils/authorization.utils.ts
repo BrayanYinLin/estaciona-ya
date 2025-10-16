@@ -1,8 +1,8 @@
 import { DomainError } from './error'
 import { verify } from 'jsonwebtoken'
 import { env_jwt } from '@shared/config/env.config'
-import { AccessTokenPayload } from '@auth/entities/dto/user-token.dto'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
+import { AccessTokenPayload } from '@auth/schemas/token.schema'
 
 export class AuthorizationUtils {
   static extractAuthorizationToken(authorization?: string): AccessTokenPayload {

@@ -3,6 +3,8 @@ import z from 'zod'
 
 export const AccessTokenPayloadSchema = z.object({
   id: z.number().positive(),
+  validatedAccount: z.boolean(),
+  state: z.boolean(),
   role: ResponseRoleSchema
 })
 

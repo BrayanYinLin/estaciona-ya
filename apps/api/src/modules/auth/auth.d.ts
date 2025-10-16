@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { RegisterUserDto } from './schemas/register_user.schema'
 import { LoginUserDto } from './schemas/login_user.schema'
-import { AccessTokenPayload, RefreshTokenPayload } from './schemas/token.schema'
+import { RefreshTokenPayload } from './schemas/token.schema'
 
 export type AccessToken = {
   access_token: string
@@ -11,10 +11,17 @@ export type RefreshToken = {
   refresh_token: string
 }
 
+export type UserAuthenticated = {
+  id: number
+  role: {
+    name: string
+  }
+}
+
 export type AuthenticationTokens = AccessToken & RefreshToken
 
 export type AuthenticationResponseType = AuthenticationTokens & {
-  user: AccessTokenPayload
+  user: UserAuthenticated
 }
 
 export interface AuthService {
