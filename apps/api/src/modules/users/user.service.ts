@@ -19,11 +19,11 @@ export class UserServiceImpl implements UserService {
   ) {}
 
   async changePassword({
-    id,
+    user,
     oldPassword,
     newPassword
   }: ChangePasswordDto): Promise<void> {
-    const userFound = await this.userRepository.findUserById(id)
+    const userFound = await this.userRepository.findUserById(user.id)
 
     if (!userFound) {
       throw new DomainError({
@@ -67,7 +67,7 @@ export class UserServiceImpl implements UserService {
     urlForPhoto: string
   ): Promise<ResponseProfileDto> {
     const userRecoveredForPhoto = await this.userRepository.findProfileById(
-      dto.id
+      dto.user.id
     )
 
     if (!userRecoveredForPhoto) {
@@ -101,10 +101,11 @@ export class UserServiceImpl implements UserService {
     }
 
     await this.userRepository.updateUser({
-      ...newDto
+      ...newDto,
+      id: newDto.user.id
     })
 
-    const userFound = await this.userRepository.findProfileById(dto.id)
+    const userFound = await this.userRepository.findProfileById(dto.user.id)
 
     if (!userFound) {
       throw new DomainError({

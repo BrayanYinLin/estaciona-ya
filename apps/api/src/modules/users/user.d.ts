@@ -35,7 +35,7 @@ export interface UserService {
   ): Promise<ResponseProfileDto>
   findPhoto(photoId: string): Promise<string>
   changePassword({
-    id,
+    user: id,
     oldPassword,
     newPassword
   }: ChangePasswordDto): Promise<void>

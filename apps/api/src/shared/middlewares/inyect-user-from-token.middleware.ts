@@ -11,8 +11,10 @@ export const inyectUserFromToken = () => {
 
       req.body = {
         ...req.body,
-        id: payload.id,
-        role: payload.role.name
+        user: {
+          id: payload.id,
+          role: payload.role.name
+        }
       }
 
       next()

@@ -3,7 +3,9 @@ import { UserIdentifierSchema } from './user.schema'
 import { FileSchema } from '@root/modules/files/schemas/file.schema'
 
 export const UpdateUserFormSchema = z.object({
-  id: UserIdentifierSchema,
+  user: z.object({
+    id: UserIdentifierSchema
+  }),
   name: z.string({ error: 'El nombre no puede estar vacio' }).optional(),
   email: z
     .email({ error: 'El correo debe cumplir con el formato adecuado' })
