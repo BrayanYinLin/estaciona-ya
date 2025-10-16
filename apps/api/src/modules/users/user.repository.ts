@@ -61,7 +61,17 @@ export class UserRepositoryImpl implements UserRepository {
 
     if (!user) return null
 
-    const { id: userId, name, email, password, dni, state, role, photo } = user
+    const {
+      id: userId,
+      name,
+      email,
+      password,
+      dni,
+      state,
+      role,
+      photo,
+      validatedAccount
+    } = user
 
     return {
       id: userId,
@@ -74,7 +84,8 @@ export class UserRepositoryImpl implements UserRepository {
         id: role.id,
         name: role.name
       },
-      photo
+      photo,
+      validatedAccount
     }
   }
 
@@ -137,7 +148,8 @@ export class UserRepositoryImpl implements UserRepository {
       dni,
       state,
       role,
-      photo
+      photo,
+      validatedAccount
     } = user
 
     return {
@@ -151,7 +163,8 @@ export class UserRepositoryImpl implements UserRepository {
         id: role.id,
         name: role.name
       },
-      photo
+      photo,
+      validatedAccount
     }
   }
 
@@ -173,7 +186,8 @@ export class UserRepositoryImpl implements UserRepository {
       dni: dniRecovered,
       state,
       role,
-      photo
+      photo,
+      validatedAccount
     } = user
 
     return {
@@ -187,7 +201,8 @@ export class UserRepositoryImpl implements UserRepository {
         id: role.id,
         name: role.name
       },
-      photo
+      photo,
+      validatedAccount
     }
   }
 

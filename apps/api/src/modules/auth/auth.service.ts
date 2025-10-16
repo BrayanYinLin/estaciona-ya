@@ -33,6 +33,8 @@ export class AuthServiceImpl implements AuthService {
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userFound.id,
+      state: userFound.state,
+      validatedAccount: userFound.validatedAccount,
       role: {
         name: userFound.role.name
       }
@@ -64,6 +66,8 @@ export class AuthServiceImpl implements AuthService {
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userFound.id,
+      state: userFound.state,
+      validatedAccount: userFound.validatedAccount,
       role: {
         name: userFound.role.name
       }
@@ -124,6 +128,8 @@ export class AuthServiceImpl implements AuthService {
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userCreated.id,
+      state: userCreated.state,
+      validatedAccount: userCreated.validatedAccount,
       role: {
         name: userCreated.role.name
       }
@@ -183,6 +189,8 @@ export class AuthServiceImpl implements AuthService {
 
     const access_token = JwtUtils.generateAccessJwt({
       id: userCreated.id,
+      state: userCreated.state,
+      validatedAccount: userCreated.validatedAccount,
       role: {
         name: userCreated.role.name
       }

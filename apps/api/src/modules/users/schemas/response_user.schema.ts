@@ -25,6 +25,7 @@ export const ResponseUserSchema = z.object({
   password: z.string(),
   dni: z.string().length(8),
   state: z.boolean(),
+  validatedAccount: z.boolean(),
   role: RoleSchema,
   photo: z.string().nullable()
 })
