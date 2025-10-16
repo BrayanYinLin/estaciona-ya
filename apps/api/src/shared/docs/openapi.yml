@@ -240,6 +240,26 @@ paths:
                   $ref: '#/components/schemas/DistrictResponse'
         '404':
           description: No se encontraron distritos
+  /location:
+    get:
+      summary: Obtiene la ubicacion de una direccion
+      tags:
+        - Location
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ubicacion obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseThirdPartyLocation'
+        '404':
+          description: Ubicacion no encontrada
 
 components:
   securitySchemes:
@@ -346,4 +366,13 @@ components:
         id:
           type: number
         name:
+          type: string
+    ResponseThirdPartyLocation:
+      type: object
+      properties:
+        latitude:
+          type: string
+        longitude:
+          type: string
+        address:
           type: string
