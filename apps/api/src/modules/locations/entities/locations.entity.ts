@@ -17,11 +17,21 @@ export class Location {
   @Column({ type: 'varchar', name: 'location_address' })
   address!: string
 
-  @Column({ type: 'decimal', name: 'location_latitude' })
-  latitude!: number
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 8,
+    name: 'location_latitude'
+  })
+  latitude!: string
 
-  @Column({ type: 'decimal', name: 'location_longitude' })
-  longitude!: number
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 8,
+    name: 'location_longitude'
+  })
+  longitude!: string
 
   @ManyToOne(() => District, (district) => district.locations)
   @JoinColumn({ name: 'district_id' })

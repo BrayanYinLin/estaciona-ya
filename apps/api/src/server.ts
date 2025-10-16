@@ -13,6 +13,7 @@ import { join } from 'node:path'
 import { mkdirSync } from 'node:fs'
 import { FILES_ROUTE } from '@shared/constants/files.route'
 import districtRouter from '@locations/routers/district.router'
+import { locationRouter } from '@locations/routers/location.router'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -28,6 +29,7 @@ app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 app.use(ENDPOINTS.AUTH, authRouter)
 app.use(ENDPOINTS.USER, userRouter)
 app.use(ENDPOINTS.DISTRICTS, districtRouter)
+app.use(ENDPOINTS.LOCATION, locationRouter)
 
 app.use(errorMiddleware)
 
