@@ -18,6 +18,8 @@ export type UserAuthenticated = {
   }
 }
 
+export type AuthenticationCodeUser = Pick<UserAuthenticated, 'id'>
+
 export type AuthenticationTokens = AccessToken & RefreshToken
 
 export type AuthenticationResponseType = AuthenticationTokens & {
@@ -29,6 +31,7 @@ export interface AuthService {
   createLessor(lessor: RegisterUserDto): Promise<AuthenticationResponseType>
   login(user: LoginUserDto): Promise<AuthenticationResponseType>
   refresh(jwt: RefreshTokenPayload): Promise<AccessToken>
+  validate(user: AuthenticationCodeUser): Promise<void>
 }
 
 export interface AuthController {
@@ -53,6 +56,11 @@ export interface AuthController {
     next: NextFunction
   ): Promise<Response | void>
   logout(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  validate(
     req: Request,
     res: Response,
     next: NextFunction

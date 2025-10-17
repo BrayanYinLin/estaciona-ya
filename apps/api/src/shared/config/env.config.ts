@@ -16,5 +16,6 @@ export const {
   DATABASE_DB: env_database_db,
   USERNAME_DB: env_username_db,
   PASSWORD_DB: env_password_db,
-  JWT_SECRET: env_jwt
+  JWT_SECRET: env_jwt,
+  RESEND_API: env_resend_api
 } = env
