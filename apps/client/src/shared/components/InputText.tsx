@@ -18,7 +18,10 @@ export function InputText({
   isRequired,
   name,
   placeholder,
-  defaultValue
+  defaultValue,
+  onChange,
+  disabled,
+  readOnly
 }: TextInputProps) {
   return (
     <fieldset className="fieldset">
@@ -30,6 +33,9 @@ export function InputText({
         name={name}
         required={isRequired}
         defaultValue={defaultValue}
+        onChange={onChange}
+        disabled={disabled}
+        readOnly={readOnly}
       />
     </fieldset>
   )

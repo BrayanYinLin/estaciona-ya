@@ -3,5 +3,6 @@ export const ENDPOINTS = {
   LESSOR: '/auth/lessor',
   LOGIN: '/auth/login',
   REFRESH: '/auth/refresh',
-  USER: '/user'
+  USER: '/user',
+  DISTRICTS: '/districts'
 }
