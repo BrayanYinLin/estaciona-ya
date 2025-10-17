@@ -16,3 +16,7 @@ input::-webkit-outer-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+html {
+  scroll-behavior: smooth;
+}
