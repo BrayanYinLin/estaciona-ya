@@ -7,6 +7,7 @@ import { ChangePasswordForm } from '@user/components/ChangePasswordForm'
 import { DangerZone } from '@user/components/DangerZone'
 import { WarningIcon } from '@shared/components/WarningIcon'
 import { LoadingScreen } from '@shared/components/LoadingScreen'
+import { api } from '@shared/api/api'
 
 export function UserProfile() {
   const { user, loading, error, recoverUser } = useUserStore()
@@ -21,6 +22,10 @@ export function UserProfile() {
       navigate('/sign-in')
     }
   }, [error])
+
+  const handleValidate = async () => {
+    await api.get('/auth/validate')
+  }
 
   if (loading && !user) {
     return <LoadingScreen />
@@ -60,7 +65,12 @@ export function UserProfile() {
               Tu cuenta no está validada, no podrás acceder a las
               funcionalidades.
             </span>
-            <button className="btn btn-dash btn-warning">Validar Cuenta</button>
+            <button
+              className="btn btn-dash btn-warning"
+              onClick={handleValidate}
+            >
+              Validar Cuenta
+            </button>
           </div>
         )}
       </div>

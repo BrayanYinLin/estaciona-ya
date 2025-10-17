@@ -33,6 +33,9 @@ API_PORT=3000
 # Ambiente (librerías como vitest inyectan el valor "test")
 NODE_ENV=development
 
+# Variable de entorno para el servicio de envio de correos
+RESEND_API=
+
 # Encriptado de contraseñas
 BCRYPT_SALT_ROUNDS=10
 

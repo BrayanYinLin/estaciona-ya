@@ -38,6 +38,10 @@ export const DOMAIN_ERRORS = {
   INCORRECT_PASSWORD: {
     code: 'INCORRECT_PASSWORD',
     message: 'La contraseña que ingresaste es incorrecta'
+  },
+  EMAIL_ERROR: {
+    code: 'EMAIL_ERROR',
+    message: 'El correo electrónico que ingresaste es incorrecto'
   }
 } as const
 

@@ -14,12 +14,46 @@ import { UserRepository } from '@users/user'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { RoleRepository } from '@roles/role'
 import { RefreshTokenPayload } from './schemas/token.schema'
+import { AuthenticationCodeUser } from '@auth/auth'
+import { AppDataSource } from '@shared/database/data-source'
+import { AuthenticationCode } from '@auth/entities/authentication_code.entity'
+import { randomUUID } from 'node:crypto'
+import { MailService } from '@root/modules/mails/mails_service'
 
 export class AuthServiceImpl implements AuthService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly roleRepository: RoleRepository
+    private readonly roleRepository: RoleRepository,
+    private readonly authenticationCodeRepository = AppDataSource.getRepository(
+      AuthenticationCode
+    ),
+    private readonly emailService = new MailService()
   ) {}
+
+  async validate(user: AuthenticationCodeUser): Promise<void> {
+    const authenticationCode = await this.authenticationCodeRepository.save({
+      user: {
+        id: user.id
+      },
+      code: randomUUID()
+    })
+
+    const userFound = await this.userRepository.findUserById(user.id)
+
+    if (!userFound) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Usuario not encontrado'
+      })
+    }
+
+    this.emailService.sendMail(
+      authenticationCode.code,
+      'Verifica tu correo',
+      userFound.email,
+      'Acme <onboarding@resend.dev>'
+    )
+  }
 
   async refresh(jwt: RefreshTokenPayload): Promise<AccessToken> {
     const userFound = await this.userRepository.findUserById(jwt.id)

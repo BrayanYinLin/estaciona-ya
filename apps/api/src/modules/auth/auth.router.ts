@@ -9,6 +9,7 @@ import { AppDataSource } from '@shared/database/data-source'
 import { Role } from '@roles/entities/role.entity'
 import { User } from '@users/entities/user.entity'
 import { UserRepositoryImpl } from '@users/user.repository'
+import { inyectUserFromToken } from '@shared/middlewares/inyect-user-from-token.middleware'
 
 const authRouter = Router()
 
@@ -36,5 +37,9 @@ authRouter.post(
 )
 authRouter.get('/refresh', controller.refresh.bind(controller))
 authRouter.get('/logout', controller.logout.bind(controller))
-
+authRouter.get(
+  '/validate',
+  inyectUserFromToken(),
+  controller.validate.bind(controller)
+)
 export { authRouter }

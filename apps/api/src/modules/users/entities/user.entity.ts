@@ -11,6 +11,7 @@ import {
 import { Role } from '@roles/entities/role.entity'
 import { Garage } from '@root/modules/garages/entities/garage.entity'
 import { Booking } from '@root/modules/bookings/entities/booking.entity'
+import { AuthenticationCode } from '@auth/entities/authentication_code.entity'
 
 @Entity('tb_users')
 export class User {
@@ -53,4 +54,7 @@ export class User {
 
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings!: Booking[]
+
+  @OneToMany(() => AuthenticationCode, (code) => code.user)
+  authenticationCodes!: AuthenticationCode[]
 }
