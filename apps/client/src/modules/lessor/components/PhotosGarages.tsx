@@ -25,7 +25,7 @@ export function PhotosGarages() {
   }
 
   return (
-    <main className="flex flex-col gap-5">
+    <main className="flex flex-col gap-5 w-85 lg:w-100 justify-start h-full">
       <input
         type="file"
         name="photos"
@@ -34,7 +34,7 @@ export function PhotosGarages() {
         onChange={handleUpload}
       />
       <div className="flex h-64 items-center justify-center rounded border border-base-content/40 bg-base-200/40 text-center">
-        <div className="carousel w-96">
+        <div className="carousel w-full">
           {previews.map((preview) => {
             return (
               <img
