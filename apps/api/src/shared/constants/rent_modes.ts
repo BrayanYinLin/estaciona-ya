@@ -1,5 +1,5 @@
 export const RENT_MODES = {
-  HORA: 'HORA',
-  DIARIO: 'DIARIO',
-  MES: 'MES'
+  HORA: 'Hora',
+  DIARIO: 'Dia',
+  MES: 'Mes'
 }
