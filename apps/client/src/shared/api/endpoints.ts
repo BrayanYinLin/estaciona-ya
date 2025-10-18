@@ -4,5 +4,6 @@ export const ENDPOINTS = {
   LOGIN: '/auth/login',
   REFRESH: '/auth/refresh',
   USER: '/user',
-  DISTRICTS: '/districts'
+  DISTRICTS: '/districts',
+  RENT_MODE: '/rent-mode/'
 }
