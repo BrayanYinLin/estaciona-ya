@@ -53,7 +53,7 @@ export function NewGarageLocation({
   }
 
   return (
-    <section className="flex flex-col lg:flex-row p-5 place-items-center justify-center mx-auto w-full lg:h-screen gap-50">
+    <section className="flex flex-col lg:flex-row p-5 place-items-center justify-center mx-auto w-full lg:h-screen gap-5 lg:gap-50">
       <div className="flex flex-col gap-5">
         <h2 className="text-2xl">¿Dónde está tu estacionamiento?</h2>
 
@@ -94,6 +94,7 @@ export function NewGarageLocation({
           style={{ border: '0px' }}
           loading="lazy"
           src={`https://www.google.com/maps?q=${location.latitude},${location.longitude}&hl=es&z=14&output=embed`}
+          className="w-[340px] h-[340px] lg:w-[400px] lg:h-[400px]"
         ></iframe>
       ) : (
         <img

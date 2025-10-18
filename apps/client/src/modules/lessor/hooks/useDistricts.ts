@@ -12,6 +12,7 @@ export function useDistricts() {
 
   const findAllDistricts = async () => {
     const { data } = await api.get<District[]>(ENDPOINTS.DISTRICTS)
+
     return data
   }
 

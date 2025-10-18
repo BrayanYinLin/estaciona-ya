@@ -33,9 +33,10 @@ export function SelectDistrict({
             {defaultValue}
           </option>
           {options.map((district) => {
+            const districtName = String(district.name).split(',')[0].trim()
             return (
               <option value={district.name} key={district.id}>
-                {district.name}
+                {districtName}
               </option>
             )
           })}
