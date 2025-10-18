@@ -25,6 +25,7 @@ export function NewGarageLocation({
   const { districts } = useDistricts()
   const [error, setError] = useState<string | null>(null)
   const [disabled, setDisabled] = useState<boolean>(false)
+  const [disabledInfo, setDisabledInfo] = useState<boolean>(false)
 
   useEffect(() => {
     const district = select.current?.value?.trim()
@@ -51,6 +52,9 @@ export function NewGarageLocation({
   const handleSelectChange = () => {
     setDisabled(true)
   }
+  const handleInputChange = () => {
+    setDisabledInfo(true)
+  }
 
   return (
     <section className="flex flex-col lg:flex-row p-5 place-items-center justify-center mx-auto w-full lg:h-screen gap-5 lg:gap-50">
@@ -71,13 +75,14 @@ export function NewGarageLocation({
           name="address"
           placeholder="Calle / Avenida / Mz."
           onChange={(e) => {
+            handleInputChange()
             setQuery(e.target.value)
           }}
           disabled={!disabled}
         />
 
         <a
-          className="btn btn-primary w-25"
+          className={`btn btn-primary w-25 ${disabledInfo ? 'btn-primary' : 'btn-disabled'}`}
           onClick={() => {
             onNext()
           }}

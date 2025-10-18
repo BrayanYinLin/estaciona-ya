@@ -7,6 +7,15 @@ export function NewGarage() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+
+    console.log(
+      `${formData.get('district')}\n${formData.get('address')}\n${formData.get('price')}\n
+      ${formData.get('description')}\n${formData.get('restrictions')}\n${formData.get('rentMode')}\n
+      ${formData.get('covered')}\n${formData.get('hasCameras') === 'on'}}`
+    )
+    console.log(formData.getAll('photos'))
   }
 
   return (

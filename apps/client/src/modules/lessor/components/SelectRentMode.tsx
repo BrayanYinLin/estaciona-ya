@@ -1,5 +1,5 @@
-import type { District } from '@lessor/hooks/useDistricts'
-import type { InputHTMLAttributes, RefObject } from 'react'
+import type { RentMode } from '@lessor/hooks/useRentMode'
+import type { InputHTMLAttributes } from 'react'
 
 type NativeInputProps = Omit<InputHTMLAttributes<HTMLSelectElement>, 'type'>
 
@@ -7,16 +7,14 @@ export type SelectProps = NativeInputProps & {
   labelContent: string
   name: string
   defaultValue: string
-  options: District[]
-  ref: RefObject<HTMLSelectElement | null>
+  options: RentMode[]
 }
 
-export function SelectDistrict({
+export function SelectRentMode({
   labelContent,
   name,
   defaultValue,
   options,
-  ref,
   onChange
 }: SelectProps) {
   return (
@@ -27,16 +25,15 @@ export function SelectDistrict({
           defaultValue={defaultValue}
           name={name}
           className="select w-full"
-          ref={ref}
           onChange={onChange}
         >
           <option disabled={true} value={defaultValue}>
             {defaultValue}
           </option>
-          {options.map((district) => {
-            const districtName = String(district.name).split(',')[0].trim()
+          {options.map((rentMode) => {
+            const districtName = String(rentMode.mode_name).split(',')[0].trim()
             return (
-              <option value={district.id} key={district.id}>
+              <option value={rentMode.id} key={rentMode.id}>
                 {districtName}
               </option>
             )
