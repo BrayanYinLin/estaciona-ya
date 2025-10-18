@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
-import { DistrictService } from '@locations/services/district.service'
+import { DistrictServiceImpl } from '@locations/services/district.service'
+import { DistrictController } from '@locations/district'
 
-export class DistrictController {
-  constructor(private readonly service: DistrictService) {}
+export class DistrictControllerImpl implements DistrictController {
+  constructor(private readonly service: DistrictServiceImpl) {}
 
   async getAll(
     _: Request,

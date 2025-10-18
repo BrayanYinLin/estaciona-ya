@@ -3,10 +3,12 @@ import { Request, Response } from 'express'
 
 export interface RentModeRepository {
   findAll(): Promise<RentModeDto[]>
+  findById(id: number): Promise<RentModeDto | null>
 }
 
 export interface RentModeService {
   findAll(): Promise<RentModeDto[]>
+  findById(id: number): Promise<RentModeDto>
 }
 
 export interface RentModeController {
