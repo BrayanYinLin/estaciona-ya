@@ -53,6 +53,11 @@ export const mapDomainToHttp = (error: DomainError): AppError => {
         message: error.message,
         httpCode: HTTP_CODES.BAD_REQUEST
       })
+    case 'EMAIL_ERROR':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.BAD_REQUEST
+      })
     default:
       return new AppError({
         message: error.message,

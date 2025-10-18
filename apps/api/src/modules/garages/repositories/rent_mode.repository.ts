@@ -5,6 +5,10 @@ import { Repository } from 'typeorm'
 
 export class RentModeRepositoryImpl implements RentModeRepository {
   constructor(private readonly repository: Repository<RentMode>) {}
+  async findById(id: number): Promise<RentModeDto | null> {
+    const rentMode = await this.repository.findOneBy({ id })
+    return rentMode
+  }
 
   async findAll(): Promise<RentModeDto[]> {
     const rentModes = await this.repository.find()
