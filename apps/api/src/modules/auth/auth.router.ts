@@ -10,13 +10,19 @@ import { Role } from '@roles/entities/role.entity'
 import { User } from '@users/entities/user.entity'
 import { UserRepositoryImpl } from '@users/user.repository'
 import { inyectUserFromToken } from '@shared/middlewares/inyect-user-from-token.middleware'
+import { MailServiceImpl } from '../mails/mails_service'
+import { env_resend_api } from '@shared/config/env.config'
+import { Resend } from 'resend'
 
 const authRouter = Router()
 
 const roleRepository = new RoleRepositoryImpl(AppDataSource.getRepository(Role))
 const userRepository = new UserRepositoryImpl(AppDataSource.getRepository(User))
 
-const service = new AuthServiceImpl(userRepository, roleRepository)
+const resend = new Resend(env_resend_api)
+const mailService = new MailServiceImpl(resend)
+
+const service = new AuthServiceImpl(userRepository, roleRepository, mailService)
 
 const controller = new AuthControllerImpl(service)
 
