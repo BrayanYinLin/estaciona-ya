@@ -18,16 +18,16 @@ import { AuthenticationCodeUser } from '@auth/auth'
 import { AppDataSource } from '@shared/database/data-source'
 import { AuthenticationCode } from '@auth/entities/authentication_code.entity'
 import { randomUUID } from 'node:crypto'
-import { MailService } from '@root/modules/mails/mails_service'
+import { MailService } from '../mails/mail'
 
 export class AuthServiceImpl implements AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly roleRepository: RoleRepository,
+    private readonly emailService: MailService,
     private readonly authenticationCodeRepository = AppDataSource.getRepository(
       AuthenticationCode
-    ),
-    private readonly emailService = new MailService()
+    )
   ) {}
 
   async validate(user: AuthenticationCodeUser): Promise<void> {
@@ -47,12 +47,12 @@ export class AuthServiceImpl implements AuthService {
       })
     }
 
-    this.emailService.sendMail(
-      authenticationCode.code,
-      'Verifica tu correo',
-      userFound.email,
-      'Acme <onboarding@resend.dev>'
-    )
+    this.emailService.sendMail({
+      code: authenticationCode.code,
+      subject: 'Verifica tu correo',
+      email: userFound.email,
+      from: 'Acme <onboarding@resend.dev>'
+    })
   }
 
   async refresh(jwt: RefreshTokenPayload): Promise<AccessToken> {
@@ -65,13 +65,22 @@ export class AuthServiceImpl implements AuthService {
       })
     }
 
+    const roleFound = await this.roleRepository.findRoleByIdWithPermissions(
+      userFound.role.id
+    )
+
+    if (!roleFound) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Rol not encontrado'
+      })
+    }
+
     const access_token = JwtUtils.generateAccessJwt({
       id: userFound.id,
       state: userFound.state,
       validatedAccount: userFound.validatedAccount,
-      role: {
-        name: userFound.role.name
-      }
+      role: roleFound
     })
 
     return {
@@ -98,14 +107,24 @@ export class AuthServiceImpl implements AuthService {
       })
     }
 
+    const roleFound = await this.roleRepository.findRoleByIdWithPermissions(
+      userFound.role.id
+    )
+
+    if (!roleFound) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Rol not encontrado'
+      })
+    }
+
     const access_token = JwtUtils.generateAccessJwt({
       id: userFound.id,
       state: userFound.state,
       validatedAccount: userFound.validatedAccount,
-      role: {
-        name: userFound.role.name
-      }
+      role: roleFound
     })
+
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userFound.id })
 
     return {
@@ -123,7 +142,9 @@ export class AuthServiceImpl implements AuthService {
   async createLessor(
     lessor: RegisterUserDto
   ): Promise<AuthenticationResponseType> {
-    const role = await this.roleRepository.findRoleByName(ROLES.LESSOR)
+    const role = await this.roleRepository.findRoleByNameWithPermissions(
+      ROLES.LESSOR
+    )
 
     if (!role) {
       throw new DomainError({
@@ -164,9 +185,7 @@ export class AuthServiceImpl implements AuthService {
       id: userCreated.id,
       state: userCreated.state,
       validatedAccount: userCreated.validatedAccount,
-      role: {
-        name: userCreated.role.name
-      }
+      role: role
     })
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userCreated.id })
 
@@ -185,7 +204,10 @@ export class AuthServiceImpl implements AuthService {
   async createTenant(
     tenant: RegisterUserDto
   ): Promise<AuthenticationResponseType> {
-    const role = await this.roleRepository.findRoleByName(ROLES.TENANT)
+    const role = await this.roleRepository.findRoleByNameWithPermissions(
+      ROLES.TENANT
+    )
+
     if (!role) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
@@ -225,9 +247,7 @@ export class AuthServiceImpl implements AuthService {
       id: userCreated.id,
       state: userCreated.state,
       validatedAccount: userCreated.validatedAccount,
-      role: {
-        name: userCreated.role.name
-      }
+      role: role
     })
     const refresh_token = JwtUtils.generateRefreshJwt({ id: userCreated.id })
 
