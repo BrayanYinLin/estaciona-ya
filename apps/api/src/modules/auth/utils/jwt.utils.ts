@@ -1,16 +1,26 @@
 import { sign, verify } from 'jsonwebtoken'
 import { env_jwt } from '@shared/config/env.config'
 import { ALGORITHM, TOKEN_EXPIRATION_SECONDS } from '@shared/config/jwt.config'
-import { AppError } from '@shared/utils/error'
+import { AppError, DomainError } from '@shared/utils/error'
 import { HTTP_CODES } from '@shared/constants/http.codes'
 import {
   AccessTokenPayload,
+  AccessTokenPayloadSchema,
   RefreshTokenPayload
 } from '@auth/schemas/token.schema'
 
 export class JwtUtils {
   static generateAccessJwt(user: AccessTokenPayload) {
-    const token = sign(user, env_jwt, {
+    const { data, error } = AccessTokenPayloadSchema.safeParse(user)
+
+    if (error) {
+      throw new DomainError({
+        code: 'TOKEN_ERROR',
+        message: 'Payload de token incorrecto'
+      })
+    }
+
+    const token = sign(data, env_jwt, {
       algorithm: ALGORITHM,
       expiresIn: TOKEN_EXPIRATION_SECONDS.ACCESS
     })

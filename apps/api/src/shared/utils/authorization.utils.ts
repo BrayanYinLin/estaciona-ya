@@ -9,7 +9,7 @@ export class AuthorizationUtils {
     if (!authorization) {
       throw new DomainError({
         code: DOMAIN_ERRORS.TOKEN_MISSING.code,
-        message: DOMAIN_ERRORS.TOKEN_MISSING.message
+        message: 'Token no encontrado'
       })
     }
 

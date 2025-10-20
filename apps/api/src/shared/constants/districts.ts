@@ -1,6 +1,6 @@
 export const DISTRICTS = [
   // Provincia de Lima
-  'Ancón, Lima, Perú',
+  'Ancón, Lima Metropolitana, Perú',
   'Ate, Lima, Perú',
   'Barranco, Lima, Perú',
   'Breña, Lima, Perú',

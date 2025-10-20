@@ -1,15 +1,18 @@
-import { env_resend_api } from '@shared/config/env.config'
 import { verifyEmailHtml } from '@shared/constants/mail'
 import { DomainError } from '@shared/utils/error'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { Resend } from 'resend'
+import { MailPayload, MailService } from './mail'
 
-export class MailService {
-  private resend: Resend
-  constructor() {
-    this.resend = new Resend(env_resend_api)
-  }
-  async sendMail(code: string, subject: string, email: string, from: string) {
+export class MailServiceImpl implements MailService {
+  constructor(private readonly resend: Resend) {}
+
+  async sendMail({
+    code,
+    email,
+    from,
+    subject
+  }: MailPayload): Promise<boolean> {
     const { data, error } = await this.resend.emails.send({
       from: from,
       to: [email],
@@ -20,7 +23,7 @@ export class MailService {
     if (error) {
       throw new DomainError({
         code: DOMAIN_ERRORS.EMAIL_ERROR.code,
-        message: DOMAIN_ERRORS.EMAIL_ERROR.message
+        message: 'Error enviando el email'
       })
     }
 

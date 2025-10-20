@@ -42,6 +42,9 @@ export const DOMAIN_ERRORS = {
   EMAIL_ERROR: {
     code: 'EMAIL_ERROR',
     message: 'El correo electrónico que ingresaste es incorrecto'
+  },
+  FORBIDDEN_ERROR: {
+    code: 'FORBIDDEN_ERROR'
   }
 } as const
 
