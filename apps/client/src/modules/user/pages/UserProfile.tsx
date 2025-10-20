@@ -8,6 +8,7 @@ import { DangerZone } from '@user/components/DangerZone'
 import { WarningIcon } from '@shared/components/WarningIcon'
 import { LoadingScreen } from '@shared/components/LoadingScreen'
 import { api } from '@shared/api/api'
+import { ValidationModal } from '@user/components/ValidationModal'
 
 export function UserProfile() {
   const { user, loading, error, recoverUser } = useUserStore()
@@ -67,12 +68,14 @@ export function UserProfile() {
             </span>
             <button
               className="btn btn-dash btn-warning"
-              onClick={handleValidate}
+              onClick={() => document.getElementById('my_modal_1')!.showModal()}
             >
               Validar Cuenta
             </button>
           </div>
         )}
+
+        <ValidationModal />
       </div>
 
       <div className="pb-8 px-4 justify-start w-full flex flex-col gap-2 lg:w-[1000px]">
