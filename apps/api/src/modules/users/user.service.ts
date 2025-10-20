@@ -28,7 +28,7 @@ export class UserServiceImpl implements UserService {
     if (!userFound) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
-        message: DOMAIN_ERRORS.ENTITY_NOT_FOUND.message
+        message: 'Usuario no encontrado'
       })
     }
 
@@ -38,7 +38,7 @@ export class UserServiceImpl implements UserService {
     if (!validPassword) {
       throw new DomainError({
         code: DOMAIN_ERRORS.INCORRECT_PASSWORD.code,
-        message: DOMAIN_ERRORS.INCORRECT_PASSWORD.message
+        message: 'Contraseña incorrecta'
       })
     }
 
@@ -52,7 +52,7 @@ export class UserServiceImpl implements UserService {
     if (!updated) {
       throw new DomainError({
         code: DOMAIN_ERRORS.CONFLICT.code,
-        message: DOMAIN_ERRORS.CONFLICT.message
+        message: 'Error actualizando contraseña'
       })
     }
   }
@@ -73,7 +73,7 @@ export class UserServiceImpl implements UserService {
     if (!userRecoveredForPhoto) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
-        message: DOMAIN_ERRORS.ENTITY_NOT_FOUND.message
+        message: 'Usuario no encontrado'
       })
     }
 
@@ -110,7 +110,7 @@ export class UserServiceImpl implements UserService {
     if (!userFound) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
-        message: DOMAIN_ERRORS.ENTITY_NOT_FOUND.message
+        message: 'Usuario no encontrado'
       })
     }
 

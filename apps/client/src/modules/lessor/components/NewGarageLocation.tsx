@@ -35,9 +35,12 @@ export function NewGarageLocation({
 
     const fetchLocation = async () => {
       try {
+        const districtSelected = districts.find(
+          (d) => d.id === Number(district)
+        )
         const data = await LocationService.getLocationByAddress(
           address,
-          district
+          districtSelected?.name ?? ''
         )
         setLocation(data)
         setError(null)

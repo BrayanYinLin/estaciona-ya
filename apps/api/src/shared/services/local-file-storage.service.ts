@@ -40,7 +40,7 @@ export class LocalFileStorageService implements FileStorageService {
     } catch (e) {
       throw new DomainError({
         code: DOMAIN_ERRORS.PHOTO_ERROR.code,
-        message: DOMAIN_ERRORS.PHOTO_ERROR.message,
+        message: 'Foto no encontrada',
         cause: e as Error
       })
     }

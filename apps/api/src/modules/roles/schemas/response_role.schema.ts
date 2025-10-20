@@ -12,3 +12,16 @@ export const ResponseRoleSchema = z.object({
 })
 
 export type ResponseRoleDto = z.infer<typeof ResponseRoleSchema>
+
+export const RoleWithPermissionsSchema = z.object({
+  id: z.number().positive(),
+  name: z.string(),
+  permissions: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string()
+    })
+  )
+})
+
+export type RoleWithPermissionsDto = z.infer<typeof RoleWithPermissionsSchema>

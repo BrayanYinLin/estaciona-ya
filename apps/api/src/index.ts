@@ -11,8 +11,8 @@ const init = async () => {
   await AppDataSource.initialize()
   await seedRoles()
   await seedDistricts()
-  await seedUserLessor()
   await seedRentModes()
+  await seedUserLessor()
 
   app.listen(env_api_port, () => {
     console.log(`Running at http://localhost:${env_api_port}`)
