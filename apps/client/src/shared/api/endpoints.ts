@@ -5,5 +5,6 @@ export const ENDPOINTS = {
   REFRESH: '/auth/refresh',
   USER: '/user',
   DISTRICTS: '/districts',
-  RENT_MODE: '/rent-mode/'
+  RENT_MODE: '/rent-mode/',
+  VERIFY: '/auth/verify'
 }

@@ -1,6 +1,7 @@
 import {
   AccessToken,
   AuthService,
+  AuthenticationCodeRepository,
   AuthenticationResponseType
 } from '@auth/auth'
 import { ROLES } from '@shared/constants/roles'
@@ -15,28 +16,65 @@ import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { RoleRepository } from '@roles/role'
 import { RefreshTokenPayload } from './schemas/token.schema'
 import { AuthenticationCodeUser } from '@auth/auth'
-import { AppDataSource } from '@shared/database/data-source'
-import { AuthenticationCode } from '@auth/entities/authentication_code.entity'
+import { AuthenticationReason } from '@auth/entities/authentication_code.entity'
 import { randomUUID } from 'node:crypto'
 import { MailService } from '../mails/mail'
+import { VerifyCodeDto } from './schemas/authetication_code.schema'
 
 export class AuthServiceImpl implements AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly roleRepository: RoleRepository,
     private readonly emailService: MailService,
-    private readonly authenticationCodeRepository = AppDataSource.getRepository(
-      AuthenticationCode
-    )
+    private readonly authenticationCodeRepository: AuthenticationCodeRepository
   ) {}
 
-  async validate(user: AuthenticationCodeUser): Promise<void> {
-    const authenticationCode = await this.authenticationCodeRepository.save({
+  async verify({ code, user }: VerifyCodeDto): Promise<void> {
+    const codeFound = await this.authenticationCodeRepository.findCodeByUserId(
+      user.id
+    )
+
+    if (!codeFound) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
+        message: 'Codigo no encontrado'
+      })
+    }
+
+    const isValid = codeFound.code === code
+
+    if (!isValid) {
+      throw new DomainError({
+        code: DOMAIN_ERRORS.VALIDATION_CODE_ERROR.code,
+        message: 'Codigo de validación incorrecto'
+      })
+    }
+
+    await this.userRepository.updateUserValitation({
       user: {
         id: user.id
       },
-      code: randomUUID()
+      validationAccount: true
     })
+  }
+
+  async validate(user: AuthenticationCodeUser): Promise<void> {
+    const existingCode =
+      await this.authenticationCodeRepository.findCodeByUserId(user.id)
+
+    if (existingCode) {
+      await this.authenticationCodeRepository.deleteCode(existingCode.id)
+    }
+
+    const authenticationCode = await this.authenticationCodeRepository.saveCode(
+      {
+        user: {
+          id: user.id
+        },
+        code: randomUUID(),
+        reason: AuthenticationReason.VALIDATE_ACCOUNT
+      }
+    )
 
     const userFound = await this.userRepository.findUserById(user.id)
 
@@ -47,7 +85,7 @@ export class AuthServiceImpl implements AuthService {
       })
     }
 
-    this.emailService.sendMail({
+    await this.emailService.sendMail({
       code: authenticationCode.code,
       subject: 'Verifica tu correo',
       email: userFound.email,

@@ -4,9 +4,9 @@ info:
   version: 1.0.0
   description: API for the Estaciona-YA application
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:3000
 paths:
-  /auth/tenant:
+  /api/auth/tenant:
     post:
       summary: Registra un nuevo arrendatario
       tags:
@@ -26,7 +26,7 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
         '400':
           description: Bad request
-  /auth/lessor:
+  /api/auth/lessor:
     post:
       summary: Registra un nuevo arrendador
       tags:
@@ -46,7 +46,7 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
         '400':
           description: Bad request
-  /auth/login:
+  /api/auth/login:
     post:
       summary: Inicia sesión
       tags:
@@ -68,7 +68,7 @@ paths:
           description: Bad request
         '404':
           description: User not found
-  /auth/refresh:
+  /api/auth/refresh:
     get:
       summary: Refreshes the access token
       tags:
@@ -82,7 +82,7 @@ paths:
                 $ref: '#/components/schemas/AccessToken'
         '401':
           description: Unauthorized
-  /auth/logout:
+  /api/auth/logout:
     get:
       summary: Cierra la sesión del usuario
       tags:
@@ -92,17 +92,50 @@ paths:
           description: Sesión cerrada correctamente
         '401':
           description: Unauthorized
-  /user:
+  /api/auth/validate:
+    get:
+      summary: Valida el token de acceso
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Token de acceso validado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Unauthorized
+  /api/auth/verify:
+    post:
+      summary: Verifica el código de autenticación
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Código de autenticación verificado correctamente
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+  /api/user:
     get:
       summary: Obtiene el perfil del usuario
       tags:
         - User
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: http
       security:
         - BearerAuth: []
       responses:
@@ -120,12 +153,6 @@ paths:
       summary: Desactivar el usuario
       tags:
         - User
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: http
       security:
         - BearerAuth: []
       responses:
@@ -139,17 +166,11 @@ paths:
           description: Unauthorized
         '404':
           description: User not found
-  /user/me:
+  /api/user/me:
     patch:
       summary: Actualiza el perfil del usuario
       tags:
         - User
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: http
       security:
         - BearerAuth: []
       requestBody:
@@ -180,7 +201,7 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
-  /user/photo/{photoId}:
+  /api/user/photo/{photoId}:
     get:
       summary: Obtiene la foto de un usuario
       tags:
@@ -198,17 +219,11 @@ paths:
             image/*: {}
         '404':
           description: Foto no encontrada
-  /user/me/password:
+  /api/user/me/password:
     patch:
       summary: Cambia la contraseña del usuario
       tags:
         - User
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: http
       security:
         - BearerAuth: []
       requestBody:
@@ -224,7 +239,7 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
-  /districts:
+  /api/districts:
     get:
       summary: Obtiene todos los distritos
       tags:
@@ -240,7 +255,7 @@ paths:
                   $ref: '#/components/schemas/DistrictResponse'
         '404':
           description: No se encontraron distritos
-  /location:
+  /api/location:
     get:
       summary: Obtiene la ubicacion de una direccion
       tags:
@@ -260,6 +275,22 @@ paths:
                 $ref: '#/components/schemas/ResponseThirdPartyLocation'
         '404':
           description: Ubicacion no encontrada
+  /api/rent-mode:
+    get:
+      summary: Obtiene todos los modos de alquiler
+      tags:
+        - Garage
+      responses:
+        '200':
+          description: Modos de alquiler obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RentModeResponse'
+        '404':
+          description: No se encontraron modos de alquiler
 
 components:
   securitySchemes:
@@ -269,6 +300,13 @@ components:
       bearerFormat: JWT
 
   schemas:
+    RentModeResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        mode_name:
+          type: string
     ResponseUserProfile:
       type: object
       properties:

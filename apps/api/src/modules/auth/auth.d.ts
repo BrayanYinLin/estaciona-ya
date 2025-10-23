@@ -2,6 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 import { RegisterUserDto } from './schemas/register_user.schema'
 import { LoginUserDto } from './schemas/login_user.schema'
 import { RefreshTokenPayload } from './schemas/token.schema'
+import {
+  AuthenticationCodeDto,
+  CreateCodeSchema,
+  VerifyCodeDto
+} from './schemas/authetication_code.schema'
 
 export type AccessToken = {
   access_token: string
@@ -26,12 +31,19 @@ export type AuthenticationResponseType = AuthenticationTokens & {
   user: UserAuthenticated
 }
 
+export interface AuthenticationCodeRepository {
+  saveCode(authCode: CreateCodeSchema): Promise<AuthenticationCodeDto>
+  deleteCode(id: number): Promise<boolean>
+  findCodeByUserId(id: number): Promise<AuthenticationCodeDto | null>
+}
+
 export interface AuthService {
   createTenant(tenant: RegisterUserDto): Promise<AuthenticationResponseType>
   createLessor(lessor: RegisterUserDto): Promise<AuthenticationResponseType>
   login(user: LoginUserDto): Promise<AuthenticationResponseType>
   refresh(jwt: RefreshTokenPayload): Promise<AccessToken>
   validate(user: AuthenticationCodeUser): Promise<void>
+  verify(verifyData: VerifyCodeDto): Promise<void>
 }
 
 export interface AuthController {
@@ -61,6 +73,11 @@ export interface AuthController {
     next: NextFunction
   ): Promise<Response | void>
   validate(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  verify(
     req: Request,
     res: Response,
     next: NextFunction

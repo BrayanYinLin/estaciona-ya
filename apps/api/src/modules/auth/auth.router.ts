@@ -11,41 +11,78 @@ import { User } from '@users/entities/user.entity'
 import { UserRepositoryImpl } from '@users/user.repository'
 import { inyectUserFromToken } from '@shared/middlewares/inyect-user-from-token.middleware'
 import { MailServiceImpl } from '../mails/mails_service'
-import { env_resend_api } from '@shared/config/env.config'
+import { env_node, env_resend_api } from '@shared/config/env.config'
 import { Resend } from 'resend'
+import { AuthenticationCodeRepositoryImpl } from './authentication_code.repository'
+import { AuthenticationCode } from './entities/authentication_code.entity'
+import { LocalMail } from '../mails/local_mail.service'
 
-const authRouter = Router()
+export const inyectMailService = () => {
+  if (env_node === 'development') {
+    const resend = new Resend(env_resend_api)
+    const mailService = new MailServiceImpl(resend)
 
-const roleRepository = new RoleRepositoryImpl(AppDataSource.getRepository(Role))
-const userRepository = new UserRepositoryImpl(AppDataSource.getRepository(User))
+    return mailService
+  }
 
-const resend = new Resend(env_resend_api)
-const mailService = new MailServiceImpl(resend)
+  return new LocalMail()
+}
 
-const service = new AuthServiceImpl(userRepository, roleRepository, mailService)
+export const createAuthRouter = () => {
+  const authRouter = Router()
 
-const controller = new AuthControllerImpl(service)
+  const roleRepository = new RoleRepositoryImpl(
+    AppDataSource.getRepository(Role)
+  )
+  const userRepository = new UserRepositoryImpl(
+    AppDataSource.getRepository(User)
+  )
+  const authenticationCodeRepository = new AuthenticationCodeRepositoryImpl(
+    AppDataSource.getRepository(AuthenticationCode)
+  )
 
-authRouter.post(
-  '/tenant',
-  checkSchema(RegisterUserSchema),
-  controller.createTenant.bind(controller)
-)
-authRouter.post(
-  '/lessor',
-  checkSchema(RegisterUserSchema),
-  controller.createLessor.bind(controller)
-)
-authRouter.post(
-  '/login',
-  checkSchema(LoginUserSchema),
-  controller.login.bind(controller)
-)
-authRouter.get('/refresh', controller.refresh.bind(controller))
-authRouter.get('/logout', controller.logout.bind(controller))
-authRouter.get(
-  '/validate',
-  inyectUserFromToken(),
-  controller.validate.bind(controller)
-)
+  const mailService = inyectMailService()
+
+  const service = new AuthServiceImpl(
+    userRepository,
+    roleRepository,
+    mailService,
+    authenticationCodeRepository
+  )
+
+  const controller = new AuthControllerImpl(service)
+
+  authRouter.post(
+    '/tenant',
+    checkSchema(RegisterUserSchema),
+    controller.createTenant.bind(controller)
+  )
+  authRouter.post(
+    '/lessor',
+    checkSchema(RegisterUserSchema),
+    controller.createLessor.bind(controller)
+  )
+  authRouter.post(
+    '/login',
+    checkSchema(LoginUserSchema),
+    controller.login.bind(controller)
+  )
+  authRouter.get('/refresh', controller.refresh.bind(controller))
+  authRouter.get('/logout', controller.logout.bind(controller))
+  authRouter.get(
+    '/validate',
+    inyectUserFromToken(),
+    controller.validate.bind(controller)
+  )
+  authRouter.post(
+    '/verify',
+    inyectUserFromToken(),
+    controller.verify.bind(controller)
+  )
+
+  return authRouter
+}
+
+const authRouter = createAuthRouter()
+
 export { authRouter }

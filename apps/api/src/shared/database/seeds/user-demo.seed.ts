@@ -13,6 +13,14 @@ export async function seedUserLessor() {
 
   const passwordHashed = await hash('Test_demo_2025', env_bcrypt_salt_rounds)
 
+  const userFound = await userRepository.findOne({
+    where: {
+      email: 'test@example.com'
+    }
+  })
+
+  if (userFound) return
+
   await userRepository.save({
     name: 'Test',
     email: 'test@example.com',

@@ -8,11 +8,25 @@ import { User } from './entities/user.entity'
 import { UserIdentifierDto } from './schemas/user.schema'
 import { UpdatePasswordDto } from './schemas/change_password.schema'
 import { AppDataSource } from '@shared/database/data-source'
-import { UpdateUserDto } from './schemas/update_user.schema'
+import {
+  UpdateUserDto,
+  UpdateValidationAccountDto
+} from './schemas/update_user.schema'
 import { CreateUserDto } from './schemas/create_user.schema'
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly repository: Repository<User>) {}
+
+  async updateUserValitation({
+    user,
+    validationAccount
+  }: UpdateValidationAccountDto): Promise<void> {
+    await AppDataSource.createQueryBuilder()
+      .update(User)
+      .set({ validatedAccount: validationAccount })
+      .where('id = :id', { id: user.id })
+      .execute()
+  }
 
   async findProfileById(
     id: UserIdentifierDto
