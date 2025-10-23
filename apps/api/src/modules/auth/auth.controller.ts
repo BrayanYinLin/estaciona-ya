@@ -7,6 +7,20 @@ import { Request, Response, NextFunction } from 'express'
 export class AuthControllerImpl implements AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  async verify(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      await this.authService.verify(req.body)
+
+      return res.status(204).end()
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async validate(
     req: Request,
     res: Response,

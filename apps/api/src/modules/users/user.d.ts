@@ -8,7 +8,11 @@ import {
   ChangePasswordDto,
   UpdatePasswordDto
 } from './schemas/change_password.schema'
-import { UpdateUserDto, UpdateUserFormDto } from './schemas/update_user.schema'
+import {
+  UpdateUserDto,
+  UpdateUserFormDto,
+  UpdateValidationAccountDto
+} from './schemas/update_user.schema'
 import { CreateUserDto } from './schemas/create_user.schema'
 
 export type UserId = {
@@ -22,6 +26,9 @@ export interface UserRepository {
   findUserByDni(dni: string): Promise<ResponseUserDto | null>
   updateUserPassword(password: UpdatePasswordDto): Promise<boolean>
   updateUser(user: UpdateUserDto): Promise<void>
+  updateUserValitation(
+    validationAccount: UpdateValidationAccountDto
+  ): Promise<void>
   saveUser(user: CreateUserDto): Promise<ResponseUserDto>
   deactivateUser(id: UserIdentifierDto): Promise<void>
 }

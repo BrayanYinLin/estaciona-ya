@@ -45,6 +45,9 @@ export const DOMAIN_ERRORS = {
   },
   FORBIDDEN_ERROR: {
     code: 'FORBIDDEN_ERROR'
+  },
+  VALIDATION_CODE_ERROR: {
+    code: 'VALIDATION_CODE_ERROR'
   }
 } as const
 

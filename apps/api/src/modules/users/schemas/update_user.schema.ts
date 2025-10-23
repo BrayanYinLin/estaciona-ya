@@ -34,3 +34,14 @@ export const UpdateUserSchema = z.object({
 })
 
 export type UpdateUserDto = z.infer<typeof UpdateUserSchema>
+
+export const UpdateValidationAccountSchema = z.object({
+  user: z.object({
+    id: UserIdentifierSchema
+  }),
+  validationAccount: z.boolean()
+})
+
+export type UpdateValidationAccountDto = z.infer<
+  typeof UpdateValidationAccountSchema
+>
