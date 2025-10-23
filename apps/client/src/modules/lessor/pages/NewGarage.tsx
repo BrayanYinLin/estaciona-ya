@@ -1,9 +1,12 @@
 import { NewGarageInfo } from '@lessor/components/NewGarageInfo'
 import { NewGarageLocation } from '@lessor/components/NewGarageLocation'
+import { ReturnButton } from '@shared/components/ReturnButton'
 import { useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router'
 
 export function NewGarage() {
   const [showInfo, setShowInfo] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -18,8 +21,14 @@ export function NewGarage() {
     console.log(formData.getAll('photos'))
   }
 
+  const handleBack = () => (showInfo ? navigate(-2) : navigate(-1))
+
   return (
     <main>
+      <ReturnButton
+        className="relative left-5 top-3 lg:absolute"
+        onClick={handleBack}
+      />
       <form onSubmit={handleSubmit}>
         <NewGarageLocation
           onNext={() => setShowInfo(true)}
