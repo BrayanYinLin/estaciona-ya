@@ -11,11 +11,15 @@ import {
 type NewGarageLocationInputProps = {
   onNext: () => void
   targetId: string
+  setLatitude: (latitude: string | null) => void
+  setLongitude: (longitude: string | null) => void
 }
 
 export function NewGarageLocation({
   onNext,
-  targetId
+  targetId,
+  setLatitude,
+  setLongitude
 }: NewGarageLocationInputProps) {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 1500)
@@ -43,6 +47,8 @@ export function NewGarageLocation({
           districtSelected?.name ?? ''
         )
         setLocation(data)
+        setLatitude(data.latitude)
+        setLongitude(data.longitude)
         setError(null)
       } catch (error) {
         setLocation(null)

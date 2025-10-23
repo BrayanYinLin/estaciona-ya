@@ -12,7 +12,6 @@ export class AuthorizationUtils {
         message: 'Token no encontrado'
       })
     }
-
     const token = authorization.split(' ')[1]
     const payload = verify(token, env_jwt) as AccessTokenPayload
 
