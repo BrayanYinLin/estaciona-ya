@@ -4,5 +4,5 @@ export const ENDPOINTS = {
   DISTRICTS: '/api/districts',
   LOCATION: '/api/location',
   RENT_MODE: '/api/rent-mode/',
-  GARAGES: '/api/garage'
+  GARAGES: '/api/garage/'
 } as const
