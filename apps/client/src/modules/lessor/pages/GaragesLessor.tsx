@@ -1,3 +1,4 @@
+import { GarageSpaceCard } from '@lessor/components/GarageSpaceCard'
 import { UserNavBar } from '@shared/components/UserNavBar'
 import { useUserStore } from '@user/context/user.context'
 import { useEffect } from 'react'
@@ -29,6 +30,28 @@ export function GaragesLessor() {
         <Link to={'/lessor/garages/new'} className="btn btn-primary">
           Nuevo espacio
         </Link>
+      </section>
+      <section className="flex flex-col m-6 gap-6">
+        <GarageSpaceCard
+          title="Calle San Rodolfo"
+          address="San Borja, Lima"
+          photo="https://placehold.co/600x400"
+          rating={3}
+          onEdit={() => console.log('Editar')}
+          onDisable={() => console.log('Deshabilitar')}
+          onDelete={() => console.log('Eliminar')}
+          disabled={true}
+        />
+        <GarageSpaceCard
+          title="Calle Las Palmeras"
+          address="Calle Las Magnolias, Surco"
+          photo="https://placehold.co/600x400"
+          rating={5}
+          onEdit={() => console.log('Editar')}
+          onDisable={() => console.log('Deshabilitar')}
+          onDelete={() => console.log('Eliminar')}
+          disabled={false}
+        />
       </section>
     </main>
   )
