@@ -47,7 +47,7 @@ export class Garage {
   @Column({ type: 'text', name: 'garage_restrictions' })
   restrictions!: string
 
-  @Column({ type: 'boolean', name: 'garage_state' })
+  @Column({ type: 'boolean', name: 'garage_state', default: true })
   state!: boolean
 
   @CreateDateColumn({ name: 'created_at' })
