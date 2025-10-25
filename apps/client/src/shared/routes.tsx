@@ -6,9 +6,10 @@ import { LogIn } from '../modules/auth/pages/LogIn'
 import { RequestsLessor } from '@lessor/pages/RequestsLessor'
 import { BookingsLessor } from '@lessor/pages/BookingsLessor'
 import { GaragesLessor } from '@lessor/pages/GaragesLessor'
-import { Catalog } from '@tenant/pages/Catalog'
+import { CatalogTenant } from '@tenant/pages/CatalogTenant'
 import { UserProfile } from '@modules/user/pages/UserProfile'
 import { NewGarage } from '@lessor/pages/NewGarage'
+import { RequestsTenant } from '@tenant/pages/RequestsTenant'
 
 export const FRONTEND_ROUTES = {
   ROOT: '/',
@@ -16,6 +17,7 @@ export const FRONTEND_ROUTES = {
   SIGNIN: 'sign-in',
 
   TENANT: 'tenant',
+  TENANT_REQUEST: 'requests',
   TENANT_CATALOG: 'catalog',
 
   LESSOR: 'lessor',
@@ -71,7 +73,11 @@ export const routes = createBrowserRouter([
         children: [
           {
             path: FRONTEND_ROUTES.TENANT_CATALOG,
-            element: <Catalog />
+            element: <CatalogTenant />
+          },
+          {
+            path: FRONTEND_ROUTES.TENANT_REQUEST,
+            element: <RequestsTenant />
           }
         ]
       },
