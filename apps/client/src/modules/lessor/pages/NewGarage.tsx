@@ -29,10 +29,12 @@ export function NewGarage() {
     formData.append('latitude', latitude)
     formData.append('longitude', longitude)
 
-    api.post('/garage', formData).then((data) => console.log(data.data))
+    api.post('/garage', formData).then(() => navigate('/lessor/garages'))
   }
 
-  const handleBack = () => (showInfo ? navigate(-2) : navigate(-1))
+  const handleBack = () => {
+    navigate('/lessor/garages')
+  }
 
   return (
     <main>
