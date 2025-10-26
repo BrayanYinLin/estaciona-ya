@@ -6,6 +6,21 @@ import { Location } from '@locations/entities/locations.entity'
 export class LocationRepositoryImpl implements LocationRepository {
   constructor(private readonly repository: Repository<Location>) {}
 
+  async findLocationByGarageId(garage: number): Promise<Location | null> {
+    const location = await this.repository.findOne({
+      where: {
+        garage: {
+          id: garage
+        }
+      },
+      relations: {
+        district: true
+      }
+    })
+
+    return location
+  }
+
   async saveLocation(location: CreateLocationDto): Promise<Location> {
     const savedLocation = await this.repository.save({
       latitude: location.latitude,

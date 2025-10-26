@@ -28,7 +28,8 @@ export async function seedUserLessor() {
     dni: '12345678',
     role: role,
     state: true,
-    photo: null
+    photo: null,
+    validatedAccount: true
   })
 }
 
@@ -55,6 +56,7 @@ export async function seedUserTenant() {
     dni: '12345679',
     role: role,
     state: true,
-    photo: null
+    photo: null,
+    validatedAccount: true
   })
 }
