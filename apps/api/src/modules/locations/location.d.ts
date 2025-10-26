@@ -17,4 +17,5 @@ export interface LocationController {
 
 export interface LocationRepository {
   saveLocation(location: CreateLocationDto): Promise<Location>
+  findLocationByGarageId(garage: number): Promise<Location | null>
 }

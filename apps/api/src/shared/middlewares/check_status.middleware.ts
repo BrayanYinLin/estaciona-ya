@@ -10,7 +10,7 @@ export function checkStatus() {
         AuthorizationUtils.extractAuthorizationToken(authorization)
       const { validatedAccount, state } = payload
 
-      if (!validatedAccount || !state) {
+      if (validatedAccount === false || state === false) {
         throw new DomainError({
           code: 'FORBIDDEN_ERROR',
           message: 'No puedes acceder a esta funcionalidad'

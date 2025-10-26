@@ -34,6 +34,9 @@ export class GarageServiceImpl implements GarageService {
       const photos = await this.garagePhotoRepository.findAllByGarageId(
         garage.id
       )
+      const location = await this.locationRepository.findLocationByGarageId(
+        garage.id
+      )
 
       if (!rentMode) {
         throw new DomainError({
@@ -42,10 +45,18 @@ export class GarageServiceImpl implements GarageService {
         })
       }
 
+      if (!location) {
+        throw new DomainError({
+          code: 'ENTITY_NOT_FOUND',
+          message: 'Ubicación no encontrada'
+        })
+      }
+
       response.push({
         ...garage,
         photos,
-        rentMode
+        rentMode,
+        location
       })
     }
 

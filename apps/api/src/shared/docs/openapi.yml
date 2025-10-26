@@ -291,7 +291,7 @@ paths:
                   $ref: '#/components/schemas/RentModeResponse'
         '404':
           description: No se encontraron modos de alquiler
-  /api/garages/me:
+  /api/garage/me:
     get:
       summary: Obtiene todos los garages de un usuario
       tags:
@@ -309,7 +309,7 @@ paths:
                   $ref: '#/components/schemas/GarageResponse'
         '401':
           description: Unauthorized
-  /api/garages/{id}/photos/{photoId}:
+  /api/garage/{id}/photos/{photoId}:
     get:
       summary: Obtiene la foto de un garage
       tags:
@@ -332,7 +332,7 @@ paths:
             image/*: {}
         '404':
           description: Foto no encontrada
-  /api/garages:
+  /api/garage:
     post:
       summary: Crea un nuevo garage
       tags:

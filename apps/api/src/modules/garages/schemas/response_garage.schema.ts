@@ -20,6 +20,16 @@ export const ResponseGarageSchema = z.object({
   covered: z.boolean(),
   hasCameras: z.boolean(),
   restrictions: z.string(),
+  location: z.object({
+    id: z.number(),
+    address: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
+    district: z.object({
+      id: z.number(),
+      name: z.string()
+    })
+  }),
   state: z.boolean().default(true),
   createdAt: z.date(),
   updatedAt: z.date()
