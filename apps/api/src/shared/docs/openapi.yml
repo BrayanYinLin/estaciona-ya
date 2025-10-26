@@ -291,6 +291,70 @@ paths:
                   $ref: '#/components/schemas/RentModeResponse'
         '404':
           description: No se encontraron modos de alquiler
+  /api/garages/me:
+    get:
+      summary: Obtiene todos los garages de un usuario
+      tags:
+        - Garage
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Garages obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GarageResponse'
+        '401':
+          description: Unauthorized
+  /api/garages/{id}/photos/{photoId}:
+    get:
+      summary: Obtiene la foto de un garage
+      tags:
+        - Garage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: photoId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Foto del garage obtenida correctamente
+          content:
+            image/*: {}
+        '404':
+          description: Foto no encontrada
+  /api/garages:
+    post:
+      summary: Crea un nuevo garage
+      tags:
+        - Garage
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGarageDto'
+      responses:
+        '201':
+          description: Garage creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GarageResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
 
 components:
   securitySchemes:
@@ -414,3 +478,52 @@ components:
           type: string
         address:
           type: string
+    GarageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        width:
+          type: number
+        height:
+          type: number
+        length:
+          type: number
+        price:
+          type: number
+        is_active:
+          type: boolean
+        location:
+          $ref: '#/components/schemas/ResponseThirdPartyLocation'
+        photos:
+          type: array
+          items:
+            type: string
+    CreateGarageDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        width:
+          type: number
+        height:
+          type: number
+        length:
+          type: number
+        price:
+          type: number
+        location_id:
+          type: string
+        rent_mode_id:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+            format: binary
