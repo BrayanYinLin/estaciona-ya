@@ -13,6 +13,7 @@ import { LocationRepositoryImpl } from '@locations/repositories/location.reposit
 import { AppDataSource } from '@shared/database/data-source'
 import { attachPhotos } from '@shared/middlewares/attach_files.middleware'
 import { checkSchema } from '@shared/middlewares/check-schema.middleware'
+import { checkStatus } from '@shared/middlewares/check_status.middleware'
 import { inyectUserFromToken } from '@shared/middlewares/inyect-user-from-token.middleware'
 import { upload } from '@shared/middlewares/uploader.middleware'
 import { LocalFileStorageService } from '@shared/services/local-file-storage.service'
@@ -46,16 +47,14 @@ const controller = new GarageControllerImpl(service)
 
 garageRouter.get(
   '/me',
+  checkStatus(),
   injectUser(),
   controller.findAllByUserId.bind(controller)
 )
-garageRouter.get('/:id/photos/:photoId', async (req, res) => {
-  const url = await fileStorageService.sendPhotoPath(req.params.photoId)
-
-  res.sendFile(url)
-})
+garageRouter.get('/:id/photos/:photoId', controller.findPhoto.bind(controller))
 garageRouter.post(
   '/',
+  checkStatus(),
   upload.array('photos', 10),
   inyectUserFromToken(),
   attachPhotos(),
