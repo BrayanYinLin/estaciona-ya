@@ -3,10 +3,13 @@ import {
   GarageRepository,
   GarageService
 } from '@garages/garage'
+import { RentModeRepository } from '@garages/rent_mode'
 import { CreateGarageFormDto } from '@garages/schemas/create_garage.schema'
+import { ResponseGarageDto } from '@garages/schemas/response_garage.schema'
 import { LocationRepository } from '@locations/location'
 import { ENDPOINTS } from '@shared/constants/endpoints'
 import { FileStorageService } from '@shared/services/file-storage'
+import { DomainError } from '@shared/utils/error'
 import { randomUUID } from 'node:crypto'
 
 export class GarageServiceImpl implements GarageService {
@@ -14,8 +17,40 @@ export class GarageServiceImpl implements GarageService {
     private readonly garageRepository: GarageRepository,
     private readonly locationRepository: LocationRepository,
     private readonly fileStorageService: FileStorageService,
-    private readonly garagePhotoRepository: GaragePhotoRepository
+    private readonly garagePhotoRepository: GaragePhotoRepository,
+    private readonly rentModeRepository: RentModeRepository
   ) {}
+
+  async findPhoto(id: string): Promise<string> {
+    return await this.fileStorageService.sendPhotoPath(id)
+  }
+
+  async findAllByUserId(user: number): Promise<ResponseGarageDto[]> {
+    const response: ResponseGarageDto[] = []
+    const garages = await this.garageRepository.findAllByUserId(user)
+
+    for await (const garage of garages) {
+      const rentMode = await this.rentModeRepository.findById(garage.rentModeId)
+      const photos = await this.garagePhotoRepository.findAllByGarageId(
+        garage.id
+      )
+
+      if (!rentMode) {
+        throw new DomainError({
+          code: 'ENTITY_NOT_FOUND',
+          message: 'Modalidad de renta no encontrada'
+        })
+      }
+
+      response.push({
+        ...garage,
+        photos,
+        rentMode
+      })
+    }
+
+    return response
+  }
 
   async saveGarage({
     price,
