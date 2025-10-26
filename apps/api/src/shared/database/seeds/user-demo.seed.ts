@@ -31,3 +31,30 @@ export async function seedUserLessor() {
     photo: null
   })
 }
+
+export async function seedUserTenant() {
+  const roleRepository = AppDataSource.getRepository(Role)
+  const userRepository = AppDataSource.getRepository(User)
+
+  const role = await roleRepository.findOneByOrFail({ name: ROLES.TENANT })
+
+  const passwordHashed = await hash('Test_demo_2025', env_bcrypt_salt_rounds)
+
+  const userFound = await userRepository.findOne({
+    where: {
+      email: 'test2@example.com'
+    }
+  })
+
+  if (userFound) return
+
+  await userRepository.save({
+    name: 'Tenant',
+    email: 'test2@example.com',
+    password: passwordHashed,
+    dni: '12345679',
+    role: role,
+    state: true,
+    photo: null
+  })
+}

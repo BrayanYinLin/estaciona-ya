@@ -11,7 +11,7 @@ export function UserNavBar({
 }) {
   return (
     <>
-      <nav className="w-full navbar">
+      <nav className="w-full navbar px-6">
         <div className="flex-1">
           <LinkAvatar photo={profilePic} className="w-16" />
         </div>

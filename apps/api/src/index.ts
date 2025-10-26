@@ -3,7 +3,10 @@ import 'reflect-metadata'
 import { app } from './server'
 import { env_api_port } from '@shared/config/env.config'
 import { seedRoles } from '@shared/database/seeds/role.seed'
-import { seedUserLessor } from '@shared/database/seeds/user-demo.seed'
+import {
+  seedUserLessor,
+  seedUserTenant
+} from '@shared/database/seeds/user-demo.seed'
 import { seedDistricts } from '@shared/database/seeds/district.seed'
 import { seedRentModes } from '@shared/database/seeds/rent_mode.seed'
 
@@ -13,6 +16,7 @@ const init = async () => {
   await seedDistricts()
   await seedRentModes()
   await seedUserLessor()
+  await seedUserTenant()
 
   app.listen(env_api_port, () => {
     console.log(`Running at http://localhost:${env_api_port}`)
