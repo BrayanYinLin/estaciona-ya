@@ -3,7 +3,7 @@ import { CoveredIcon } from '@shared/components/CoveredIcon'
 
 type GarageSpaceCardProps = {
   address: string
-  photo: string
+  photo: { url: string }[]
   rating: number
   disabled: boolean
   price: number
@@ -36,8 +36,10 @@ export function GarageSpaceCard({
         disabled ? 'opacity-80' : ''
       ].join(' ')}
     >
-      <figure className="md:max-w-xs md:w-64">
-        <img src={photo} className="h-48 w-full object-cover md:h-full" />
+      <figure className="hover-gallery flex max-h-52 md:max-h-full md:w-64 overflow-hidden">
+        {photo.map((img) => (
+          <img src={img.url} />
+        ))}
       </figure>
 
       <div className="card-body gap-3">
@@ -59,14 +61,14 @@ export function GarageSpaceCard({
           <CameraIcon marked={hasCameras} />
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           {Array.from({ length: 5 }).map((_, i) => (
             <span
               key={i}
               className={`mask mask-star-2 ${i < clampedRating ? 'bg-yellow-400' : 'bg-gray-300'} w-3 h-3 inline-block`}
             />
           ))}
-        </div>
+        </div> */}
 
         <div className="card-actions justify-end flex-nowrap pt-2">
           <button className="btn btn-primary" onClick={onEdit}>
