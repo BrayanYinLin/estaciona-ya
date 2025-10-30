@@ -1,17 +1,43 @@
 import { GarageSpaceCard } from '@lessor/components/GarageSpaceCard'
+import { api } from '@shared/api/api'
 import { UserNavBar } from '@shared/components/UserNavBar'
 import { useUserStore } from '@user/context/user.context'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
+
+type Garage = {
+  id: number
+  rentMode: {
+    id: number
+    mode_name: string
+  }
+  price: number
+  description: string
+  covered: boolean
+  hasCameras: boolean
+  restrictions: string
+  state: boolean
+  createdAt: Date
+  updatedAt: Date
+  photos: {
+    url: string
+  }[]
+}
 
 export function GaragesLessor() {
   const { user, loading, error, recoverUser } = useUserStore()
+  const [garages, setGarages] = useState<Garage[]>([])
   const navigate = useNavigate()
+  const garagesData = async () => {
+    const garage = await api.get<Garage[]>('garage/me')
+    setGarages(garage.data)
+  }
 
   // Función para traer GarageStore y validar si el usuario tiene registros
 
   useEffect(() => {
     recoverUser()
+    garagesData()
   }, [])
 
   useEffect(() => {
@@ -32,26 +58,22 @@ export function GaragesLessor() {
         </Link>
       </section>
       <section className="flex flex-col m-6 gap-6">
-        <GarageSpaceCard
-          title="Calle San Rodolfo"
-          address="San Borja, Lima"
-          photo="https://placehold.co/600x400"
-          rating={3}
-          onEdit={() => console.log('Editar')}
-          onDisable={() => console.log('Deshabilitar')}
-          onDelete={() => console.log('Eliminar')}
-          disabled={true}
-        />
-        <GarageSpaceCard
-          title="Calle Las Palmeras"
-          address="Calle Las Magnolias, Surco"
-          photo="https://placehold.co/600x400"
-          rating={5}
-          onEdit={() => console.log('Editar')}
-          onDisable={() => console.log('Deshabilitar')}
-          onDelete={() => console.log('Eliminar')}
-          disabled={false}
-        />
+        {garages.map((garage) => {
+          return (
+            <GarageSpaceCard
+              address="Calle San Rodolfo"
+              price={garage.price}
+              photo={garage.photos[0].url}
+              rating={3}
+              rentMode={garage.rentMode.mode_name}
+              isCovered={garage.covered}
+              hasCameras={garage.hasCameras}
+              onEdit={() => console.log('Editar')}
+              onDisable={() => console.log('Deshabilitar')}
+              disabled={!garage.state}
+            />
+          )
+        })}
       </section>
     </main>
   )
