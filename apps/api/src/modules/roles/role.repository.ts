@@ -1,14 +1,12 @@
 import { Repository } from 'typeorm'
 import { RoleRepository } from './role'
 import { Role } from './entities/role.entity'
-import { RoleDto, RoleWithPermissionsDto } from './schemas/response_role.schema'
+import { RoleDto } from './schemas/response_role.schema'
 
 export class RoleRepositoryImpl implements RoleRepository {
   constructor(private readonly repository: Repository<Role>) {}
 
-  async findRoleByNameWithPermissions(
-    name: string
-  ): Promise<RoleWithPermissionsDto | null> {
+  async findRoleByNameWithPermissions(name: string): Promise<Role | null> {
     const role = await this.repository.findOne({
       where: { name },
       relations: {
@@ -27,9 +25,7 @@ export class RoleRepositoryImpl implements RoleRepository {
     }
   }
 
-  async findRoleByIdWithPermissions(
-    id: number
-  ): Promise<RoleWithPermissionsDto | null> {
+  async findRoleByIdWithPermissions(id: number): Promise<Role | null> {
     const role = await this.repository.findOne({
       where: { id },
       relations: {

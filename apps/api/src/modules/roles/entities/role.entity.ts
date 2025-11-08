@@ -18,7 +18,7 @@ export class Role {
   name!: string
 
   @OneToMany(() => User, (user) => user.role)
-  users!: User[]
+  users?: User[]
 
   @ManyToMany(() => Permission, (permission) => permission.roles)
   @JoinTable({

@@ -1,11 +1,11 @@
+import { RentMode } from '@garages/entities/rent_modes.entity'
 import { RentModeRepository, RentModeService } from '@garages/rent_mode'
-import { RentModeDto } from '@garages/schemas/rent_mode.schema'
 import { DomainError } from '@shared/utils/error'
 
 export class RentModeServiceImpl implements RentModeService {
   constructor(private readonly repository: RentModeRepository) {}
 
-  async findById(id: number): Promise<RentModeDto> {
+  async findById(id: number): Promise<RentMode> {
     const rentModes = await this.repository.findById(id)
 
     if (!rentModes) {
@@ -18,7 +18,7 @@ export class RentModeServiceImpl implements RentModeService {
     return rentModes
   }
 
-  async findAll(): Promise<RentModeDto[]> {
+  async findAll(): Promise<RentMode[]> {
     const rentModes = await this.repository.findAll()
 
     return rentModes

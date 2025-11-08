@@ -1,3 +1,4 @@
+import { RentMode } from './entities/rent_modes.entity'
 import { RentModeDto } from './schemas/rent_mode.schema'
 import { Request, Response } from 'express'
 
@@ -7,8 +8,8 @@ export interface RentModeRepository {
 }
 
 export interface RentModeService {
-  findAll(): Promise<RentModeDto[]>
-  findById(id: number): Promise<RentModeDto>
+  findAll(): Promise<RentMode[]>
+  findById(id: number): Promise<RentMode>
 }
 
 export interface RentModeController {

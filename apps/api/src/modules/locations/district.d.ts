@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { DistrictDto } from './schemas/district.schema'
 
 export interface DistrictRepository {
-  findById(id: number): Promise<DistrictDto | null>
-  findAll(): Promise<DistrictDto[]>
+  findById(id: number): Promise<District | null>
+  findAll(): Promise<District[]>
 }
 
 export interface DistrictService {

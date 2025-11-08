@@ -10,5 +10,5 @@ export class RentMode {
   mode_name!: string
 
   @OneToMany(() => Garage, (garage) => garage.rentMode)
-  garages!: Garage[]
+  garages?: Garage[]
 }
