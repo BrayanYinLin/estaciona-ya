@@ -27,7 +27,7 @@ export class Location {
 
   @Column({
     type: 'decimal',
-    precision: 10,
+    precision: 11,
     scale: 8,
     name: 'location_longitude'
   })
@@ -35,9 +35,9 @@ export class Location {
 
   @ManyToOne(() => District, (district) => district.locations)
   @JoinColumn({ name: 'district_id' })
-  district!: District
+  district?: District
 
   @OneToOne(() => Garage)
   @JoinColumn({ name: 'garage_id' })
-  garage!: Garage
+  garage?: Garage
 }

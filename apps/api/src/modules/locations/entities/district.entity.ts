@@ -10,5 +10,5 @@ export class District {
   name!: string
 
   @OneToMany(() => Location, (location) => location.district)
-  locations!: Location[]
+  locations?: Location[]
 }

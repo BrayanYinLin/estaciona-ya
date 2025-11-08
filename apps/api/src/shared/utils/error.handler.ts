@@ -24,6 +24,7 @@ export class ErrorHandler {
     res?: Response
   ): Promise<void> {
     const error = this.normalize(e)
+    console.log(`[${(error as Error).name}] ${(error as Error).message}`)
 
     if (context.source !== 'http') {
       this.handleProcessError(error)
