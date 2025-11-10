@@ -8,8 +8,8 @@ import { District } from '@locations/entities/district.entity'
 
 export async function seedGarage(
   user: User,
-  mode: RentMode,
-  district: District
+  modes: RentMode[],
+  districts: District[]
 ) {
   try {
     const repository = AppDataSource.getRepository(Garage)
@@ -22,7 +22,7 @@ export async function seedGarage(
         price: faker.number.float({ max: 999 }),
         description: fakerES.commerce.productDescription(),
         restrictions: fakerES.commerce.productDescription(),
-        rentMode: mode,
+        rentMode: modes[faker.number.int({ min: 0, max: modes.length - 1 })],
         user: user
       })
 
@@ -30,7 +30,8 @@ export async function seedGarage(
         address: fakerES.location.streetAddress({ useFullAddress: true }),
         latitude: faker.location.latitude().toString(),
         longitude: faker.location.latitude().toString(),
-        district,
+        district:
+          districts[faker.number.int({ min: 0, max: districts.length - 1 })],
         garage: savedGarage
       })
     }
