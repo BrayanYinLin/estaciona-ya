@@ -6,12 +6,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  OneToOne
 } from 'typeorm'
 import { GaragePhoto } from './garage-photo.entity'
 import { User } from '@users/entities/user.entity'
 import { BookingRequest } from '@root/modules/booking_requests/entities/booking-requests.entity'
 import { RentMode } from './rent_modes.entity'
+import { Location } from '@locations/entities/locations.entity'
 
 @Entity('tb_garages')
 export class Garage {
@@ -29,14 +31,24 @@ export class Garage {
   @OneToMany(() => BookingRequest, (bookingRequest) => bookingRequest.garage)
   bookingRequests!: BookingRequest[]
 
-  @Column({ type: 'decimal', name: 'garage_price' })
+  @OneToOne(() => Location, (location) => location.garage)
+  location!: Location
+
+  @Column({
+    type: 'decimal',
+    name: 'garage_price',
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => Number(value)
+    }
+  })
   price!: number
 
   @Column({ type: 'text', name: 'garage_description' })
   description!: string
 
   @OneToMany(() => GaragePhoto, (garagePhoto) => garagePhoto.garage)
-  garagePhotos!: GaragePhoto[]
+  photos!: GaragePhoto[]
 
   @Column({ type: 'boolean', name: 'garage_covered' })
   covered!: boolean

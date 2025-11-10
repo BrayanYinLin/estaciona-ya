@@ -1,59 +1,66 @@
 import { Garage } from '@garages/entities/garage.entity'
-import { GarageRepository, IGarage } from '../garage'
+import { Filters, GarageRepository } from '../garage'
 import { CreateGarageFormDto } from '../schemas/create_garage.schema'
-import { Repository } from 'typeorm'
+import { FindOptionsWhere, Repository } from 'typeorm'
 
 export class GarageRepositoryImpl implements GarageRepository {
   constructor(private readonly repository: Repository<Garage>) {}
 
-  async findAllByUserId(userId: number): Promise<IGarage[]> {
-    const garages = await this.repository
-      .createQueryBuilder('garage')
-      .leftJoin('garage.user', 'user')
-      .leftJoin('garage.rentMode', 'rentMode')
-      .where('user.id = :userId', { userId })
-      .select([
-        'garage.id',
-        'user.id',
-        'rentMode.id',
-        'garage.price',
-        'garage.description',
-        'garage.covered',
-        'garage.hasCameras',
-        'garage.restrictions',
-        'garage.state',
-        'garage.createdAt',
-        'garage.updatedAt'
-      ])
-      .getMany()
+  async findAll({
+    page,
+    size,
+    covered,
+    hasCameras,
+    mode
+  }: Filters): Promise<Garage[]> {
+    const skip = (page - 1) * size
 
-    return garages.map(
-      ({
-        id,
-        user,
-        rentMode,
-        price,
-        description,
-        covered,
-        hasCameras,
-        restrictions,
-        state,
-        createdAt,
-        updatedAt
-      }) => ({
-        id,
-        ownerId: user.id,
-        rentModeId: rentMode.id,
-        price,
-        description,
-        covered,
-        hasCameras,
-        restrictions,
-        state,
-        createdAt,
-        updatedAt
-      })
-    )
+    const where: FindOptionsWhere<Garage> = {}
+    if (covered !== undefined) {
+      where.covered = covered
+    }
+
+    if (hasCameras !== undefined) {
+      where.hasCameras = hasCameras
+    }
+
+    if (mode !== undefined) {
+      where.rentMode = {
+        mode_name: mode
+      }
+    }
+
+    const garages = await this.repository.find({
+      skip,
+      take: size,
+      order: {
+        id: 'ASC'
+      },
+      where,
+      relations: ['location', 'rentMode', 'photos', 'location.district']
+    })
+
+    return garages
+  }
+
+  async findAllByUserId(userId: number): Promise<Garage[]> {
+    const garages = await this.repository.find({
+      where: {
+        user: {
+          id: userId
+        }
+      },
+      relations: [
+        'user',
+        'rentMode',
+        'bookingRequests',
+        'location',
+        'photos',
+        'location.district'
+      ]
+    })
+
+    return garages
   }
 
   async saveGarage(garage: CreateGarageFormDto): Promise<Garage> {

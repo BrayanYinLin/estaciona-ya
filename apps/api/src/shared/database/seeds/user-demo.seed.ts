@@ -21,7 +21,7 @@ export async function seedUserLessor() {
 
   if (userFound) return
 
-  await userRepository.save({
+  const user = await userRepository.save({
     name: 'Test',
     email: 'test@example.com',
     password: passwordHashed,
@@ -31,6 +31,8 @@ export async function seedUserLessor() {
     photo: null,
     validatedAccount: true
   })
+
+  return user
 }
 
 export async function seedUserTenant() {

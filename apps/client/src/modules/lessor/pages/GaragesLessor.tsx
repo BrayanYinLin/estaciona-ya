@@ -1,6 +1,5 @@
 import { GarageSpaceCard } from '@lessor/components/GarageSpaceCard'
 import { api } from '@shared/api/api'
-import { GhostIcon } from '@shared/components/GhostIcon'
 import { UserNavBar } from '@shared/components/UserNavBar'
 import { useUserStore } from '@user/context/user.context'
 import { useEffect, useState } from 'react'
@@ -23,6 +22,16 @@ type Garage = {
   photos: {
     url: string
   }[]
+  location: {
+    id: number
+    address: string
+    latitude: string
+    longitude: string
+    district: {
+      id: number
+      name: string
+    }
+  }
 }
 
 export function GaragesLessor() {
@@ -59,30 +68,27 @@ export function GaragesLessor() {
         </Link>
       </section>
       <section className="flex flex-col m-6 gap-6">
-        {garages.length === 0 && (
-          <section className="flex flex-col items-center gap-4 text-gray-500">
-            <p className="text-center text-2xl">
-              No tienes espacios de garage aún.
-            </p>
-            <GhostIcon />
-          </section>
-        )}
-        {garages.map((garage) => {
-          return (
-            <GarageSpaceCard
-              address="Calle San Rodolfo"
-              price={garage.price}
-              photo={garage.photos}
-              rating={3}
-              rentMode={garage.rentMode.mode_name}
-              isCovered={garage.covered}
-              hasCameras={garage.hasCameras}
-              onEdit={() => console.log('Editar')}
-              onDisable={() => console.log('Deshabilitar')}
-              disabled={!garage.state}
-            />
-          )
-        })}
+        {garages.length > 0 &&
+          garages.map((garage) => {
+            return (
+              <GarageSpaceCard
+                address={garage.location.address}
+                price={garage.price}
+                photo={
+                  garage.photos[0]
+                    ? [{ url: garage.photos[0].url }]
+                    : [{ url: 'https://placehold.co/300x200' }]
+                }
+                rating={3}
+                rentMode={garage.rentMode.mode_name}
+                isCovered={garage.covered}
+                hasCameras={garage.hasCameras}
+                onEdit={() => console.log('Editar')}
+                onDisable={() => console.log('Deshabilitar')}
+                disabled={!garage.state}
+              />
+            )
+          })}
       </section>
     </main>
   )

@@ -333,6 +333,49 @@ paths:
         '404':
           description: Foto no encontrada
   /api/garage:
+    get:
+      summary: Obtiene todos los garages
+      tags:
+        - Garage
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 10
+        - name: covered
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: hasCameras
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: mode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Garages obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GarageResponse'
+        '404':
+          description: No se encontraron garages
     post:
       summary: Crea un nuevo garage
       tags:
