@@ -38,6 +38,8 @@ export type Filters = {
   covered?: boolean
   hasCameras?: boolean
   mode?: string
+  price?: number
+  district?: string
 }
 
 export interface GarageRepository {

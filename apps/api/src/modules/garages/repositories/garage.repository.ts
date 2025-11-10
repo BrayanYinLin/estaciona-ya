@@ -1,7 +1,7 @@
 import { Garage } from '@garages/entities/garage.entity'
 import { Filters, GarageRepository } from '../garage'
 import { CreateGarageFormDto } from '../schemas/create_garage.schema'
-import { FindOptionsWhere, Repository } from 'typeorm'
+import { FindOptionsWhere, Like, Repository } from 'typeorm'
 
 export class GarageRepositoryImpl implements GarageRepository {
   constructor(private readonly repository: Repository<Garage>) {}
@@ -11,7 +11,9 @@ export class GarageRepositoryImpl implements GarageRepository {
     size,
     covered,
     hasCameras,
-    mode
+    mode,
+    price,
+    district
   }: Filters): Promise<Garage[]> {
     const skip = (page - 1) * size
 
@@ -27,6 +29,18 @@ export class GarageRepositoryImpl implements GarageRepository {
     if (mode !== undefined) {
       where.rentMode = {
         mode_name: mode
+      }
+    }
+
+    if (price !== undefined) {
+      where.price = price
+    }
+
+    if (district !== undefined) {
+      where.location = {
+        district: {
+          name: Like(`%${district}%`)
+        }
       }
     }
 

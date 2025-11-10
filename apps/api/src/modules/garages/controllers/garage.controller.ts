@@ -9,7 +9,8 @@ export class GarageControllerImpl implements GarageController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const { page, size, covered, hasCameras, mode } = req.query
+      const { page, size, covered, hasCameras, mode, price, district } =
+        req.query
 
       const garages = await this.service.findAll({
         page: Number(page) || 1,
@@ -22,7 +23,9 @@ export class GarageControllerImpl implements GarageController {
           hasCameras !== undefined
             ? String(hasCameras).toLowerCase() === 'true'
             : undefined,
-        mode: mode ? String(mode) : undefined
+        mode: mode ? String(mode) : undefined,
+        price: price !== undefined ? Number(price) : undefined,
+        district: district !== undefined ? String(district) : undefined
       })
 
       return res.json(garages)

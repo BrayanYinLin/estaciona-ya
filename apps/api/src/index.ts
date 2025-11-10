@@ -19,7 +19,7 @@ const init = async () => {
   const modes = await seedRentModes()
   const user = await seedUserLessor()
   await seedUserTenant()
-  await seedGarage(user as User, modes[0], districts[0])
+  await seedGarage(user as User, modes, districts)
 
   app.listen(env_api_port, () => {
     console.log(`Running at http://localhost:${env_api_port}`)
