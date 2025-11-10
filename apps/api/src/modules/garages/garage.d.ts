@@ -32,10 +32,18 @@ export interface IGaragePhoto {
   url: string
   garageId: number
 }
+export type Filters = {
+  page: number
+  size: number
+  covered?: boolean
+  hasCameras?: boolean
+  mode?: string
+}
 
 export interface GarageRepository {
   saveGarage(garage: CreateGarageDto): Promise<Garage>
-  findAllByUserId(userId: number): Promise<IGarage[]>
+  findAllByUserId(userId: number): Promise<Garage[]>
+  findAll(filters: Filters): Promise<Garage[]>
 }
 
 export interface GaragePhotoRepository {
@@ -47,6 +55,7 @@ export interface GarageService {
   saveGarage(garage: CreateGarageFormDto): Promise<void>
   findAllByUserId(user: number): Promise<ResponseGarageDto[]>
   findPhoto(id: string): Promise<string>
+  findAll(filters: Filters): Promise<ResponseGarageDto[]>
 }
 
 export interface GarageController {
@@ -61,6 +70,11 @@ export interface GarageController {
     next: NextFunction
   ): Promise<Response | void>
   findPhoto(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  findAll(
     req: Request,
     res: Response,
     next: NextFunction
