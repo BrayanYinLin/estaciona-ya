@@ -48,6 +48,18 @@ export const DOMAIN_ERRORS = {
   },
   VALIDATION_CODE_ERROR: {
     code: 'VALIDATION_CODE_ERROR'
+  },
+  INVALID_DATES: {
+    code: 'INVALID_DATES',
+    message: 'Las fechas proporcionadas no son válidas'
+  },
+  CONFLICTING_BOOKING: {
+    code: 'CONFLICTING_BOOKING',
+    message: 'Ya existe una reserva aceptada o pendiente en ese horario'
+  },
+  PASTED_DATE_BOOKING: {
+    code: 'PASTED_DATE_BOOKING',
+    message: 'No se pueden crear reservas con fechas pasadas'
   }
 } as const
 
