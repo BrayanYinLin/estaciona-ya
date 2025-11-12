@@ -7,6 +7,7 @@ export type PriceInputProps = NativeInputProps & {
   inputClassName?: string
   wrapperClassName?: string
   isRequired?: boolean
+  footerText?: string
   name: InputHTMLAttributes<HTMLInputElement>['name']
   placeholder: InputHTMLAttributes<HTMLInputElement>['placeholder']
   defaultValue?: InputHTMLAttributes<HTMLInputElement>['value']
@@ -16,6 +17,7 @@ export function InputPrice({
   labelContent,
   inputClassName,
   isRequired,
+  footerText = 'Máximo S/1000',
   name,
   placeholder,
   defaultValue
@@ -58,7 +60,7 @@ export function InputPrice({
           }}
         />
       </label>
-      <p className="label">Máximo S/1000</p>
+      {footerText && <p className="label">{footerText}</p>}
     </fieldset>
   )
 }

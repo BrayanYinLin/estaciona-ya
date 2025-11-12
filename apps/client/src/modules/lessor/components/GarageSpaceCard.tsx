@@ -1,5 +1,6 @@
 import { CameraIcon } from '@shared/components/CameraIcon'
 import { CoveredIcon } from '@shared/components/CoveredIcon'
+import { RatingStars } from '@shared/components/RatingStars'
 
 type GarageSpaceCardProps = {
   address: string
@@ -27,8 +28,6 @@ export function GarageSpaceCard({
   onEdit,
   onDisable
 }: GarageSpaceCardProps) {
-  const clampedRating = Math.max(0, Math.min(5, Math.round(rating)))
-
   return (
     <section
       className={[
@@ -61,14 +60,7 @@ export function GarageSpaceCard({
           <CameraIcon marked={hasCameras} />
         </div>
 
-        {/* <div className="flex items-center gap-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span
-              key={i}
-              className={`mask mask-star-2 ${i < clampedRating ? 'bg-yellow-400' : 'bg-gray-300'} w-3 h-3 inline-block`}
-            />
-          ))}
-        </div> */}
+        <RatingStars rating={rating} />
 
         <div className="card-actions justify-end flex-nowrap pt-2">
           <button className="btn btn-primary" onClick={onEdit}>
