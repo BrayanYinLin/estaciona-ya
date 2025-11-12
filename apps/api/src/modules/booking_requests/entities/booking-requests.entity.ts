@@ -21,7 +21,7 @@ export class BookingRequest {
 
   @ManyToOne(() => Garage, (garage) => garage.bookingRequests)
   @JoinColumn({ name: 'garage_id' })
-  garage!: Garage[]
+  garage!: Garage
 
   @Column({ type: 'datetime', name: 'start_dt' })
   startDate!: Date
