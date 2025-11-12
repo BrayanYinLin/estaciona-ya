@@ -12,6 +12,9 @@ type Garage = {
     id: number
     mode_name: string
   }
+  location: {
+    address: string
+  }
   price: number
   description: string
   covered: boolean
@@ -70,7 +73,7 @@ export function GaragesLessor() {
         {garages.map((garage) => {
           return (
             <GarageSpaceCard
-              address="Calle San Rodolfo"
+              address={garage.location.address}
               price={garage.price}
               photo={garage.photos}
               rating={3}

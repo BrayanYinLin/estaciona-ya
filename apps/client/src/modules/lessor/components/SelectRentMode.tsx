@@ -31,10 +31,10 @@ export function SelectRentMode({
             {defaultValue}
           </option>
           {options.map((rentMode) => {
-            const districtName = String(rentMode.mode_name).split(',')[0].trim()
+            const modeName = String(rentMode.mode_name).split(',')[0].trim()
             return (
               <option value={rentMode.id} key={rentMode.id}>
-                {districtName}
+                {modeName}
               </option>
             )
           })}
