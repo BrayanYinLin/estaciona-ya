@@ -30,8 +30,9 @@ export class GarageServiceImpl implements GarageService {
     covered,
     hasCameras,
     mode,
-    price,
-    district
+    district,
+    minPrice,
+    maxPrice
   }: Filters): Promise<ResponseGarageDto[]> {
     const garages = await this.garageRepository.findAll({
       page,
@@ -39,8 +40,9 @@ export class GarageServiceImpl implements GarageService {
       covered,
       hasCameras,
       mode,
-      price,
-      district
+      district,
+      minPrice,
+      maxPrice
     })
 
     return garages.map((garage) => {

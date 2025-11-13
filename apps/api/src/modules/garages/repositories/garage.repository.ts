@@ -1,7 +1,8 @@
 import { Garage } from '@garages/entities/garage.entity'
 import { Filters, GarageRepository } from '../garage'
 import { CreateGarageFormDto } from '../schemas/create_garage.schema'
-import { FindOptionsWhere, Like, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
+import { BookingRequest } from '@booking_requests/entities/booking-requests.entity'
 
 export class GarageRepositoryImpl implements GarageRepository {
   constructor(private readonly repository: Repository<Garage>) {}
@@ -12,48 +13,104 @@ export class GarageRepositoryImpl implements GarageRepository {
     covered,
     hasCameras,
     mode,
-    price,
-    district
+    district,
+    minPrice,
+    maxPrice,
+    filters
   }: Filters): Promise<Garage[]> {
     const skip = (page - 1) * size
 
-    const where: FindOptionsWhere<Garage> = {}
-    if (covered !== undefined) {
-      where.covered = covered
-    }
+    const query = this.repository
+      .createQueryBuilder('garage')
+      .leftJoinAndSelect('garage.location', 'location')
+      .leftJoinAndSelect('location.district', 'district')
+      .leftJoinAndSelect('garage.rentMode', 'rentMode')
+      .leftJoinAndSelect('garage.photos', 'photos')
+      .leftJoinAndSelect('garage.bookingRequests', 'booking')
 
-    if (hasCameras !== undefined) {
-      where.hasCameras = hasCameras
-    }
+    if (covered !== undefined)
+      query.andWhere('garage.covered = :covered', { covered })
+    if (hasCameras !== undefined)
+      query.andWhere('garage.hasCameras = :hasCameras', { hasCameras })
+    if (mode !== undefined)
+      query.andWhere('rentMode.mode_name = :mode', { mode })
+    if (district !== undefined)
+      query.andWhere('district.name ILIKE :district', {
+        district: `%${district}%`
+      })
 
-    if (mode !== undefined) {
-      where.rentMode = {
-        mode_name: mode
+    if (minPrice !== undefined && maxPrice === undefined)
+      query.andWhere('garage.price >= :minPrice', { minPrice })
+    if (maxPrice !== undefined && minPrice === undefined)
+      query.andWhere('garage.price <= :maxPrice', { maxPrice })
+    if (minPrice !== undefined && maxPrice !== undefined)
+      query.andWhere('garage.price BETWEEN :minPrice AND :maxPrice', {
+        minPrice,
+        maxPrice
+      })
+
+    if (filters) {
+      if (filters.type === 'hour') {
+        query.andWhere(
+          (qb) => {
+            const subQuery = qb
+              .subQuery()
+              .select('b.id')
+              .from(BookingRequest, 'b')
+              .where('b.garageId = garage.id')
+              .andWhere('b.startTime < :endHour AND b.endTime > :startHour')
+              .getQuery()
+            return `NOT EXISTS ${subQuery}`
+          },
+          {
+            startHour: filters.startHour,
+            endHour: filters.endHour
+          }
+        )
+      }
+
+      if (filters.type === 'day') {
+        query.andWhere(
+          (qb) => {
+            const subQuery = qb
+              .subQuery()
+              .select('b.id')
+              .from(BookingRequest, 'b')
+              .where('b.garageId = garage.id')
+              .andWhere('b.startTime < :endDay AND b.endTime > :startDay')
+              .getQuery()
+            return `NOT EXISTS ${subQuery}`
+          },
+          {
+            startDay: filters.startDay,
+            endDay: filters.endDay
+          }
+        )
+      }
+
+      if (filters.type === 'month') {
+        query.andWhere(
+          (qb) => {
+            const subQuery = qb
+              .subQuery()
+              .select('b.id')
+              .from(BookingRequest, 'b')
+              .where('b.garageId = garage.id')
+              .andWhere('b.startTime < :endMonth AND b.endTime > :startMonth')
+              .getQuery()
+            return `NOT EXISTS ${subQuery}`
+          },
+          {
+            startMonth: filters.startMonth,
+            endMonth: filters.endMonth
+          }
+        )
       }
     }
 
-    if (price !== undefined) {
-      where.price = price
-    }
+    query.skip(skip).take(size).orderBy('garage.id', 'ASC')
 
-    if (district !== undefined) {
-      where.location = {
-        district: {
-          name: Like(`%${district}%`)
-        }
-      }
-    }
-
-    const garages = await this.repository.find({
-      skip,
-      take: size,
-      order: {
-        id: 'ASC'
-      },
-      where,
-      relations: ['location', 'rentMode', 'photos', 'location.district']
-    })
-
+    const garages = await query.getMany()
     return garages
   }
 

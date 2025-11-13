@@ -1,4 +1,5 @@
 import { GarageController, GarageService } from '@garages/garage'
+import { separateFilters } from '@garages/utils/separate_filters.utils'
 import { Request, Response, NextFunction } from 'express'
 
 export class GarageControllerImpl implements GarageController {
@@ -9,8 +10,36 @@ export class GarageControllerImpl implements GarageController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const { page, size, covered, hasCameras, mode, price, district } =
-        req.query
+      const {
+        page,
+        size,
+        covered,
+        hasCameras,
+        mode,
+        district,
+        minPrice,
+        maxPrice,
+        // Filtros por hora
+        day,
+        startHour,
+        endHour,
+        // Filtros por dia
+        startDay,
+        endDay,
+        // Filtros por mes
+        startMonth,
+        endMonth
+      } = req.query
+
+      const filter = separateFilters({
+        day: new Date(String(day)),
+        startHour: Number(startHour),
+        endHour: Number(endHour),
+        startDay: new Date(String(startDay)),
+        endDay: new Date(String(endDay)),
+        startMonth: String(startMonth),
+        endMonth: String(endMonth)
+      })
 
       const garages = await this.service.findAll({
         page: Number(page) || 1,
@@ -24,8 +53,10 @@ export class GarageControllerImpl implements GarageController {
             ? String(hasCameras).toLowerCase() === 'true'
             : undefined,
         mode: mode ? String(mode) : undefined,
-        price: price !== undefined ? Number(price) : undefined,
-        district: district !== undefined ? String(district) : undefined
+        district: district !== undefined ? String(district) : undefined,
+        minPrice: minPrice !== undefined ? Number(minPrice) : undefined,
+        maxPrice: maxPrice !== undefined ? Number(maxPrice) : undefined,
+        filters: filter
       })
 
       return res.json(garages)
