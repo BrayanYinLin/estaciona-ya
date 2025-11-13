@@ -32,14 +32,36 @@ export interface IGaragePhoto {
   url: string
   garageId: number
 }
+
+export type HourFilter = {
+  type: 'hour'
+  day: string
+  startHour: number
+  endHour: number
+}
+
+export type DayFilter = {
+  type: 'day'
+  startDay: string
+  endDay: string
+}
+
+export type MonthFilter = {
+  type: 'month'
+  startMonth: string
+  endMonth: string
+}
+
 export type Filters = {
   page: number
   size: number
   covered?: boolean
   hasCameras?: boolean
   mode?: string
-  price?: number
   district?: string
+  minPrice?: number
+  maxPrice?: number
+  filters?: HourFilter | DayFilter | MonthFilter
 }
 
 export interface GarageRepository {
