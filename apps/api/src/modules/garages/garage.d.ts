@@ -68,6 +68,7 @@ export interface GarageRepository {
   saveGarage(garage: CreateGarageDto): Promise<Garage>
   findAllByUserId(userId: number): Promise<Garage[]>
   findAll(filters: Filters): Promise<Garage[]>
+  findGarageById(garageId: number): Promise<Garage | null>
 }
 
 export interface GaragePhotoRepository {
@@ -80,6 +81,7 @@ export interface GarageService {
   findAllByUserId(user: number): Promise<ResponseGarageDto[]>
   findPhoto(id: string): Promise<string>
   findAll(filters: Filters): Promise<ResponseGarageDto[]>
+  findGarageById(garageId: number): Promise<ResponseGarageByIdDto>
 }
 
 export interface GarageController {

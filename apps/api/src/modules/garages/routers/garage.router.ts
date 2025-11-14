@@ -45,6 +45,7 @@ garageRouter.get(
   controller.findAllByUserId.bind(controller)
 )
 garageRouter.get('/:id/photos/:photoId', controller.findPhoto.bind(controller))
+garageRouter.get('/:id', controller.findGarageById.bind(controller))
 garageRouter.post(
   '/',
   checkStatus(),

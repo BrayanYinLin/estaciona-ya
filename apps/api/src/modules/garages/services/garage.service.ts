@@ -7,7 +7,9 @@ import {
 import { CreateGarageFormDto } from '@garages/schemas/create_garage.schema'
 import {
   ResponseGarageDto,
-  ResponseGarageSchema
+  ResponseGarageSchema,
+  ResponseGarageByIdDto,
+  ResponseGarageSchemaById
 } from '@garages/schemas/response_garage.schema'
 import { LocationRepository } from '@locations/location'
 import { ENDPOINTS } from '@shared/constants/endpoints'
@@ -135,5 +137,26 @@ export class GarageServiceImpl implements GarageService {
         })
       })
     )
+  }
+  async findGarageById(garageId: number): Promise<ResponseGarageByIdDto> {
+    const garage = await this.garageRepository.findGarageById(garageId)
+
+    if (!garage) {
+      throw new DomainError({
+        code: 'VALIDATION_ERROR',
+        message: `Garage with id ${garageId} not found`
+      })
+    }
+
+    const { success, data, error } = ResponseGarageSchemaById.safeParse(garage)
+
+    if (!success || error) {
+      throw new DomainError({
+        code: 'VALIDATION_ERROR',
+        message: prettifyError(error)
+      })
+    }
+
+    return data
   }
 }

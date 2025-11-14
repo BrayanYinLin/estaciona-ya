@@ -109,4 +109,19 @@ export class GarageControllerImpl implements GarageController {
       next(e)
     }
   }
+  async findGarageById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const { id } = req.params
+
+      const garage = await this.service.findGarageById(Number(id))
+
+      return res.json(garage)
+    } catch (e) {
+      next(e)
+    }
+  }
 }
