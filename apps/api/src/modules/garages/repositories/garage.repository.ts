@@ -158,6 +158,7 @@ export class GarageRepositoryImpl implements GarageRepository {
         'user',
         'rentMode',
         'bookingRequests',
+        'bookingRequests.user',
         'location',
         'photos',
         'location.district'

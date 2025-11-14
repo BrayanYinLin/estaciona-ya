@@ -65,6 +65,19 @@ export const ResponseGarageSchemaById = z.object({
       name: z.string()
     })
   }),
+  bookingRequests: z
+    .array(
+      z.object({
+        id: z.number(),
+        startDate: z.date(),
+        user: z.object({
+          id: z.number(),
+          name: z.string(),
+          email: z.string().optional()
+        })
+      })
+    )
+    .optional(),
   state: z.boolean().default(true),
   createdAt: z.date(),
   updatedAt: z.date()
