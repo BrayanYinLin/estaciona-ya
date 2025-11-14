@@ -149,4 +149,20 @@ export class GarageRepositoryImpl implements GarageRepository {
 
     return savedGarage
   }
+  async findGarageById(garageId: number): Promise<Garage | null> {
+    const garage = await this.repository.findOne({
+      where: {
+        id: garageId
+      },
+      relations: [
+        'user',
+        'rentMode',
+        'bookingRequests',
+        'location',
+        'photos',
+        'location.district'
+      ]
+    })
+    return garage
+  }
 }

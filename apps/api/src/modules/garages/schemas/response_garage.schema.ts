@@ -35,4 +35,40 @@ export const ResponseGarageSchema = z.object({
   updatedAt: z.date()
 })
 
+export const ResponseGarageSchemaById = z.object({
+  id: z.number(),
+  rentMode: RentModeSchema,
+  price: z.number(),
+  description: z.string(),
+  photos: z
+    .array(
+      z.object({
+        url: z.string()
+      })
+    )
+    .optional(),
+  covered: z.boolean(),
+  hasCameras: z.boolean(),
+  restrictions: z.string(),
+  user: z.object({
+    id: z.number(),
+    name: z.string(),
+    email: z.string()
+  }),
+  location: z.object({
+    id: z.number(),
+    address: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
+    district: z.object({
+      id: z.number(),
+      name: z.string()
+    })
+  }),
+  state: z.boolean().default(true),
+  createdAt: z.date(),
+  updatedAt: z.date()
+})
+
 export type ResponseGarageDto = z.infer<typeof ResponseGarageSchema>
+export type ResponseGarageByIdDto = z.infer<typeof ResponseGarageSchemaById>
