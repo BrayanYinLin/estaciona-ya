@@ -4,23 +4,27 @@ import { HourFilterForm } from './HourFilterForm'
 import { DayFilterForm } from './DayFilterForm'
 import { MonthFilterForm } from './MonthFilterForm'
 import { FilterCheckboxes } from './FilterCheckboxes'
-import { PriceRangeFilter } from '@shared/components/PriceRangeFilter'
 import { useDistricts } from '@lessor/hooks/useDistricts'
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import type { GarageFilters } from '../services/garage.service'
 import 'react-day-picker/style.css'
 import { SelectFilterDistrict } from './SelectFilterDistrict'
+import { RangeSlider } from '@shared/components/RangeSlider'
 
 type ModeFilter = '' | 'hora' | 'dia' | 'mes'
 
 type FilterSectionProps = {
   filters: GarageFilters
   onFiltersChange: Dispatch<SetStateAction<GarageFilters>>
+  setMin: (min: number) => void
+  setMax: (max: number) => void
 }
 
 export function FilterSection({
   filters,
-  onFiltersChange
+  onFiltersChange,
+  setMin,
+  setMax
 }: FilterSectionProps) {
   const { rentModes } = useRentMode()
   const { districts } = useDistricts()
@@ -79,7 +83,8 @@ export function FilterSection({
       {selectedMode === 'hora' && <HourFilterForm />}
       {selectedMode === 'dia' && <DayFilterForm />}
       {selectedMode === 'mes' && <MonthFilterForm />}
-      <PriceRangeFilter />
+      {/* <PriceRangeFilter /> */}
+      <RangeSlider setMin={setMin} setMax={setMax} />
       <FilterCheckboxes
         value={{ covered: filters.covered, hasCameras: filters.hasCameras }}
         onChange={handleFeatureChange}
