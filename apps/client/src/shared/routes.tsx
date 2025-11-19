@@ -21,7 +21,7 @@ export const FRONTEND_ROUTES = {
   TENANT: 'tenant',
   TENANT_REQUEST: 'requests',
   TENANT_CATALOG: 'catalog',
-  TENANT_CATALOG_DETAIL: 'catalog/detail',
+  TENANT_CATALOG_DETAIL: 'catalog/:id',
 
   LESSOR: 'lessor',
   LESSOR_REQUEST: 'requests',
