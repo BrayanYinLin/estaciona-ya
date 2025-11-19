@@ -16,7 +16,7 @@ export function CatalogTenant() {
     garages,
     loading: garagesLoading,
     error: garagesError
-  } = useGarages(1, 40, filters)
+  } = useGarages(1, 100, filters)
 
   useEffect(() => {
     recoverUser()
@@ -44,7 +44,7 @@ export function CatalogTenant() {
     address: garage.location.address,
     price: garage.price,
     rentMode: garage.rentMode.mode_name,
-    imageUrl: 'https://placehold.co/600x400',
+    imageUrl: garage.photos[0]?.url ?? 'https://placehold.co/600x400',
     covered: garage.covered,
     hasCamera: garage.hasCameras
   }))

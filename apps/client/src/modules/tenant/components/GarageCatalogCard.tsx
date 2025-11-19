@@ -3,6 +3,7 @@ import { CoveredIcon } from '@shared/components/CoveredIcon'
 import { RatingStars } from '@shared/components/RatingStars'
 
 type GarageCatalogCardProps = {
+  id: number
   address: string
   price: number
   rating?: number
@@ -13,6 +14,7 @@ type GarageCatalogCardProps = {
 }
 
 export function GarageCatalogCard({
+  id,
   address: title,
   price,
   rating,
@@ -72,12 +74,12 @@ export function GarageCatalogCard({
           {rating !== undefined && <RatingStars rating={rating} />}
 
           <div className="card-actions">
-            <button
+            <a
               className="btn btn-primary btn-sm"
-              aria-label={`Reservar ${title}`}
+              href={`/tenant/catalog/${id}`}
             >
               Reservar
-            </button>
+            </a>
           </div>
         </div>
       </div>

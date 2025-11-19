@@ -1,15 +1,16 @@
+import type { Garage } from '@/types'
 import { GarageCatalogCard } from './GarageCatalogCard'
 
-type Garage = {
-  id: number
-  address: string
-  price: number
-  // rating: number
-  rentMode: string
-  imageUrl: string
-  covered: boolean
-  hasCamera: boolean
-}
+// type Garage = {
+//   id: number
+//   address: string
+//   price: number
+//   // rating: number
+//   rentMode: string
+//   imageUrl: string
+//   covered: boolean
+//   hasCamera: boolean
+// }
 
 export function GarageCatalogGrid({ garages }: { garages: Garage[] }) {
   return (
@@ -18,6 +19,7 @@ export function GarageCatalogGrid({ garages }: { garages: Garage[] }) {
         {garages.map((garage) => (
           <GarageCatalogCard
             key={garage.id}
+            id={garage.id}
             address={garage.address}
             price={garage.price}
             rentMode={garage.rentMode}
