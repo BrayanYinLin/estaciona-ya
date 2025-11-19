@@ -11,6 +11,7 @@ import { UserProfile } from '@modules/user/pages/UserProfile'
 import { NewGarage } from '@lessor/pages/NewGarage'
 import { RequestsTenant } from '@tenant/pages/RequestsTenant'
 import { EditGarage } from '@lessor/pages/EditGarage'
+import { GarageDetail } from '@tenant/pages/GarageDetail'
 
 export const FRONTEND_ROUTES = {
   ROOT: '/',
@@ -20,12 +21,14 @@ export const FRONTEND_ROUTES = {
   TENANT: 'tenant',
   TENANT_REQUEST: 'requests',
   TENANT_CATALOG: 'catalog',
+  TENANT_CATALOG_DETAIL: 'catalog/detail',
 
   LESSOR: 'lessor',
   LESSOR_REQUEST: 'requests',
   LESSOR_GARAGES: 'garages',
   LESSOR_GARAGES_NEW: 'garages/new',
   LESSOR_GARAGES_UPDATE: 'garages/update',
+  LESSOR_GARAGES_DETAIL: 'garages/detail',
 
   LESSOR_BOOKINGS: 'bookings',
 
@@ -84,6 +87,10 @@ export const routes = createBrowserRouter([
           {
             path: FRONTEND_ROUTES.TENANT_REQUEST,
             element: <RequestsTenant />
+          },
+          {
+            path: FRONTEND_ROUTES.TENANT_CATALOG_DETAIL,
+            element: <GarageDetail />
           }
         ]
       },

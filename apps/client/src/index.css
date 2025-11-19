@@ -20,3 +20,9 @@ input[type=number] {
 html {
   scroll-behavior: smooth;
 }
+
+#filter-section ::-webkit-scrollbar
+{
+    scrollbar-width: none;
+    display: none;
+}

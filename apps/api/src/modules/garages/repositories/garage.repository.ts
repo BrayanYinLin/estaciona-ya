@@ -23,7 +23,7 @@ export class GarageRepositoryImpl implements GarageRepository {
     const query = this.repository
       .createQueryBuilder('garage')
       .leftJoinAndSelect('garage.location', 'location')
-      .leftJoinAndSelect('location.district', 'district')
+      .leftJoinAndSelect('location.district', 'districtAlias')
       .leftJoinAndSelect('garage.rentMode', 'rentMode')
       .leftJoinAndSelect('garage.photos', 'photos')
       .leftJoinAndSelect('garage.bookingRequests', 'booking')
@@ -35,7 +35,7 @@ export class GarageRepositoryImpl implements GarageRepository {
     if (mode !== undefined)
       query.andWhere('rentMode.mode_name = :mode', { mode })
     if (district !== undefined)
-      query.andWhere('district.name ILIKE :district', {
+      query.andWhere('districtAlias.name LIKE :district', {
         district: `%${district}%`
       })
 

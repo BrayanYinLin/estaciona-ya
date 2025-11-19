@@ -5,7 +5,7 @@ import { RatingStars } from '@shared/components/RatingStars'
 type GarageCatalogCardProps = {
   address: string
   price: number
-  rating: number
+  rating?: number
   imageUrl: string
   rentMode: string
   covered: boolean
@@ -66,8 +66,10 @@ export function GarageCatalogCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <RatingStars rating={rating} />
+        <div
+          className={`flex items-center ${rating !== undefined ? 'justify-between' : 'justify-end'}`}
+        >
+          {rating !== undefined && <RatingStars rating={rating} />}
 
           <div className="card-actions">
             <button

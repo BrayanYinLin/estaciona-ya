@@ -7,22 +7,21 @@ export type CheckboxInputProps = NativeInputProps & {
   inputClassName?: string
   isRequired?: boolean
   name: InputHTMLAttributes<HTMLInputElement>['name']
-  defaultValue?: InputHTMLAttributes<HTMLInputElement>['value']
 }
 
 export function Checkbox({
   labelContent,
   inputClassName,
   name,
-  defaultValue
+  ...rest
 }: CheckboxInputProps) {
   return (
     <label className="label">
       <input
         type="checkbox"
-        className={`checkbox ${inputClassName}`}
+        className={`checkbox ${inputClassName ?? ''}`.trim()}
         name={name}
-        defaultValue={defaultValue}
+        {...rest}
       />
       {labelContent}
     </label>
