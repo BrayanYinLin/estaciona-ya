@@ -7,16 +7,20 @@ import { useUserStore } from '@user/context/user.context'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import type { GarageFilters } from '@tenant/services/garage.service'
+import { PaginationButton } from '@shared/components/PaginationButton'
 
 export function CatalogTenant() {
   const { user, loading, error, recoverUser } = useUserStore()
   const navigate = useNavigate()
   const [filters, setFilters] = useState<GarageFilters>({})
+  const [page, setPage] = useState<number>(1)
+  const [minPrice, setMinPrice] = useState<number>(0)
+  const [maxPrice, setMaxPrice] = useState<number>(1000)
   const {
     garages,
     loading: garagesLoading,
     error: garagesError
-  } = useGarages(1, 100, filters)
+  } = useGarages(page, 12, minPrice, maxPrice, filters)
 
   useEffect(() => {
     recoverUser()
@@ -58,7 +62,12 @@ export function CatalogTenant() {
       <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
       <DrawerLayout
         sidebar={
-          <FilterSection filters={filters} onFiltersChange={setFilters} />
+          <FilterSection
+            filters={filters}
+            onFiltersChange={setFilters}
+            setMin={setMinPrice}
+            setMax={setMaxPrice}
+          />
         }
       >
         <div className="relative">
@@ -68,6 +77,17 @@ export function CatalogTenant() {
             </div>
           )}
           <GarageCatalogGrid garages={catalogGarages} />
+          <PaginationButton
+            page={page}
+            prev={() => {
+              if (page - 1 == 0) return
+
+              if (page > 0) setPage(page - 1)
+            }}
+            next={() => {
+              if (garages.length > 0) setPage(page + 1)
+            }}
+          />
         </div>
       </DrawerLayout>
     </main>

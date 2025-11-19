@@ -32,6 +32,8 @@ export type GarageFilters = {
   hasCameras?: boolean
   mode?: string
   district?: string
+  minPrice?: number
+  maxPrice?: number
 }
 
 const getGarages = async (
