@@ -11,7 +11,7 @@ export type SelectProps = NativeInputProps & {
   ref?: RefObject<HTMLSelectElement | null>
 }
 
-export function SelectDistrict({
+export function SelectFilterDistrict({
   labelContent,
   name,
   defaultValue,
@@ -36,7 +36,7 @@ export function SelectDistrict({
           {options.map((district) => {
             const districtName = String(district.name).split(',')[0].trim()
             return (
-              <option value={district.id} key={district.id}>
+              <option value={district.name} key={district.id}>
                 {districtName}
               </option>
             )

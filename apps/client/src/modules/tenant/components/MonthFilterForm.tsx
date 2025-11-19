@@ -1,6 +1,3 @@
-import { PriceRangeFilter } from '@shared/components/PriceRangeFilter'
-import { FilterCheckboxes } from './FilterCheckboxes'
-
 export function MonthFilterForm() {
   const months = [
     'Enero',
@@ -22,7 +19,11 @@ export function MonthFilterForm() {
     <>
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Desde</legend>
-        <select defaultValue="Pick a browser" className="select">
+        <select
+          defaultValue="Pick a browser"
+          className="select"
+          name="startMonth"
+        >
           <option disabled={true}>Selecciona un mes</option>
           {availableMonths.map((month, index) => (
             <option value={month} key={index}>
@@ -33,7 +34,11 @@ export function MonthFilterForm() {
       </fieldset>
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Hasta</legend>
-        <select defaultValue="Pick a browser" className="select">
+        <select
+          defaultValue="Pick a browser"
+          className="select"
+          name="endMonth"
+        >
           <option disabled={true}>Selecciona un mes</option>
           {availableMonths.map((month, index) => (
             <option value={month} key={index}>
@@ -42,8 +47,6 @@ export function MonthFilterForm() {
           ))}
         </select>
       </fieldset>
-      <PriceRangeFilter />
-      <FilterCheckboxes />
     </>
   )
 }

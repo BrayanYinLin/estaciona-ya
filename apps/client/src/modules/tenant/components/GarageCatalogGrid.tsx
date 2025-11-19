@@ -4,7 +4,7 @@ type Garage = {
   id: number
   address: string
   price: number
-  rating: number
+  // rating: number
   rentMode: string
   imageUrl: string
   covered: boolean
@@ -20,7 +20,6 @@ export function GarageCatalogGrid({ garages }: { garages: Garage[] }) {
             key={garage.id}
             address={garage.address}
             price={garage.price}
-            rating={garage.rating}
             rentMode={garage.rentMode}
             imageUrl={garage.imageUrl}
             covered={garage.covered}
