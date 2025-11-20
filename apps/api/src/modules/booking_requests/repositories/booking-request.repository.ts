@@ -1,11 +1,23 @@
 import { BookingRequest } from '@booking_requests/entities/booking-requests.entity'
 import { Repository, MoreThan, LessThan, In } from 'typeorm'
 import { CreateBookingRequestDto } from '../schemas/create_booking_request.shcema'
+import { BookingRequestRepository } from '@booking_requests/booking-request'
 
-export class createBookingRequestRepository {
+export class BookingRequestRepositoryImpl implements BookingRequestRepository {
   constructor(
     private readonly bookingRequestRepository: Repository<BookingRequest>
   ) {}
+
+  async findAllByUserId(userId: number): Promise<BookingRequest[]> {
+    return this.bookingRequestRepository.find({
+      where: {
+        user: {
+          id: userId
+        }
+      },
+      relations: ['garage', 'user', 'garage.location', 'garage.photos']
+    })
+  }
 
   async createBookingRequest(
     data: CreateBookingRequestDto
