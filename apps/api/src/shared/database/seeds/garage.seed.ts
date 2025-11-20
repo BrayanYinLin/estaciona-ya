@@ -37,9 +37,16 @@ export async function seedGarage(
         garage: savedGarage
       })
 
+      const photos = [
+        'https://fastly.picsum.photos/id/999/1920/1080.jpg?hmac=UVOnR6VRpGMfprI8-QKg-U5-bXE1E09oj0wz6D1CvFU',
+        'https://fastly.picsum.photos/id/144/1920/1080.jpg?hmac=RZKNvvTTTWx2vXwkq-l5CwauwMp3AkcLptJ8IDoAUlM',
+        'https://fastly.picsum.photos/id/82/1920/1080.jpg?hmac=ZAfXGM7sh8e1k6vz_P4yBAQ2tqluOjDfagtiEXVZIwo',
+        'https://fastly.picsum.photos/id/1013/1920/1080.jpg?hmac=ZJf9HqrLLv2hOMaQYbxNrcEqzuHEhETtQ_OiQRL4N-U',
+        'https://fastly.picsum.photos/id/376/1920/1080.jpg?hmac=yedc3mmYvOifg1_SB2GlPCHz0MCYFnGuizz4meRn9bU'
+      ]
       for (let index = 0; index < 5; index++) {
         await photosRepository.save({
-          url: 'https://picsum.photos/1920/1080',
+          url: photos[index],
           garage: savedGarage
         })
       }

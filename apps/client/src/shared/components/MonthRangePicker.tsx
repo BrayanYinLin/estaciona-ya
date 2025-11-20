@@ -241,7 +241,7 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
                   >
                     «
                   </button>
-                  <span className="font-semibold">From {fromYear}</span>
+                  <span className="font-semibold">Desde {fromYear}</span>
                   <button
                     className="btn btn-xs btn-ghost"
                     onClick={() => setFromYear((y) => y + 1)}
@@ -265,7 +265,7 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
                   >
                     «
                   </button>
-                  <span className="font-semibold">To {toYear}</span>
+                  <span className="font-semibold">Hasta {toYear}</span>
                   <button
                     className="btn btn-xs btn-ghost"
                     onClick={() => setToYear((y) => y + 1)}

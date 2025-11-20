@@ -1,30 +1,46 @@
-import { useState, type ChangeEvent } from 'react'
+import type { RangeDate } from '@tenant/pages/GarageDetail'
+import { useState, type ChangeEvent, type Dispatch } from 'react'
 import { DayPicker } from 'react-day-picker'
 import { es } from 'react-day-picker/locale'
 
-export function HourFilterForm() {
+export type HourFilterFormProps = {
+  rangeDate: RangeDate
+  setRangeDate: Dispatch<React.SetStateAction<RangeDate>>
+}
+
+export function HourFilterForm({
+  rangeDate,
+  setRangeDate
+}: HourFilterFormProps) {
   const [selected, setSelected] = useState<Date>()
   const [startHour, setStartHour] = useState('')
   const [endHour, setEndHour] = useState('')
-  const [selectedRange, setSelectedRange] = useState<{
-    startDate: string | null
-    endDate: string | null
-  }>({
-    startDate: null,
-    endDate: null
-  })
+
+  function toCustomFormat(dateInput: string) {
+    const d = new Date(dateInput)
+
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const yyyy = d.getFullYear()
+
+    const hh = String(d.getHours()).padStart(2, '0')
+    const min = String(d.getMinutes()).padStart(2, '0')
+
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`
+  }
 
   const combineDateTime = (date: Date | undefined, time: string) => {
     if (!date || !time) return null
     const [h, m] = time.split(':').map(Number)
+
     const d = new Date(date)
     d.setHours(h ?? 0, m ?? 0, 0, 0)
-    return d.toISOString()
+    return toCustomFormat(d.toString())
   }
 
   const handleSelect = (date?: Date) => {
     setSelected(date)
-    setSelectedRange({
+    setRangeDate({
       startDate: combineDateTime(date, startHour),
       endDate: combineDateTime(date, endHour)
     })
@@ -48,7 +64,7 @@ export function HourFilterForm() {
     // Reinicia hora fin si es menor/igual que inicio
     const nextEnd = isEndAfterStart(value, endHour) ? endHour : ''
     setEndHour(nextEnd)
-    setSelectedRange({
+    setRangeDate({
       startDate: combineDateTime(selected, value),
       endDate: combineDateTime(selected, nextEnd)
     })
@@ -58,7 +74,7 @@ export function HourFilterForm() {
     const value = normalizeToHour(e.target.value)
     if (!isEndAfterStart(startHour, value)) return
     setEndHour(value)
-    setSelectedRange({
+    setRangeDate({
       startDate: combineDateTime(selected, startHour),
       endDate: combineDateTime(selected, value)
     })
@@ -105,7 +121,7 @@ export function HourFilterForm() {
       </fieldset>
 
       <pre className="text-xs opacity-70">
-        {JSON.stringify(selectedRange, null, 2)}
+        {JSON.stringify(rangeDate, null, 2)}
       </pre>
     </>
   )

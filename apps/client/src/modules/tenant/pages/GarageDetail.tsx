@@ -3,9 +3,8 @@ import { HourFilterForm } from '@tenant/components/HourFilterForm'
 import { DayFilterForm } from '@tenant/components/DayFilterForm'
 import { MonthFilterForm } from '@tenant/components/MonthFilterForm'
 import { useUserStore } from '@user/context/user.context'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import 'react-day-picker/style.css'
 import { GarageImgCarousel } from '@shared/components/GarageImgCarousel'
 import { GarageFeatures } from '@tenant/components/GarageFeatures'
 import { GarageDescription } from '@tenant/components/GarageDescription'
@@ -13,10 +12,18 @@ import { GarageRestrictions } from '@tenant/components/GarageRestrictions'
 import { GarageReservationHeader } from '@tenant/components/GarageReservationHeader'
 import { useGarageDetail } from '@tenant/hooks/useGarageDetail'
 import { GarageDetailHeader } from '@tenant/components/GarageDetailHeader'
+import { BookingRequestService } from '@tenant/services/request.service'
+import 'react-day-picker/style.css'
+
+export type RangeDate = {
+  startDate: string | null
+  endDate: string | null
+}
 
 export function GarageDetail() {
   const { id } = useParams()
   const { user, loading, error, recoverUser } = useUserStore()
+  const modalRef = useRef<HTMLDialogElement>(null)
   const navigate = useNavigate()
   const [rentMode, setRentMode] = useState<string>('')
   const {
@@ -24,6 +31,19 @@ export function GarageDetail() {
     getGarageDetail,
     error: garageError
   } = useGarageDetail(Number(id))
+  const [rangeDate, setRangeDate] = useState<RangeDate>({
+    startDate: null,
+    endDate: null
+  })
+
+  const handleRequest = () => {
+    BookingRequestService.createBookingRequest({
+      range: rangeDate,
+      garageId: Number(id!)
+    })
+    // modalRef.current?.close()
+    navigate('/tenant/requests')
+  }
 
   useEffect(() => {
     recoverUser()
@@ -77,9 +97,25 @@ export function GarageDetail() {
                 rentMode={garage?.rentMode.mode_name ?? 'Hora'}
               />
               <div className="space-y-4">
-                {rentMode === 'hora' && <HourFilterForm />}
-                {rentMode === 'dia' && <DayFilterForm />}
-                {rentMode === 'mes' && <MonthFilterForm />}
+                {rentMode === 'hora' && (
+                  <HourFilterForm
+                    rangeDate={rangeDate}
+                    setRangeDate={setRangeDate}
+                  />
+                )}
+                {rentMode === 'dia' && (
+                  <DayFilterForm
+                    rangeDate={rangeDate}
+                    setRangeDate={setRangeDate}
+                  />
+                )}
+                {rentMode === 'mes' && (
+                  <MonthFilterForm
+                    rangeDate={rangeDate}
+                    setRangeDate={setRangeDate}
+                  />
+                )}
+
                 {/* <fieldset className="fieldset">
                   <legend className="fieldset-legend">Placa</legend>
                   <input
@@ -98,11 +134,33 @@ export function GarageDetail() {
                     placeholder="Ej. Toyota Corolla 2022"
                   />
                 </fieldset> */}
-                <input
+                {/* Open the modal using document.getElementById('ID').showModal() method */}
+                <button
                   type="button"
-                  value="Reservar ahora"
                   className="btn btn-primary max-w-sm"
-                />
+                  onClick={() => {
+                    document.getElementById('my_modal_1')!.showModal()
+                  }}
+                >
+                  Solicitar ahora
+                </button>
+                <dialog ref={modalRef} className="modal" id="my_modal_1">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-lg">Confirmar solicitud</h3>
+                    <div className="modal-action">
+                      <form method="dialog" className="flex gap-3">
+                        <button className="btn">Close</button>
+                        <button
+                          className="btn btn-primary"
+                          type="button"
+                          onClick={handleRequest}
+                        >
+                          Aceptar
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
               </div>
             </div>
           </aside>

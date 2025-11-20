@@ -23,10 +23,18 @@ export class BookingRequest {
   @JoinColumn({ name: 'garage_id' })
   garage!: Garage
 
-  @Column({ type: 'datetime', name: 'start_dt' })
+  @Column({
+    type: 'datetime',
+    name: 'start_dt',
+    default: () => 'CURRENT_TIMESTAMP'
+  })
   startDate!: Date
 
-  @Column({ type: 'datetime', name: 'end_dt' })
+  @Column({
+    type: 'datetime',
+    name: 'end_dt',
+    default: () => 'CURRENT_TIMESTAMP'
+  })
   endDate!: Date
 
   @Column({
