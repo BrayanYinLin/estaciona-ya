@@ -148,6 +148,9 @@ importers:
       react-dom:
         specifier: 19.1.1
         version: 19.1.1(react@19.1.1)
+      react-month-picker:
+        specifier: 2.2.1
+        version: 2.2.1(prop-types@15.8.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-router:
         specifier: 7.9.1
         version: 7.9.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1752,6 +1755,9 @@ packages:
   js-md4@0.3.2:
     resolution: {integrity: sha512-/GDnfQYsltsjRswQhN9fhv3EMw2sCpUdrdxyWDOUK7eyD++r3gRhzgiQgc/x4MAv2i1iuQ4lxO5mvqM3vj4bwA==}
 
+  js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+
   js-tokens@9.0.1:
     resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
 
@@ -1879,6 +1885,10 @@ packages:
 
   long@5.3.2:
     resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
+
+  loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
 
   loupe@3.2.1:
     resolution: {integrity: sha512-CdzqowRJCeLU72bHvWqwRBBlLcMEtIvGrlvef74kMnV2AolS9Y8xUv1I0U/MNAWMhBlKIoyuEgoJ0t/bbwHbLQ==}
@@ -2131,6 +2141,9 @@ packages:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
     engines: {node: '>= 0.6.0'}
 
+  prop-types@15.8.1:
+    resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
+
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
@@ -2168,6 +2181,16 @@ packages:
     peerDependencies:
       react: ^19.1.1
 
+  react-is@16.13.1:
+    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-month-picker@2.2.1:
+    resolution: {integrity: sha512-FJoDanK58ql5z9+FR3KGxw/psUCnDEGWI5UCq74EAj/Pk7Q4SE8obCP69N61gRQzbHrxn8qarjxUfFY1XbTXvQ==}
+    peerDependencies:
+      prop-types: ^15.6.0
+      react: ^17.0.2
+      react-dom: ^17.0.2
+
   react-router@7.9.1:
     resolution: {integrity: sha512-pfAByjcTpX55mqSDGwGnY9vDCpxqBLASg0BMNAuMmpSGESo/TaOUG6BllhAtAkCGx8Rnohik/XtaqiYUJtgW2g==}
     engines: {node: '>=20.0.0'}
@@ -2177,6 +2200,13 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react-tapper@0.1.23:
+    resolution: {integrity: sha512-BLV2zRnpTeLQdSf7tUbk9JQ6Og5DKK66kjjbEkhj2Y4wURlIq8YtibWNceKRzBWYiRGcEzJbUZYAcKic4HZLUA==}
+    peerDependencies:
+      prop-types: ^15.6.0
+      react: ^17.0.2
+      react-dom: ^17.0.2
 
   react@19.1.1:
     resolution: {integrity: sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ==}
@@ -4325,6 +4355,8 @@ snapshots:
   js-md4@0.3.2:
     optional: true
 
+  js-tokens@4.0.0: {}
+
   js-tokens@9.0.1: {}
 
   js-yaml@4.1.0:
@@ -4436,6 +4468,10 @@ snapshots:
   lodash.once@4.1.1: {}
 
   long@5.3.2: {}
+
+  loose-envify@1.4.0:
+    dependencies:
+      js-tokens: 4.0.0
 
   loupe@3.2.1: {}
 
@@ -4658,6 +4694,12 @@ snapshots:
   process@0.11.10:
     optional: true
 
+  prop-types@15.8.1:
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react-is: 16.13.1
+
   proxy-addr@2.0.7:
     dependencies:
       forwarded: 0.2.0
@@ -4694,12 +4736,27 @@ snapshots:
       react: 19.1.1
       scheduler: 0.26.0
 
+  react-is@16.13.1: {}
+
+  react-month-picker@2.2.1(prop-types@15.8.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      react-tapper: 0.1.23(prop-types@15.8.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+
   react-router@7.9.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
       cookie: 1.0.2
       react: 19.1.1
       set-cookie-parser: 2.7.1
     optionalDependencies:
+      react-dom: 19.1.1(react@19.1.1)
+
+  react-tapper@0.1.23(prop-types@15.8.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
   react@19.1.1: {}

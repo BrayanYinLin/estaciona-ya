@@ -5,6 +5,30 @@ import { useState } from 'react'
 
 export function DayFilterForm() {
   const [selected, setSelected] = useState<DateRange | undefined>(undefined)
+  const [isoRange, setIsoRange] = useState<{
+    from: string | null
+    to: string | null
+  }>({
+    from: null,
+    to: null
+  })
+
+  const handleSelect = (range: DateRange | undefined) => {
+    setSelected(range)
+
+    if (!range?.from && !range?.to) {
+      setIsoRange({ from: null, to: null })
+      return
+    }
+
+    console.log(isoRange)
+
+    setIsoRange({
+      from: range?.from ? range.from.toISOString() : null,
+      to: range?.to ? range.to.toISOString() : null
+    })
+  }
+
   return (
     <div className="flex w-full justify-center overflow-x-auto">
       <DayPicker
@@ -20,10 +44,10 @@ export function DayFilterForm() {
         animate
         mode="range"
         selected={selected}
-        onSelect={setSelected}
+        onSelect={handleSelect}
         footer={
-          selected
-            ? `\nSelected: ${selected.from} TO ${selected.to}`
+          isoRange.from || isoRange.to
+            ? `Seleccionado: ${isoRange.from ?? '—'}${isoRange.to ? ` a ${isoRange.to}` : ''}`
             : 'Pick a day.'
         }
         disabled={{ before: new Date() }}

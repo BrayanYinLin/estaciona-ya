@@ -18,9 +18,7 @@ export function GarageReservationHeader({
           /{rentMode}
         </span>
       </h3>
-      <p className="mb-4 text-sm text-base-content/70">
-        Selecciona horario y vehículo para continuar.
-      </p>
+      <p className="mb-4 text-sm text-base-content/70">Selecciona horario.</p>
     </>
   )
 }
