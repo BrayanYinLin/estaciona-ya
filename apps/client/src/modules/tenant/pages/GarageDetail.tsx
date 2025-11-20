@@ -12,14 +12,13 @@ import { GarageDescription } from '@tenant/components/GarageDescription'
 import { GarageRestrictions } from '@tenant/components/GarageRestrictions'
 import { GarageReservationHeader } from '@tenant/components/GarageReservationHeader'
 import { useGarageDetail } from '@tenant/hooks/useGarageDetail'
-
-type RentMode = 'hora' | 'dia' | 'mes'
+import { GarageDetailHeader } from '@tenant/components/GarageDetailHeader'
 
 export function GarageDetail() {
   const { id } = useParams()
   const { user, loading, error, recoverUser } = useUserStore()
   const navigate = useNavigate()
-  const [rentMode] = useState<RentMode>('hora')
+  const [rentMode, setRentMode] = useState<string>('')
   const {
     garage,
     getGarageDetail,
@@ -41,7 +40,7 @@ export function GarageDetail() {
   }, [])
 
   useEffect(() => {
-    console.log(garage)
+    setRentMode(garage?.rentMode.mode_name.toLowerCase() || 'dia')
   }, [garage, garageError])
 
   if (user === null) {
@@ -51,14 +50,7 @@ export function GarageDetail() {
     <main className="min-h-screen w-full bg-base-200">
       <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
       <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 lg:gap-10 lg:py-10">
-        <header className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold text-base-content sm:text-3xl">
-            {garage?.location.address ?? 'No encontrado'}
-          </h1>
-          <p className="text-sm text-base-content/60">
-            Información general del garaje seleccionada por el arrendador.
-          </p>
-        </header>
+        <GarageDetailHeader address={garage?.location.address} />
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="space-y-6">
             <GarageImgCarousel
@@ -88,7 +80,7 @@ export function GarageDetail() {
                 {rentMode === 'hora' && <HourFilterForm />}
                 {rentMode === 'dia' && <DayFilterForm />}
                 {rentMode === 'mes' && <MonthFilterForm />}
-                <fieldset className="fieldset">
+                {/* <fieldset className="fieldset">
                   <legend className="fieldset-legend">Placa</legend>
                   <input
                     type="text"
@@ -105,7 +97,7 @@ export function GarageDetail() {
                     className="input input-bordered max-w-sm"
                     placeholder="Ej. Toyota Corolla 2022"
                   />
-                </fieldset>
+                </fieldset> */}
                 <input
                   type="button"
                   value="Reservar ahora"
