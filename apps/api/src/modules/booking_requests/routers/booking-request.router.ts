@@ -6,6 +6,8 @@ import { User } from '@users/entities/user.entity'
 import { Garage } from '@garages/entities/garage.entity'
 import { BookingRequest } from '../entities/booking-requests.entity'
 import { Router } from 'express'
+import { injectTenant } from '@booking_requests/middleware/inject_tenant.middleware'
+import { logPostBody } from '@shared/utils/log_body.utils'
 
 const userRepo = AppDataSource.getRepository(User)
 const garageRepo = AppDataSource.getRepository(Garage)
@@ -28,6 +30,8 @@ const BookingRequestrouter = Router()
 
 BookingRequestrouter.post(
   '/',
+  injectTenant(),
+  logPostBody(),
   bookingRequestController.createBookingRequest.bind(bookingRequestController)
 )
 

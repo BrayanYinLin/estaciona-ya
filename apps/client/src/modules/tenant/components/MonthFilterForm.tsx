@@ -1,77 +1,56 @@
 import { MonthRangePicker } from '@shared/components/MonthRangePicker'
-import { useState } from 'react'
+import type { RangeDate } from '@tenant/pages/GarageDetail'
+import { useMemo, useState, type Dispatch } from 'react'
 
-export function MonthFilterForm() {
-  const months = [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Setiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ]
+export type MonthFilterFormProps = {
+  rangeDate: RangeDate
+  setRangeDate: Dispatch<React.SetStateAction<RangeDate>>
+}
 
-  const handleRangeChange = (nextRange: {
-    start: Date | null
-    end: Date | null
-  }) => {
-    setRange(nextRange)
-    console.log('Rango:', {
-      from: nextRange.start?.toLocaleDateString('es-ES'),
-      to: nextRange.end?.toLocaleDateString('es-ES')
-    })
+export function MonthFilterForm({ setRangeDate }: MonthFilterFormProps) {
+  const toCustomFormat = (dateInput: string) => {
+    const d = new Date(dateInput)
+
+    // const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const yyyy = d.getFullYear()
+
+    // const hh = String(d.getHours()).padStart(2, '0')
+    // const min = String(d.getMinutes()).padStart(2, '0')
+
+    return `${yyyy}-${mm}-01 00:00`
   }
+
+  const minDate = useMemo(() => {
+    const d = new Date()
+    d.setMonth(d.getMonth() + 1, 1)
+    d.setHours(0, 0, 0, 0)
+    return d
+  }, [])
 
   const [range, setRange] = useState({
     start: null as Date | null,
     end: null as Date | null
   })
-  const actualMonth = new Date().getMonth()
-  const availableMonths = months.slice(actualMonth)
+
   return (
     <>
-      {/* <fieldset className="fieldset">
-        <legend className="fieldset-legend">Desde</legend>
-        <select
-          defaultValue="Pick a browser"
-          className="select"
-          name="startMonth"
-        >
-          <option disabled={true}>Selecciona un mes</option>
-          {availableMonths.map((month, index) => (
-            <option value={month} key={index}>
-              {month}
-            </option>
-          ))}
-        </select>
-      </fieldset>
-      <fieldset className="fieldset">
-        <legend className="fieldset-legend">Hasta</legend>
-        <select
-          defaultValue="Pick a browser"
-          className="select"
-          name="endMonth"
-        >
-          <option disabled={true}>Selecciona un mes</option>
-          {availableMonths.map((month, index) => (
-            <option value={month} key={index}>
-              {month}
-            </option>
-          ))}
-        </select>
-      </fieldset> */}
-
       <MonthRangePicker
         label="Selecciona un rango de meses"
         value={range}
-        onChange={handleRangeChange}
-        minDate={new Date()} // bloquea meses anteriores al actual
+        onChange={(nextRange) => {
+          setRange(nextRange)
+          const normalizedRange: RangeDate = {
+            startDate: nextRange.start
+              ? toCustomFormat(nextRange.start.toString())
+              : null,
+            endDate: nextRange.end
+              ? toCustomFormat(nextRange.end.toString())
+              : null
+          }
+          setRangeDate(normalizedRange)
+        }}
+        minDate={minDate}
       />
     </>
   )

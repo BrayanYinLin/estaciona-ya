@@ -1,10 +1,16 @@
 import { DayPicker, type DateRange } from 'react-day-picker'
 
 import { es } from 'react-day-picker/locale'
-import { useState } from 'react'
+import { useState, type Dispatch } from 'react'
+import type { RangeDate } from '@tenant/pages/GarageDetail'
 
-export function DayFilterForm() {
-  const [selected, setSelected] = useState<DateRange | undefined>(undefined)
+export type DayFilterFormProps = {
+  rangeDate: RangeDate
+  setRangeDate: Dispatch<React.SetStateAction<RangeDate>>
+}
+
+export function DayFilterForm({ rangeDate, setRangeDate }: DayFilterFormProps) {
+  const [selected, setSelected] = useState<DateRange | undefined>()
   const [isoRange, setIsoRange] = useState<{
     from: string | null
     to: string | null
@@ -13,19 +19,36 @@ export function DayFilterForm() {
     to: null
   })
 
+  const toCustomFormat = (dateInput: string) => {
+    const d = new Date(dateInput)
+
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const yyyy = d.getFullYear()
+
+    // const hh = String(d.getHours()).padStart(2, '0')
+    // const min = String(d.getMinutes()).padStart(2, '0')
+
+    return `${yyyy}-${mm}-${dd} 00:00`
+  }
+
   const handleSelect = (range: DateRange | undefined) => {
     setSelected(range)
+    setRangeDate({
+      startDate: toCustomFormat(range!.from!.toString()),
+      endDate: toCustomFormat(range!.to!.toString())
+    })
 
     if (!range?.from && !range?.to) {
       setIsoRange({ from: null, to: null })
       return
     }
 
-    console.log(isoRange)
+    console.log(rangeDate)
 
     setIsoRange({
-      from: range?.from ? range.from.toISOString() : null,
-      to: range?.to ? range.to.toISOString() : null
+      from: range?.from ? toCustomFormat(range.from.toString()) : null,
+      to: range?.to ? toCustomFormat(range.to.toString()) : null
     })
   }
 
