@@ -43,17 +43,8 @@ export function CatalogTenant() {
   if (user === null) {
     return <main>Ha ocurrido algo</main>
   }
-  const catalogGarages = garages.map((garage) => ({
-    id: garage.id,
-    address: garage.location.address,
-    price: garage.price,
-    rentMode: garage.rentMode.mode_name,
-    imageUrl: garage.photos[0]?.url ?? 'https://placehold.co/600x400',
-    covered: garage.covered,
-    hasCamera: garage.hasCameras
-  }))
 
-  if (garagesLoading && catalogGarages.length === 0) {
+  if (garagesLoading && garages.length === 0) {
     return <main>Cargando garajes...</main>
   }
 
@@ -70,13 +61,14 @@ export function CatalogTenant() {
           />
         }
       >
-        <div className="relative">
+        <div className="relative ">
           {garagesLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-base-100/70">
               Actualizando garajes...
             </div>
           )}
-          <GarageCatalogGrid garages={catalogGarages} />
+
+          <GarageCatalogGrid garages={garages} />
           <PaginationButton
             page={page}
             prev={() => {

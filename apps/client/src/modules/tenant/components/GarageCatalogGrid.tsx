@@ -1,16 +1,5 @@
-import type { Garage } from '@/types'
+import type { Garage } from '@tenant/services/garage.service'
 import { GarageCatalogCard } from './GarageCatalogCard'
-
-// type Garage = {
-//   id: number
-//   address: string
-//   price: number
-//   // rating: number
-//   rentMode: string
-//   imageUrl: string
-//   covered: boolean
-//   hasCamera: boolean
-// }
 
 export function GarageCatalogGrid({ garages }: { garages: Garage[] }) {
   return (
@@ -20,12 +9,12 @@ export function GarageCatalogGrid({ garages }: { garages: Garage[] }) {
           <GarageCatalogCard
             key={garage.id}
             id={garage.id}
-            address={garage.address}
+            address={garage.location.address}
             price={garage.price}
-            rentMode={garage.rentMode}
-            imageUrl={garage.imageUrl}
+            rentMode={garage.rentMode.mode_name}
+            imageUrl={garage.photos[0].url ?? 'https://placehold.co/600x400'}
             covered={garage.covered}
-            hasCamera={garage.hasCamera}
+            hasCamera={garage.hasCameras}
           />
         ))}
       </div>
