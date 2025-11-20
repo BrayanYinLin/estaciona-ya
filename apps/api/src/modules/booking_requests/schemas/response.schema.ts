@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const ReservationSchema = z.object({
+export const ResponseBookinRequest = z.object({
   id: z.number(),
 
   user: z.object({
@@ -20,7 +20,12 @@ export const ReservationSchema = z.object({
     state: z.boolean(),
     location: z.object({
       address: z.string()
-    })
+    }),
+    photos: z.array(
+      z.object({
+        url: z.string()
+      })
+    )
   }),
 
   startDate: z.date(),
@@ -28,4 +33,4 @@ export const ReservationSchema = z.object({
   status: z.string()
 })
 
-export type ResponseBookingRequest = z.infer<typeof ReservationSchema>
+export type ResponseBookingRequest = z.infer<typeof ResponseBookinRequest>

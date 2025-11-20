@@ -25,6 +25,7 @@ const createBookingRequest = async ({
 const getBookingRequestsByUser = async () => {
   try {
     const { data } = await api.get('/booking-requests/by-user')
+
     return data
   } catch (e) {
     console.error((e as Error).message)

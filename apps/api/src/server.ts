@@ -17,7 +17,6 @@ import { locationRouter } from '@locations/routers/location.router'
 import { rentModeRouter } from '@garages/routers/rent_mode.router'
 import { garageRouter } from '@garages/routers/garage.router'
 import BookingRequestrouter from '@booking_requests/routers/booking-request.router'
-import brayanRouter from '@booking_requests/routers/brayan.router'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -37,7 +36,6 @@ app.use(ENDPOINTS.LOCATION, locationRouter)
 app.use(ENDPOINTS.RENT_MODE, rentModeRouter)
 app.use(ENDPOINTS.GARAGES, garageRouter)
 app.use(ENDPOINTS.BOOKING_REQUESTS, BookingRequestrouter)
-app.use(ENDPOINTS.BOOKING_REQUESTS, brayanRouter)
 
 app.use(errorMiddleware)
 

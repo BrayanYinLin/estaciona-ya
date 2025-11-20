@@ -14,6 +14,7 @@ import { useGarageDetail } from '@tenant/hooks/useGarageDetail'
 import { GarageDetailHeader } from '@tenant/components/GarageDetailHeader'
 import { BookingRequestService } from '@tenant/services/request.service'
 import 'react-day-picker/style.css'
+import { useBookingRequestsStore } from '@tenant/contexts/booking_requests.store'
 
 export type RangeDate = {
   startDate: string | null
@@ -35,13 +36,16 @@ export function GarageDetail() {
     startDate: null,
     endDate: null
   })
+  const { getAllRequests } = useBookingRequestsStore()
 
-  const handleRequest = () => {
-    BookingRequestService.createBookingRequest({
+  const handleRequest = async () => {
+    await BookingRequestService.createBookingRequest({
       range: rangeDate,
       garageId: Number(id!)
     })
-    // modalRef.current?.close()
+
+    await getAllRequests()
+
     navigate('/tenant/requests')
   }
 

@@ -9,7 +9,7 @@ export type DayFilterFormProps = {
   setRangeDate: Dispatch<React.SetStateAction<RangeDate>>
 }
 
-export function DayFilterForm({ rangeDate, setRangeDate }: DayFilterFormProps) {
+export function DayFilterForm({ setRangeDate }: DayFilterFormProps) {
   const [selected, setSelected] = useState<DateRange | undefined>()
   const [isoRange, setIsoRange] = useState<{
     from: string | null
@@ -43,8 +43,6 @@ export function DayFilterForm({ rangeDate, setRangeDate }: DayFilterFormProps) {
       setIsoRange({ from: null, to: null })
       return
     }
-
-    console.log(rangeDate)
 
     setIsoRange({
       from: range?.from ? toCustomFormat(range.from.toString()) : null,

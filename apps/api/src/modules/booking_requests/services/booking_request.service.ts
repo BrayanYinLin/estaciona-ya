@@ -4,17 +4,39 @@ import { Repository } from 'typeorm'
 import { User } from '@users/entities/user.entity'
 import { Garage } from '@garages/entities/garage.entity'
 import { CreateBookingRequestDto } from '../schemas/create_booking_request.shcema'
-import { createBookingRequestRepository } from '../repositories/booking-request.repository'
+import { BookingRequestRepositoryImpl } from '../repositories/booking-request.repository'
 import { BookingRequestService } from '../booking-request'
 import { BookingRequest } from '../entities/booking-requests.entity'
+import { prettifyError } from 'node_modules/zod/v4/core/errors'
+import {
+  ResponseBookinRequest,
+  ResponseBookingRequest
+} from '@booking_requests/schemas/response.schema'
 
 export class BookingRequestServiceImpl implements BookingRequestService {
   constructor(
-    private bookingRequestRepository: createBookingRequestRepository,
+    private bookingRequestRepository: BookingRequestRepositoryImpl,
 
     private readonly userRepository: Repository<User>,
     private readonly garageRepository: Repository<Garage>
   ) {}
+
+  async findAllByUserId(userId: number): Promise<ResponseBookingRequest[]> {
+    const data = await this.bookingRequestRepository.findAllByUserId(userId)
+
+    return data.map((b) => {
+      const { data, success, error } = ResponseBookinRequest.safeParse(b)
+
+      if (!success || error) {
+        throw new DomainError({
+          code: 'VALIDATION_CODE_ERROR',
+          message: prettifyError(error)
+        })
+      }
+
+      return data
+    })
+  }
 
   async createBookingRequest(
     dto: CreateBookingRequestDto

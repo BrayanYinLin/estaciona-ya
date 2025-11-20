@@ -24,7 +24,7 @@ export function GarageCatalogCard({
   hasCamera = false
 }: GarageCatalogCardProps) {
   return (
-    <article className="card bg-base-100 w-80 lg:w-65 shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 ring-primary/30">
+    <article className="card bg-base-100  shadow-sm hover:shadow-md transition-shadow duration-200 focus-within:ring-2 ring-primary/30">
       {/* Card Title */}
       <figure className="relative">
         <div className="absolute left-3 top-3 z-10 flex gap-2">
@@ -78,7 +78,7 @@ export function GarageCatalogCard({
               className="btn btn-primary btn-sm"
               href={`/tenant/catalog/${id}`}
             >
-              Reservar
+              Solicitar
             </a>
           </div>
         </div>
