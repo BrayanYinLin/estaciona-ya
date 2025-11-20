@@ -5,6 +5,7 @@ import { RentMode } from '@garages/entities/rent_modes.entity'
 import { faker, fakerES } from '@faker-js/faker'
 import { Location } from '@locations/entities/locations.entity'
 import { District } from '@locations/entities/district.entity'
+import { GaragePhoto } from '@garages/entities/garage-photo.entity'
 
 export async function seedGarage(
   user: User,
@@ -14,6 +15,7 @@ export async function seedGarage(
   try {
     const repository = AppDataSource.getRepository(Garage)
     const locationRepository = AppDataSource.getRepository(Location)
+    const photosRepository = AppDataSource.getRepository(GaragePhoto)
 
     for (let index = 0; index < 40; index++) {
       const savedGarage = await repository.save({
@@ -34,6 +36,13 @@ export async function seedGarage(
           districts[faker.number.int({ min: 0, max: districts.length - 1 })],
         garage: savedGarage
       })
+
+      for (let index = 0; index < 5; index++) {
+        await photosRepository.save({
+          url: 'https://picsum.photos/1920/1080',
+          garage: savedGarage
+        })
+      }
     }
   } catch (error) {
     console.error(error)
