@@ -80,9 +80,9 @@ export function FilterSection({
         options={districts}
         onChange={handleDistrictChange}
       />
-      {selectedMode === 'hora' && <HourFilterForm />}
-      {selectedMode === 'dia' && <DayFilterForm />}
-      {selectedMode === 'mes' && <MonthFilterForm />}
+      {/* {selectedMode === 'hora' && <HourFilterForm />} */}
+      {/* {selectedMode === 'dia' && <DayFilterForm />} */}
+      {/* {selectedMode === 'mes' && <MonthFilterForm />} */}
       {/* <PriceRangeFilter /> */}
       <RangeSlider setMin={setMin} setMax={setMax} />
       <FilterCheckboxes
