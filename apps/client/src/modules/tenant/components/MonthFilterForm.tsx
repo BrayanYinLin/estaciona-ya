@@ -1,5 +1,5 @@
 import { MonthRangePicker } from '@shared/components/MonthRangePicker'
-import type { RangeDate } from '@tenant/pages/GarageDetail'
+import type { RangeDate } from '@tenant/types'
 import { useMemo, useState, type Dispatch } from 'react'
 
 export type MonthFilterFormProps = {

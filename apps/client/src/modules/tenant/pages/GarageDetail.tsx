@@ -3,7 +3,7 @@ import { HourFilterForm } from '@tenant/components/HourFilterForm'
 import { DayFilterForm } from '@tenant/components/DayFilterForm'
 import { MonthFilterForm } from '@tenant/components/MonthFilterForm'
 import { useUserStore } from '@user/context/user.context'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { GarageImgCarousel } from '@shared/components/GarageImgCarousel'
 import { GarageFeatures } from '@tenant/components/GarageFeatures'
@@ -12,42 +12,25 @@ import { GarageRestrictions } from '@tenant/components/GarageRestrictions'
 import { GarageReservationHeader } from '@tenant/components/GarageReservationHeader'
 import { useGarageDetail } from '@tenant/hooks/useGarageDetail'
 import { GarageDetailHeader } from '@tenant/components/GarageDetailHeader'
-import { BookingRequestService } from '@tenant/services/request.service'
 import 'react-day-picker/style.css'
-import { useBookingRequestsStore } from '@tenant/contexts/booking_requests.store'
-
-export type RangeDate = {
-  startDate: string | null
-  endDate: string | null
-}
+import { useGarageReservation } from '@tenant/hooks/useGarageReservation'
+import { GarageRatingDetail } from '@tenant/components/GarageRatingDetail'
 
 export function GarageDetail() {
   const { id } = useParams()
   const { user, loading, error, recoverUser } = useUserStore()
   const modalRef = useRef<HTMLDialogElement>(null)
   const navigate = useNavigate()
-  const [rentMode, setRentMode] = useState<string>('')
+
+  const { garage, getGarageDetail } = useGarageDetail(Number(id))
   const {
-    garage,
-    getGarageDetail,
-    error: garageError
-  } = useGarageDetail(Number(id))
-  const [rangeDate, setRangeDate] = useState<RangeDate>({
-    startDate: null,
-    endDate: null
-  })
-  const { getAllRequests } = useBookingRequestsStore()
-
-  const handleRequest = async () => {
-    await BookingRequestService.createBookingRequest({
-      range: rangeDate,
-      garageId: Number(id!)
-    })
-
-    await getAllRequests()
-
-    navigate('/tenant/requests')
-  }
+    rangeDate,
+    setRangeDate,
+    rentMode,
+    selectedDays,
+    totalCost,
+    handleRequest
+  } = useGarageReservation(garage, Number(id))
 
   useEffect(() => {
     recoverUser()
@@ -62,10 +45,6 @@ export function GarageDetail() {
   useEffect(() => {
     getGarageDetail()
   }, [])
-
-  useEffect(() => {
-    setRentMode(garage?.rentMode.mode_name.toLowerCase() || 'dia')
-  }, [garage, garageError])
 
   if (user === null) {
     return <main>Ha ocurrido algo</main>
@@ -93,6 +72,14 @@ export function GarageDetail() {
               <GarageDescription description={garage?.description ?? ''} />
               <GarageRestrictions restrictions={garage?.restrictions ?? ''} />
             </div>
+            <div className="rounded-2xl bg-base-100 p-6 shadow-lg">
+              <div className="flex items-center justify-between">
+                <GarageRatingDetail rating={4.5} />
+                <button className="btn btn-outline btn-primary">
+                  Escribe una opinión
+                </button>
+              </div>
+            </div>
           </div>
           <aside className="lg:sticky lg:top-6">
             <div className="rounded-2xl bg-base-100 p-5 shadow-lg">
@@ -108,10 +95,24 @@ export function GarageDetail() {
                   />
                 )}
                 {rentMode === 'dia' && (
-                  <DayFilterForm
-                    rangeDate={rangeDate}
-                    setRangeDate={setRangeDate}
-                  />
+                  <>
+                    <DayFilterForm
+                      rangeDate={rangeDate}
+                      setRangeDate={setRangeDate}
+                    />
+                    <div className="mt-4 flex flex-col gap-2 border-t border-base-300 pt-4">
+                      <div className="flex justify-between text-base-content/70">
+                        <span>Días seleccionados:</span>
+                        <span className="font-bold text-base-content">
+                          {selectedDays}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-lg font-bold text-primary">
+                        <span>Total estimado:</span>
+                        <span>S/{totalCost.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </>
                 )}
                 {rentMode === 'mes' && (
                   <MonthFilterForm

@@ -1,4 +1,4 @@
-import type { RangeDate } from '@tenant/pages/GarageDetail'
+import type { RangeDate } from '@tenant/types'
 import { useState, type ChangeEvent, type Dispatch } from 'react'
 import { DayPicker } from 'react-day-picker'
 import { es } from 'react-day-picker/locale'

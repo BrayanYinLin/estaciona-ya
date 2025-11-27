@@ -2,7 +2,7 @@ import { DayPicker, type DateRange } from 'react-day-picker'
 
 import { es } from 'react-day-picker/locale'
 import { useState, type Dispatch } from 'react'
-import type { RangeDate } from '@tenant/pages/GarageDetail'
+import type { RangeDate } from '@tenant/types'
 
 export type DayFilterFormProps = {
   rangeDate: RangeDate
@@ -34,10 +34,17 @@ export function DayFilterForm({ setRangeDate }: DayFilterFormProps) {
 
   const handleSelect = (range: DateRange | undefined) => {
     setSelected(range)
-    setRangeDate({
-      startDate: toCustomFormat(range!.from!.toString()),
-      endDate: toCustomFormat(range!.to!.toString())
-    })
+    if (range?.from) {
+      setRangeDate({
+        startDate: toCustomFormat(range.from.toString()),
+        endDate: range.to ? toCustomFormat(range.to.toString()) : null
+      })
+    } else {
+      setRangeDate({
+        startDate: null,
+        endDate: null
+      })
+    }
 
     if (!range?.from && !range?.to) {
       setIsoRange({ from: null, to: null })
