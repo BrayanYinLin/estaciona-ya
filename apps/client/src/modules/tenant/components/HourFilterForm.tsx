@@ -4,14 +4,10 @@ import { DayPicker } from 'react-day-picker'
 import { es } from 'react-day-picker/locale'
 
 export type HourFilterFormProps = {
-  rangeDate: RangeDate
   setRangeDate: Dispatch<React.SetStateAction<RangeDate>>
 }
 
-export function HourFilterForm({
-  rangeDate,
-  setRangeDate
-}: HourFilterFormProps) {
+export function HourFilterForm({ setRangeDate }: HourFilterFormProps) {
   const [selected, setSelected] = useState<Date>()
   const [startHour, setStartHour] = useState('')
   const [endHour, setEndHour] = useState('')
@@ -119,10 +115,6 @@ export function HourFilterForm({
           onChange={handleEndHourChange}
         />
       </fieldset>
-
-      <pre className="text-xs opacity-70">
-        {JSON.stringify(rangeDate, null, 2)}
-      </pre>
     </>
   )
 }

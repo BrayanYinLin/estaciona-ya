@@ -13,7 +13,6 @@ type GarageSpaceCardProps = {
   hasCameras: boolean
   //   Funciones se pasan como prop o la lógica se puede agregar en este mismo card?s
   onEdit: () => void
-  onDisable: () => void
 }
 
 export function GarageSpaceCard({
@@ -25,8 +24,7 @@ export function GarageSpaceCard({
   rentMode,
   isCovered,
   hasCameras,
-  onEdit,
-  onDisable
+  onEdit
 }: GarageSpaceCardProps) {
   return (
     <section
@@ -67,9 +65,35 @@ export function GarageSpaceCard({
             Editar
           </button>
 
-          <button className="btn btn-warning btn-outline" onClick={onDisable}>
+          <button
+            className="btn btn-warning btn-outline"
+            onClick={() => {
+              document.getElementById('modal-disable')!.showModal()
+            }}
+          >
             {disabled ? 'Habilitar' : 'Deshabilitar'}
           </button>
+          <dialog id="modal-disable" className="modal">
+            <div className="modal-box">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
+              <h3 className="font-bold text-lg">Deshabilitar garaje</h3>
+              <p className="py-4">
+                ¿Desea deshabilitar este garaje? Presione el botón debajo para
+                confirmar
+              </p>
+              <div className="flex justify-end w-full">
+                <button className="btn btn-warning ml-auto">
+                  Deshabilitar
+                </button>
+              </div>
+            </div>
+          </dialog>
+
           <button
             className="btn btn-error btn-outline"
             onClick={() => document.getElementById('my_modal_3')!.showModal()}
