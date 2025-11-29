@@ -4,12 +4,13 @@ stateDiagram-v2
     PENDING --> DECLINED: owner rechaza
     PENDING --> ACCEPTED: owner acepta
 
-    ACCEPTED --> UNPAID: dueño accepta
-    UNPAID --> PAID: pago exitoso (antes del inicio de su reserva)
-    UNPAID --> CANCELLED: timeout / cancelación (antes de que inicie la reserva)
+    ACCEPTED --> IN_PROGRESS: dueño accepta
+    IN_PROGRESS --> PAID: pago exitoso (antes del inicio de su reserva)
+    IN_PROGRESS --> CANCELLED: timeout / cancelación (antes de que inicie la reserva)
 
     PAID --> COMPLETED: finaliza ventana de uso
-    UNPAID --> EXPIRED: no show / expira
+    IN_PROGRESS --> EXPIRED: expira
+
 
     DECLINED --> [*]
     CANCELLED --> [*]
