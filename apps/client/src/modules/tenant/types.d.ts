@@ -16,3 +16,8 @@ export type BookingRequest = {
   createdAt: string
   updatedAt: string
 }
+
+export type RangeDate = {
+  startDate: string | null
+  endDate: string | null
+}
