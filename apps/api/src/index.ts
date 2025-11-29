@@ -1,6 +1,6 @@
 import { AppDataSource } from '@shared/database/data-source'
 import 'reflect-metadata'
-import { app } from './server'
+import { server } from './server'
 import { env_api_port } from '@shared/config/env.config'
 import { seedRoles } from '@shared/database/seeds/role.seed'
 import {
@@ -21,7 +21,7 @@ const init = async () => {
   await seedUserTenant()
   await seedGarage(user as User, modes, districts)
 
-  app.listen(env_api_port, () => {
+  server.listen(env_api_port, () => {
     console.log(`Running at http://localhost:${env_api_port}`)
   })
 }
