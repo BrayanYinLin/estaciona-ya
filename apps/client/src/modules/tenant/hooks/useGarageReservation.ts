@@ -21,18 +21,32 @@ export function useGarageReservation(
     return garage?.rentMode.mode_name.toLowerCase() || 'dia'
   }, [garage])
 
-  const { days: selectedDays, total: totalCost } = useMemo(() => {
-    if (!rangeDate.startDate || !rangeDate.endDate) return { days: 0, total: 0 }
+  const { quantity, total: totalCost } = useMemo(() => {
+    if (!rangeDate.startDate || !rangeDate.endDate)
+      return { quantity: 0, total: 0 }
 
     const start = new Date(rangeDate.startDate)
     const end = new Date(rangeDate.endDate)
     const diffTime = Math.abs(end.getTime() - start.getTime())
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    const days = diffDays + 1
-    const total = days * (garage?.price ?? 0)
 
-    return { days, total }
-  }, [rangeDate, garage])
+    let quantity = 0
+
+    if (rentMode === 'hora') {
+      quantity = Math.ceil(diffTime / (1000 * 60 * 60))
+    } else if (rentMode === 'dia') {
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      quantity = diffDays + 1
+    } else if (rentMode === 'mes') {
+      quantity =
+        (end.getFullYear() - start.getFullYear()) * 12 +
+        (end.getMonth() - start.getMonth()) +
+        1
+    }
+
+    const total = quantity * (garage?.price ?? 0)
+
+    return { quantity: quantity, total }
+  }, [rangeDate, garage, rentMode])
 
   const handleRequest = async () => {
     if (!rangeDate.startDate || !rangeDate.endDate) return
@@ -51,7 +65,7 @@ export function useGarageReservation(
     rangeDate,
     setRangeDate,
     rentMode,
-    selectedDays,
+    quantity,
     totalCost,
     handleRequest
   }

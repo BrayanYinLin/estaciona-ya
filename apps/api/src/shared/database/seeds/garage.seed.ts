@@ -17,7 +17,7 @@ export async function seedGarage(
     const locationRepository = AppDataSource.getRepository(Location)
     const photosRepository = AppDataSource.getRepository(GaragePhoto)
 
-    for (let index = 0; index < 400; index++) {
+    for (let index = 0; index < 40; index++) {
       const savedGarage = await repository.save({
         hasCameras: Boolean(fakerES.number.int({ min: 0, max: 1 })),
         covered: Boolean(fakerES.number.int({ min: 0, max: 1 })),

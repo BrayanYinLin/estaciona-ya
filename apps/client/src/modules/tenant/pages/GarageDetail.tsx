@@ -15,6 +15,7 @@ import { GarageDetailHeader } from '@tenant/components/GarageDetailHeader'
 import 'react-day-picker/style.css'
 import { useGarageReservation } from '@tenant/hooks/useGarageReservation'
 import { GarageRatingDetail } from '@tenant/components/GarageRatingDetail'
+import { RentalSummary } from '@tenant/components/RentalSummary'
 
 export function GarageDetail() {
   const { id } = useParams()
@@ -27,7 +28,7 @@ export function GarageDetail() {
     rangeDate,
     setRangeDate,
     rentMode,
-    selectedDays,
+    quantity,
     totalCost,
     handleRequest
   } = useGarageReservation(garage, Number(id))
@@ -53,7 +54,10 @@ export function GarageDetail() {
     <main className="min-h-screen w-full bg-base-200">
       <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
       <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 lg:gap-10 lg:py-10">
-        <GarageDetailHeader address={garage?.location.address} />
+        <GarageDetailHeader
+          address={garage?.location.address}
+          owner={garage?.user.name}
+        />
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="space-y-6">
             <GarageImgCarousel
@@ -73,7 +77,7 @@ export function GarageDetail() {
               <GarageRestrictions restrictions={garage?.restrictions ?? ''} />
             </div>
             <div className="rounded-2xl bg-base-100 p-6 shadow-lg">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap justify-items-start md:justify-items-center">
                 <GarageRatingDetail rating={4.5} />
                 <button className="btn btn-outline btn-primary">
                   Escribe una opinión
@@ -82,6 +86,26 @@ export function GarageDetail() {
             </div>
           </div>
           <aside className="lg:sticky lg:top-6">
+            {/* IFRAME */}
+            {garage?.location ? (
+              <iframe
+                width="100%"
+                height="400"
+                style={{ border: '0px' }}
+                loading="lazy"
+                src={`https://www.google.com/maps?q=${garage?.location.latitude},${garage?.location.longitude}&hl=es&z=14&output=embed`}
+                className="w-full h-[340px] rounded-2xl mb-5 shadow-lg"
+              ></iframe>
+            ) : (
+              <img
+                src={`https://placehold.co/400x400/00bafe/FFF?text=${
+                  !garage?.location && !error
+                    ? 'Ingresa+tu+dirección'
+                    : 'Dirección+no+encontrada'
+                }`}
+                alt="Map"
+              />
+            )}
             <div className="rounded-2xl bg-base-100 p-5 shadow-lg">
               <GarageReservationHeader
                 price={garage?.price ?? 0}
@@ -89,10 +113,14 @@ export function GarageDetail() {
               />
               <div className="space-y-4">
                 {rentMode === 'hora' && (
-                  <HourFilterForm
-                    rangeDate={rangeDate}
-                    setRangeDate={setRangeDate}
-                  />
+                  <>
+                    <HourFilterForm setRangeDate={setRangeDate} />
+                    <RentalSummary
+                      label="Horas seleccionadas"
+                      quantity={quantity}
+                      totalCost={totalCost}
+                    />
+                  </>
                 )}
                 {rentMode === 'dia' && (
                   <>
@@ -100,25 +128,25 @@ export function GarageDetail() {
                       rangeDate={rangeDate}
                       setRangeDate={setRangeDate}
                     />
-                    <div className="mt-4 flex flex-col gap-2 border-t border-base-300 pt-4">
-                      <div className="flex justify-between text-base-content/70">
-                        <span>Días seleccionados:</span>
-                        <span className="font-bold text-base-content">
-                          {selectedDays}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-lg font-bold text-primary">
-                        <span>Total estimado:</span>
-                        <span>S/{totalCost.toFixed(2)}</span>
-                      </div>
-                    </div>
+                    <RentalSummary
+                      label="Días seleccionados"
+                      quantity={quantity}
+                      totalCost={totalCost}
+                    />
                   </>
                 )}
                 {rentMode === 'mes' && (
-                  <MonthFilterForm
-                    rangeDate={rangeDate}
-                    setRangeDate={setRangeDate}
-                  />
+                  <>
+                    <MonthFilterForm
+                      rangeDate={rangeDate}
+                      setRangeDate={setRangeDate}
+                    />
+                    <RentalSummary
+                      label="Meses seleccionados"
+                      quantity={quantity}
+                      totalCost={totalCost}
+                    />
+                  </>
                 )}
 
                 {/* <fieldset className="fieldset">

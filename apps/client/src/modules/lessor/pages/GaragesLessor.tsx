@@ -41,6 +41,7 @@ export function GaragesLessor() {
   const garagesData = async () => {
     const res = await api.get<Garage[]>('garage/me')
     setGarages(res.data ?? [])
+    console.log(res.data)
   }
 
   useEffect(() => {
@@ -67,7 +68,9 @@ export function GaragesLessor() {
       <section className="flex flex-col m-6 gap-6">
         {garages.length === 0 && (
           <section className="flex flex-col items-center gap-4 text-gray-500">
-            <p className="text-center text-2xl">No tienes espacios de garage aún.</p>
+            <p className="text-center text-2xl">
+              No tienes espacios de garage aún.
+            </p>
             <GhostIcon />
           </section>
         )}
@@ -77,17 +80,12 @@ export function GaragesLessor() {
             key={garage.id}
             address={garage.location.address}
             price={garage.price}
-            photo={
-              garage.photos?.[0]
-                ? [{ url: garage.photos[0].url }]
-                : [{ url: 'https://placehold.co/300x200' }]
-            }
+            photo={garage.photos}
             rating={3}
             rentMode={garage.rentMode.mode_name}
             isCovered={garage.covered}
             hasCameras={garage.hasCameras}
             onEdit={() => console.log('Editar')}
-            onDisable={() => console.log('Deshabilitar')}
             disabled={!garage.state}
           />
         ))}
