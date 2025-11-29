@@ -19,6 +19,7 @@ import { garageRouter } from '@garages/routers/garage.router'
 import BookingRequestrouter from '@booking_requests/routers/booking-request.router'
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
+import { socketManager } from '@shared/sockets/manager'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -26,6 +27,7 @@ mkdirSync(uploadDir, { recursive: true })
 
 const server = createServer(app)
 const io = new Server(server, { cors: { origin: '*' } })
+socketManager(io)
 
 app.use(express.json())
 app.use(morgan('dev'))
