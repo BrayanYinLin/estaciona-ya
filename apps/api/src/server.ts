@@ -17,10 +17,15 @@ import { locationRouter } from '@locations/routers/location.router'
 import { rentModeRouter } from '@garages/routers/rent_mode.router'
 import { garageRouter } from '@garages/routers/garage.router'
 import BookingRequestrouter from '@booking_requests/routers/booking-request.router'
+import { createServer } from 'node:http'
+import { Server } from 'socket.io'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
 mkdirSync(uploadDir, { recursive: true })
+
+const server = createServer(app)
+const io = new Server(server, { cors: { origin: '*' } })
 
 app.use(express.json())
 app.use(morgan('dev'))
@@ -39,4 +44,4 @@ app.use(ENDPOINTS.BOOKING_REQUESTS, BookingRequestrouter)
 
 app.use(errorMiddleware)
 
-export { app }
+export { app, server, io }
