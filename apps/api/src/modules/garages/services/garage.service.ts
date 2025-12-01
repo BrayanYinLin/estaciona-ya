@@ -65,8 +65,16 @@ export class GarageServiceImpl implements GarageService {
     return await this.fileStorageService.sendPhotoPath(id)
   }
 
-  async findAllByUserId(user: number): Promise<ResponseGarageDto[]> {
-    const garages = await this.garageRepository.findAllByUserId(user)
+  async findAllByUserId(
+    user: number,
+    page: number = 1,
+    size: number = 20
+  ): Promise<ResponseGarageDto[]> {
+    const garages = await this.garageRepository.findAllByUserId(
+      user,
+      page,
+      size
+    )
 
     return garages.map((garage) => {
       const { success, data, error } = ResponseGarageSchema.safeParse(garage)

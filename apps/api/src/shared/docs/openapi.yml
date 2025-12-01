@@ -296,6 +296,19 @@ paths:
       summary: Obtiene todos los garages de un usuario
       tags:
         - Garage
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 10
       security:
         - BearerAuth: []
       responses:
