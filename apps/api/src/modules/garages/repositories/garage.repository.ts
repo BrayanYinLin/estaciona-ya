@@ -114,22 +114,42 @@ export class GarageRepositoryImpl implements GarageRepository {
     return garages
   }
 
-  async findAllByUserId(userId: number): Promise<Garage[]> {
-    const garages = await this.repository.find({
-      where: {
-        user: {
-          id: userId
-        }
-      },
-      relations: [
-        'user',
-        'rentMode',
-        'bookingRequests',
-        'location',
-        'photos',
-        'location.district'
-      ]
-    })
+  async findAllByUserId(
+    userId: number,
+    page: number,
+    size: number
+  ): Promise<Garage[]> {
+    const skip = (page - 1) * size
+
+    const query = this.repository
+      .createQueryBuilder('garage')
+      .leftJoinAndSelect('garage.location', 'location')
+      .leftJoinAndSelect('location.district', 'districtAlias')
+      .leftJoinAndSelect('garage.rentMode', 'rentMode')
+      .leftJoinAndSelect('garage.photos', 'photos')
+      .leftJoinAndSelect('garage.bookingRequests', 'booking')
+      .leftJoinAndSelect('garage.user', 'user')
+
+    query.andWhere('garage.user.id = :userId', { userId })
+    query.skip(skip).take(size).orderBy('garage.id', 'ASC')
+
+    // const garages = await this.repository.find({
+    //   where: {
+    //     user: {
+    //       id: userId
+    //     }
+    //   },
+    //   relations: [
+    //     'user',
+    //     'rentMode',
+    //     'bookingRequests',
+    //     'location',
+    //     'photos',
+    //     'location.district'
+    //   ]
+    // })
+
+    const garages = await query.getMany()
 
     return garages
   }

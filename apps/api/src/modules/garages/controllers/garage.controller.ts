@@ -80,12 +80,17 @@ export class GarageControllerImpl implements GarageController {
   }
 
   async findAllByUserId(
-    _: Request,
+    req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const garages = await this.service.findAllByUserId(res.locals.id)
+      const { page, size } = req.query
+      const garages = await this.service.findAllByUserId(
+        res.locals.id,
+        Number(page === undefined ? 1 : page),
+        Number(size === undefined ? 20 : size)
+      )
 
       return res.json(garages)
     } catch (e) {

@@ -66,7 +66,7 @@ export type Filters = {
 
 export interface GarageRepository {
   saveGarage(garage: CreateGarageDto): Promise<Garage>
-  findAllByUserId(userId: number): Promise<Garage[]>
+  findAllByUserId(userId: number, page: number, size: number): Promise<Garage[]>
   findAll(filters: Filters): Promise<Garage[]>
   findGarageById(garageId: number): Promise<Garage | null>
 }
@@ -78,7 +78,11 @@ export interface GaragePhotoRepository {
 
 export interface GarageService {
   saveGarage(garage: CreateGarageFormDto): Promise<void>
-  findAllByUserId(user: number): Promise<ResponseGarageDto[]>
+  findAllByUserId(
+    user: number,
+    page: number,
+    size: number
+  ): Promise<ResponseGarageDto[]>
   findPhoto(id: string): Promise<string>
   findAll(filters: Filters): Promise<ResponseGarageDto[]>
   findGarageById(garageId: number): Promise<ResponseGarageByIdDto>
