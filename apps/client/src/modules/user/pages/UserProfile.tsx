@@ -10,19 +10,14 @@ import { LoadingScreen } from '@shared/components/LoadingScreen'
 import { api } from '@shared/api/api'
 import { ValidationModal } from '@user/components/ValidationModal'
 import { useValidateAccount } from '@user/hooks/useValidateAccount'
-import { useSocket } from '@shared/hooks/useSocket'
 
 export function UserProfile() {
   const { user, loading, error, recoverUser } = useUserStore()
   const { finished, validateAccount } = useValidateAccount()
   const navigate = useNavigate()
-  const socket = useSocket()
 
   useEffect(() => {
     recoverUser()
-    socket?.on('welcome', (data) => {
-      console.log(data)
-    })
   }, [])
 
   useEffect(() => {
