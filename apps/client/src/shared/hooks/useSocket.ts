@@ -1,22 +1,27 @@
 import { useEffect } from 'react'
-import { io } from 'socket.io-client'
 import { useAuthStore } from '@auth/context/auth.context'
-
-const socket = io('http://localhost:3000', {
-  autoConnect: false
-})
+import { useSocketStore } from '../context/socket.store'
 
 export function useSocket() {
   const { access_token } = useAuthStore()
+  const socket = useSocketStore((s) => s.socket)
+  const connect = useSocketStore((s) => s.connect)
+  const disconnect = useSocketStore((s) => s.disconnect)
 
   useEffect(() => {
     if (!access_token) return
 
-    socket.auth = { token: access_token }
-    socket.connect()
+    connect(access_token)
+
+    const handleBeforeUnload = () => {
+      socket.disconnect()
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
 
     return () => {
-      socket.disconnect()
+      disconnect()
+      window.removeEventListener('beforeunload', handleBeforeUnload)
     }
   }, [access_token])
 

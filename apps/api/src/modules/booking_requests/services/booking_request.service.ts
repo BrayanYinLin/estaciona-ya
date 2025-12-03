@@ -12,6 +12,7 @@ import {
   ResponseBookinRequest,
   ResponseBookingRequest
 } from '@booking_requests/schemas/response.schema'
+import { notificationEmitter } from '@shared/sockets/notify_event'
 
 export class BookingRequestServiceImpl implements BookingRequestService {
   constructor(
@@ -64,7 +65,10 @@ export class BookingRequestServiceImpl implements BookingRequestService {
       })
     }
 
-    const garage = await this.garageRepository.findOneBy({ id: garageId })
+    const garage = await this.garageRepository.findOne({
+      where: { id: garageId },
+      relations: ['user']
+    })
     if (!garage) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
@@ -88,6 +92,13 @@ export class BookingRequestServiceImpl implements BookingRequestService {
 
     const newBookingRequest =
       await this.bookingRequestRepository.createBookingRequest(dto)
+
+    notificationEmitter.emit('notify', [
+      {
+        id: garage.user.id,
+        message: 'Tienes una solicitud pendiente'
+      }
+    ])
 
     return newBookingRequest
   }
