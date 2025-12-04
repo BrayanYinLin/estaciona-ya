@@ -1,4 +1,5 @@
 import { RequestGarageCard } from '@lessor/components/RequestGarageCard'
+import { api } from '@shared/api/api'
 import { UserNavBar } from '@shared/components/UserNavBar'
 import { useSocket } from '@shared/hooks/useSocket'
 import { useUserStore } from '@user/context/user.context'
@@ -19,6 +20,8 @@ export function RequestsLessor() {
     socket?.on('notify-user', (data) => {
       console.log(data)
     })
+
+    api.get('/booking-requests/owner').then(({ data }) => console.log(data))
   }, [])
 
   useEffect(() => {

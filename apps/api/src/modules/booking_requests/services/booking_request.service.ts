@@ -22,6 +22,10 @@ export class BookingRequestServiceImpl implements BookingRequestService {
     private readonly garageRepository: Repository<Garage>
   ) {}
 
+  async findAllByOwner(userId: number): Promise<BookingRequest[]> {
+    return this.bookingRequestRepository.findAllByOwner(userId)
+  }
+
   async findAllByUserId(userId: number): Promise<ResponseBookingRequest[]> {
     const data = await this.bookingRequestRepository.findAllByUserId(userId)
 
