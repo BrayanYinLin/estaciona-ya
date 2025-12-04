@@ -10,6 +10,7 @@ export function useGarageDetail(id: number) {
     try {
       const res = await api.get<GarageDetail>(`/garage/${id}`)
       setGarage(res.data)
+      console.log(res.data)
     } catch (error) {
       setError((error as Error).message)
     }

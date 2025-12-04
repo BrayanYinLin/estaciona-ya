@@ -40,6 +40,7 @@ export type GarageDetail = {
     id: number
     name: string
     email: string
+    photo: string | null
   }
   location: {
     id: number

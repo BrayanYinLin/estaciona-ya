@@ -1,6 +1,8 @@
 import { GarageSpaceCard } from '@lessor/components/GarageSpaceCard'
 import { api } from '@shared/api/api'
 import { GhostIcon } from '@shared/components/GhostIcon'
+import { PaginationButton } from '@shared/components/PaginationButton'
+import { RequestAlert } from '@shared/components/RequestAlert'
 import { UserNavBar } from '@shared/components/UserNavBar'
 import { useUserStore } from '@user/context/user.context'
 import { useEffect, useState } from 'react'
@@ -36,18 +38,22 @@ type Garage = {
 export function GaragesLessor() {
   const { user, loading, error, recoverUser } = useUserStore()
   const [garages, setGarages] = useState<Garage[]>([])
+  const [page, setPage] = useState<number>(1)
   const navigate = useNavigate()
 
-  const garagesData = async () => {
-    const res = await api.get<Garage[]>('garage/me')
+  const garagesData = async (page: number) => {
+    const res = await api.get<Garage[]>(`garage/me?page=${page}&size=10`)
     setGarages(res.data ?? [])
     console.log(res.data)
   }
 
   useEffect(() => {
     recoverUser()
-    garagesData()
   }, [])
+
+  useEffect(() => {
+    garagesData(page)
+  }, [page])
 
   useEffect(() => {
     if (loading === false && error) navigate('/sign-in')
@@ -58,6 +64,7 @@ export function GaragesLessor() {
   return (
     <main>
       <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
+      <RequestAlert status="accepted" />
 
       <section className="flex justify-end px-6 py-2">
         <Link to="/lessor/garages/new" className="btn btn-primary">
@@ -89,6 +96,17 @@ export function GaragesLessor() {
             disabled={!garage.state}
           />
         ))}
+        <PaginationButton
+          page={page}
+          prev={() => {
+            if (page - 1 == 0) return
+
+            if (page > 0) setPage(page - 1)
+          }}
+          next={() => {
+            if (garages.length > 0) setPage(page + 1)
+          }}
+        />
       </section>
     </main>
   )

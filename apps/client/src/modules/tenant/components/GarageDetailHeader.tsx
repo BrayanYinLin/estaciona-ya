@@ -1,11 +1,13 @@
 type GarageDetailHeaderProps = {
   address: string | undefined
   owner: string | undefined
+  ownerPhoto: string | undefined
 }
 
 export function GarageDetailHeader({
   address,
-  owner
+  owner,
+  ownerPhoto
 }: GarageDetailHeaderProps) {
   return (
     <header className="flex flex-col-reverse lg:flex-row lg:justify-between gap-3 items-center">
@@ -17,13 +19,19 @@ export function GarageDetailHeader({
           Información general del garaje seleccionada por el arrendador.
         </p>
       </div>
-      <div className="flex flex-col">
-        <p className="text-base-content/60 text-xs lg:text-md">
-          Publicado por:
-        </p>
-        <p className="font-bold text-md lg:text-lg">
-          {owner ?? 'No encontrado'}
-        </p>
+      <div className="flex items-center gap-2">
+        <img
+          src={ownerPhoto ?? 'https://placehold.co/50x50?text=?'}
+          className="w-10 h-10 rounded-full"
+        />
+        <div>
+          <p className="text-base-content/60 text-xs lg:text-md">
+            Publicado por:
+          </p>
+          <p className="font-bold text-md lg:text-lg">
+            {owner ?? 'No encontrado'}
+          </p>
+        </div>
       </div>
     </header>
   )
