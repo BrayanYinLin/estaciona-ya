@@ -167,4 +167,8 @@ export class GarageServiceImpl implements GarageService {
 
     return data
   }
+
+  async disableGarage(garageId: number): Promise<void> {
+    await this.garageRepository.disableGarage(garageId)
+  }
 }

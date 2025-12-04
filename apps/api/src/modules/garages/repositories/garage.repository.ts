@@ -186,4 +186,7 @@ export class GarageRepositoryImpl implements GarageRepository {
     })
     return garage
   }
+  async disableGarage(garageId: number): Promise<void> {
+    await this.repository.update(garageId, { state: false })
+  }
 }

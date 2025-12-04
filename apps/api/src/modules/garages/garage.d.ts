@@ -69,6 +69,7 @@ export interface GarageRepository {
   findAllByUserId(userId: number, page: number, size: number): Promise<Garage[]>
   findAll(filters: Filters): Promise<Garage[]>
   findGarageById(garageId: number): Promise<Garage | null>
+  disableGarage(garageId: number): Promise<void>
 }
 
 export interface GaragePhotoRepository {
