@@ -1,5 +1,5 @@
 type RequestAlertProps = {
-  status: 'accepted' | 'rejected'
+  status: 'accepted' | 'rejected' | 'info'
   garageName?: string
   rejectionReason?: string
   onViewRequest?: () => void
@@ -14,6 +14,7 @@ export function RequestAlert({
   onClose
 }: RequestAlertProps) {
   const isAccepted = status === 'accepted'
+  const isInfo = status === 'info'
 
   return (
     <div className="fixed bottom-0 left-0 right-0 p-4 md:left-auto md:right-6 md:bottom-6 z-50 w-full md:w-[450px]">
@@ -21,25 +22,37 @@ export function RequestAlert({
         className={`card bg-base-100 shadow-2xl border animate-in slide-in-from-bottom-2 fade-in duration-300 ${
           isAccepted
             ? 'border-success shadow-success/20'
-            : 'border-error shadow-error/20'
+            : isInfo
+              ? 'border-info shadow-info/20'
+              : 'border-error shadow-error/20'
         }`}
       >
         <div className="card-body p-6 gap-2">
           <div className="flex justify-between items-start gap-4">
             <h3
               className={`text-xl font-bold tracking-tight font-mono ${
-                isAccepted ? 'text-success' : 'text-error'
+                isAccepted
+                  ? 'text-success'
+                  : isInfo
+                    ? 'text-info'
+                    : 'text-error'
               }`}
             >
               {isAccepted
                 ? 'Tu solicitud fue aceptada'
-                : 'Tu solicitud fue rechazada'}
+                : isInfo
+                  ? 'Notificación'
+                  : 'Tu solicitud fue rechazada'}
             </h3>
             {onClose && (
               <button
                 onClick={onClose}
                 className={`btn btn-sm btn-circle btn-ghost hover:bg-base-content/10 ${
-                  isAccepted ? 'text-success' : 'text-error'
+                  isAccepted
+                    ? 'text-success animate-blurred-fade-in'
+                    : isInfo
+                      ? 'text-info animate-blurred-fade-in'
+                      : 'text-error animate-blurred-fade-in'
                 }`}
               >
                 ✕
@@ -50,14 +63,16 @@ export function RequestAlert({
           <p className="text-base-content/80 font-medium font-mono text-sm">
             {isAccepted
               ? `Usuario ha aceptado tu solicitud al garage en ${garageName}`
-              : rejectionReason}
+              : isInfo
+                ? 'Tu solicitud fue rechazada'
+                : rejectionReason}
           </p>
 
           {isAccepted && (
             <div className="card-actions justify-end mt-4">
               <button
                 onClick={onViewRequest}
-                className="btn btn-outline btn-success btn-sm gap-2 normal-case font-mono"
+                className="btn btn-outline btn-success btn-sm gap-2 normal-case font-mono animate-blurred-fade-in"
               >
                 Ver solicitud
                 <svg

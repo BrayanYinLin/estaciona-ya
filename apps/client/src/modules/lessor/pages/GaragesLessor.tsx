@@ -2,7 +2,6 @@ import { GarageSpaceCard } from '@lessor/components/GarageSpaceCard'
 import { api } from '@shared/api/api'
 import { GhostIcon } from '@shared/components/GhostIcon'
 import { PaginationButton } from '@shared/components/PaginationButton'
-import { RequestAlert } from '@shared/components/RequestAlert'
 import { UserNavBar } from '@shared/components/UserNavBar'
 import { useUserStore } from '@user/context/user.context'
 import { useEffect, useState } from 'react'
@@ -64,7 +63,6 @@ export function GaragesLessor() {
   return (
     <main>
       <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
-      <RequestAlert status="accepted" />
 
       <section className="flex justify-end px-6 py-2">
         <Link to="/lessor/garages/new" className="btn btn-primary">
