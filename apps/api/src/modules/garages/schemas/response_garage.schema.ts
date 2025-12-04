@@ -53,7 +53,8 @@ export const ResponseGarageSchemaById = z.object({
   user: z.object({
     id: z.number(),
     name: z.string(),
-    email: z.string()
+    email: z.string(),
+    photo: z.string().nullable()
   }),
   location: z.object({
     id: z.number(),

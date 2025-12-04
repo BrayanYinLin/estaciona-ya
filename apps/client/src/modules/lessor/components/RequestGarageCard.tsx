@@ -1,0 +1,192 @@
+type RentalType = 'hour' | 'day' | 'month'
+type RequestStatus = 'pending' | 'approved' | 'rejected'
+
+interface RequestGarageCardProps {
+  tenantName: string
+  tenantAvatar?: string
+  rentalType: RentalType
+  startDate: Date
+  endDate: Date
+  totalPrice: number
+  status: RequestStatus
+  garageName: string
+  garageImage?: string
+  onAccept?: () => void
+  onReject?: () => void
+}
+
+export function RequestGarageCard({
+  tenantName,
+  tenantAvatar,
+  rentalType,
+  startDate,
+  endDate,
+  totalPrice,
+  status,
+  garageName,
+  garageImage,
+  onAccept,
+  onReject
+}: RequestGarageCardProps) {
+  const formatPrice = (amount: number) => {
+    return new Intl.NumberFormat('es-PE', {
+      style: 'currency',
+      currency: 'PEN'
+    }).format(amount)
+  }
+
+  const formatDate = () => {
+    const start = startDate.toLocaleDateString('es-PE', {
+      day: 'numeric',
+      month: 'short'
+    })
+    const end = endDate.toLocaleDateString('es-PE', {
+      day: 'numeric',
+      month: 'short'
+    })
+    const startTime = startDate.toLocaleTimeString('es-PE', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    const endTime = endDate.toLocaleTimeString('es-PE', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+
+    let dateContent
+    if (rentalType === 'hour') {
+      dateContent = (
+        <>
+          <span className="font-bold text-base-content block">{start}</span>
+          <span className="text-xs text-base-content/70 block">
+            {startTime} - {endTime}
+          </span>
+        </>
+      )
+    } else if (rentalType === 'day') {
+      dateContent = (
+        <>
+          <span className="font-bold text-base-content block">
+            {start} - {end}
+          </span>
+          <span className="text-xs text-base-content/70 block">
+            Estadía completa
+          </span>
+        </>
+      )
+    } else {
+      dateContent = (
+        <>
+          <span className="font-bold text-base-content block">
+            {start} - {end}
+          </span>
+          <span className="text-xs text-base-content/70 block">
+            Alquiler Mensual
+          </span>
+        </>
+      )
+    }
+
+    return (
+      <div className="flex flex-col items-center text-center gap-1">
+        <div>{dateContent}</div>
+        <div className="badge badge-success font-mono mt-1">
+          <strong>Total:</strong>
+          {formatPrice(totalPrice)}
+        </div>
+      </div>
+    )
+  }
+  const getStatusBadge = () => {
+    const styles = {
+      pending: 'badge-warning',
+      approved: 'badge-success text-white',
+      rejected: 'badge-error text-white'
+    }
+
+    const labels = {
+      pending: 'Pendiente',
+      approved: 'Aceptado',
+      rejected: 'Rechazado'
+    }
+
+    return (
+      <div className={`badge ${styles[status]} gap-2 font-semibold`}>
+        {labels[status]}
+      </div>
+    )
+  }
+
+  return (
+    <div className="card md:card-side bg-base-100 shadow-lg border border-base-200 min-h-[200px]">
+      <figure className="relative w-full md:w-72 h-64 md:h-auto">
+        {garageImage ? (
+          <img
+            src={garageImage}
+            alt={garageName}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-base-200 text-base-content/50">
+            <span className="text-sm">Sin foto</span>
+          </div>
+        )}
+      </figure>
+
+      <div className="card-body p-6">
+        <div className="flex flex-col md:flex-row justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-4">
+              <div className="avatar placeholder">
+                <div className="bg-gray-700 text-neutral-content rounded-full w-12">
+                  {tenantAvatar ? (
+                    <img src={tenantAvatar} alt={tenantName} />
+                  ) : (
+                    <p className="text-2xl uppercase flex items-center justify-center pt-1">
+                      {tenantName.charAt(0)}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between md:justify-start gap-2">
+                  <h2 className="card-title text-xl">{tenantName}</h2>
+                  <div className="md:hidden scale-90 origin-right">
+                    {getStatusBadge()}
+                  </div>
+                </div>
+                <p className="text-sm text-base-content/70">
+                  Solicita:{' '}
+                  <span className="font-medium text-base-content">
+                    {garageName}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="mt-2 p-3 bg-base-200 rounded-lg w-full md:w-fit md:min-w-[140px] flex justify-center md:block">
+              {formatDate()}
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-between items-end gap-4">
+            <div className="hidden md:block">{getStatusBadge()}</div>
+
+            {status === 'pending' && (
+              <div className="card-actions justify-end mt-auto">
+                <button
+                  className="btn btn-outline btn-error"
+                  onClick={onReject}
+                >
+                  Rechazar
+                </button>
+                <button className="btn btn-primary" onClick={onAccept}>
+                  Aceptar
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -57,6 +57,7 @@ export function GarageDetail() {
         <GarageDetailHeader
           address={garage?.location.address}
           owner={garage?.user.name}
+          ownerPhoto={garage?.user.photo ?? undefined}
         />
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="space-y-6">
