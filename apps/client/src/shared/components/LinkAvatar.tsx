@@ -4,10 +4,11 @@ import { Link } from 'react-router'
 export type AvatarProps = {
   photo: string | null
   className?: HTMLAttributes<HTMLElementType>['className']
+  name?: string
 }
 
-export function LinkAvatar({ photo, className }: AvatarProps) {
-  const placeholder = 'https://placehold.co/150x150'
+export function LinkAvatar({ photo, className, name }: AvatarProps) {
+  const placeholder = 'https://placehold.co/150x150?text=' + (name ?? '')
 
   return (
     <Link to={'/profile'} className="avatar">

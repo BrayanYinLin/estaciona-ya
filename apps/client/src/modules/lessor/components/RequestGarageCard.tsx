@@ -1,30 +1,30 @@
 type RentalType = 'hour' | 'day' | 'month'
 type RequestStatus = 'pending' | 'approved' | 'rejected'
 
-interface RequestGarageCardProps {
-  tenantName: string
-  tenantAvatar?: string
+export interface RequestGarageCardProps {
+  name: string
+  photo?: string
   rentalType: RentalType
   startDate: Date
   endDate: Date
   totalPrice: number
   status: RequestStatus
-  garageName: string
-  garageImage?: string
+  description: string
+  image?: string
   onAccept?: () => void
   onReject?: () => void
 }
 
 export function RequestGarageCard({
-  tenantName,
-  tenantAvatar,
+  name,
+  photo,
   rentalType,
   startDate,
   endDate,
   totalPrice,
   status,
-  garageName,
-  garageImage,
+  description,
+  image,
   onAccept,
   onReject
 }: RequestGarageCardProps) {
@@ -120,10 +120,10 @@ export function RequestGarageCard({
   return (
     <div className="card md:card-side bg-base-100 shadow-lg border border-base-200 min-h-[200px]">
       <figure className="relative w-full md:w-72 h-64 md:h-auto">
-        {garageImage ? (
+        {image ? (
           <img
-            src={garageImage}
-            alt={garageName}
+            src={image}
+            alt={description}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -139,18 +139,18 @@ export function RequestGarageCard({
             <div className="flex items-center gap-4">
               <div className="avatar placeholder">
                 <div className="bg-gray-700 text-neutral-content rounded-full w-12">
-                  {tenantAvatar ? (
-                    <img src={tenantAvatar} alt={tenantName} />
+                  {photo ? (
+                    <img src={photo} alt={name} />
                   ) : (
                     <p className="text-2xl uppercase flex items-center justify-center pt-1">
-                      {tenantName.charAt(0)}
+                      {name.charAt(0)}
                     </p>
                   )}
                 </div>
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between md:justify-start gap-2">
-                  <h2 className="card-title text-xl">{tenantName}</h2>
+                  <h2 className="card-title text-xl">{name}</h2>
                   <div className="md:hidden scale-90 origin-right">
                     {getStatusBadge()}
                   </div>
@@ -158,7 +158,7 @@ export function RequestGarageCard({
                 <p className="text-sm text-base-content/70">
                   Solicita:{' '}
                   <span className="font-medium text-base-content">
-                    {garageName}
+                    {description}
                   </span>
                 </p>
               </div>

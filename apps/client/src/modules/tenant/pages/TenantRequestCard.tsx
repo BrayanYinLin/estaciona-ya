@@ -23,26 +23,35 @@ type TenantRequestCardProps = {
 export function TenantRequestCard({ request }: TenantRequestCardProps) {
   return (
     <>
-      <div className="card bg-base-100 shadow-sm">
-        <figure>
-          <img src={request.garage.photos[0].url} alt="Shoes" />
+      <article className="flex rounded-xl bg-base-100 shadow-sm">
+        <figure className="w-2/6">
+          <img
+            src={request.garage.photos[0].url}
+            alt="Shoes"
+            className="rounded-s-xl"
+          />
         </figure>
-        <div className="card-body">
-          <h2 className="card-title">
-            {request.garage.location.address}
-            {/* <div className="badge badge-secondary">NEW</div> */}
-          </h2>
-          <p>
-            Desde {new Date(request.startDate).toLocaleDateString()} hasta{' '}
-            {new Date(request.endDate).toLocaleDateString()}
-          </p>
-          <div className="card-actions justify-end">
+
+        <section className="w-full p-6 flex flex-col justify-between">
+          <h2 className="card-title">{request.garage.location.address}</h2>
+          <div className="flex justify-between">
+            <p>
+              Desde{' '}
+              <div className="badge badge-accent text-white font-semibold">
+                {new Date(request.startDate).toLocaleDateString()}
+              </div>{' '}
+              hasta{' '}
+              <div className="badge badge-accent text-white font-semibold">
+                {new Date(request.endDate).toLocaleDateString()}
+              </div>
+            </p>
+
             {request.status === 'pending' && (
               <div className="badge badge-soft badge-warning">Pendiente</div>
             )}
           </div>
-        </div>
-      </div>
+        </section>
+      </article>
     </>
   )
 }

@@ -27,9 +27,13 @@ export function RequestsTenant() {
 
   return (
     <main>
-      <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
+      <UserNavBar
+        profilePic={user?.photo ?? null}
+        role={user?.role}
+        initial={user.name![0]}
+      />
       <h1 className="text-xl px-5 font-bold mt-8">Mis Solicitudes</h1>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-12 px-5 pb-50">
+      <section className="flex flex-col gap-8 pt-12 px-5 pb-50">
         {requests.length > 0 ? (
           requests.map((request) => (
             <TenantRequestCard key={request.id} request={request} />

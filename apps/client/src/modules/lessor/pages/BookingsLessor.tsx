@@ -23,7 +23,11 @@ export function BookingsLessor() {
 
   return (
     <main>
-      <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
+      <UserNavBar
+        profilePic={user?.photo ?? null}
+        role={user?.role}
+        initial={user.name![0]}
+      />
     </main>
   )
 }
