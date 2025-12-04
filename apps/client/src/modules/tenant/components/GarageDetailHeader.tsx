@@ -21,7 +21,7 @@ export function GarageDetailHeader({
       </div>
       <div className="flex items-center gap-2">
         <img
-          src={ownerPhoto ?? 'https://placehold.co/50x50?text=?'}
+          src={ownerPhoto ?? 'https://placehold.co/50x50?text=' + owner![0]}
           className="w-10 h-10 rounded-full"
         />
         <div>

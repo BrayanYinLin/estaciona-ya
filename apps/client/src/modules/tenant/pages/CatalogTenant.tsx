@@ -50,7 +50,11 @@ export function CatalogTenant() {
 
   return (
     <main className="w-full min-h-screen bg-base-100">
-      <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
+      <UserNavBar
+        profilePic={user?.photo ?? null}
+        role={user?.role}
+        initial={user.name![0]}
+      />
       <DrawerLayout
         sidebar={
           <FilterSection

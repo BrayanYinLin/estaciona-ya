@@ -9,7 +9,7 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
   ) {}
 
   async findAllByOwner(userId: number): Promise<BookingRequest[]> {
-    const requests = this.bookingRequestRepository.find({
+    const requests = await this.bookingRequestRepository.find({
       where: {
         garage: {
           user: {
@@ -17,10 +17,8 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
           }
         }
       },
-      relations: ['garage', 'user']
+      relations: ['garage', 'user', 'garage.photos']
     })
-
-    console.log('[Repository] ', requests)
 
     return requests
   }

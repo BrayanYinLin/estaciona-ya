@@ -27,7 +27,7 @@ export function ProfileHeader({
     <div className="flex items-center justify-between gap-4 w-full">
       <section className="flex items-center gap-4">
         <img
-          src={profilePic ?? 'https://placehold.co/150x150'}
+          src={profilePic ?? 'https://placehold.co/150x150?text=' + name[0]}
           alt=""
           className="rounded-full h-16 w-16 object-cover"
         />

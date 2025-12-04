@@ -52,7 +52,11 @@ export function GarageDetail() {
   }
   return (
     <main className="min-h-screen w-full bg-base-200">
-      <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
+      <UserNavBar
+        profilePic={user?.photo ?? null}
+        role={user?.role}
+        initial={user.name![0]}
+      />
       <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 lg:gap-10 lg:py-10">
         <GarageDetailHeader
           address={garage?.location.address}
