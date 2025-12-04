@@ -42,4 +42,10 @@ BookingRequestrouter.get(
   bookingRequestController.findAllByUserId.bind(bookingRequestController)
 )
 
+BookingRequestrouter.get(
+  '/owner',
+  inyectUserFromToken(),
+  bookingRequestController.findAllByOwner.bind(bookingRequestController)
+)
+
 export default BookingRequestrouter

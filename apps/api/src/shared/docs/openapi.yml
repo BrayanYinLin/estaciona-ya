@@ -440,6 +440,24 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
+  /api/booking-requests/owner:
+    get:
+      summary: Obtiene todas las solicitudes de reserva de un arrendador
+      tags:
+        - Booking Requests
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Solicitudes de reserva obtenidas correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingRequestResponse'
+        '401':
+          description: Unauthorized
 
 components:
   securitySchemes:
