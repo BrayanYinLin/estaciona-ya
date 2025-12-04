@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@plugin "@midudev/tailwind-animations";
 
 @theme {
     --shadow-custom: 0 0 20px oklch(91.7% 0.08 205.041);

@@ -1,17 +1,62 @@
 import type { UserRole } from '@user/context/user.context'
 import { MenuIcon } from './MenuIcon'
 import { Link } from 'react-router'
+import { NotificationIcon } from './NotificationIcon'
+import { useSocket } from '@shared/hooks/useSocket'
+import { useEffect, useState } from 'react'
 
 export type NavbarLinksProps = {
   role: UserRole
 }
 
+type NotificationData = {
+  message: string
+  type: 'accepted' | 'rejected' | 'info'
+}
+
 export function NavBarLinks({ role }: NavbarLinksProps) {
+  const [hasNotification, setHasNotification] = useState(false)
+  const [notifications, setNotifications] = useState<NotificationData[]>([])
+  const socket = useSocket()
+
+  useEffect(() => {
+    const handleNotification = (data: NotificationData) => {
+      setHasNotification(true)
+      setNotifications((prev) => [...prev, data])
+    }
+
+    socket.on('notify-user', handleNotification)
+
+    return () => {
+      socket.off('notify-user', handleNotification)
+    }
+  }, [socket])
+
+  // useEffect(() => {
+  //   if (!socket) return
+
+  //   const handleWelcome = (data: unknown) => {
+  //     console.log(data)
+  //   }
+
+  //   const handleNotifyUser = (data: AlertData) => {
+  //     console.log(data)
+  //   }
+
+  //   socket.on('welcome', handleWelcome)
+  //   socket.on('notify-user', handleNotifyUser)
+
+  //   return () => {
+  //     socket.off('welcome', handleWelcome)
+  //     socket.off('notify-user', handleNotifyUser)
+  //   }
+  // }, [socket])
+
   if (role.name === 'lessor') {
     return (
       <>
         <nav className="hidden md:block flex-none">
-          <ul className="menu menu-horizontal px-1 gap-2">
+          <ul className="menu menu-horizontal px-1 gap-2 items-center">
             <li>
               <Link to="/lessor/requests" className="px-4">
                 Solicitudes
@@ -27,6 +72,30 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
                 Espacios
               </Link>
             </li>
+            <div className="indicator hover:bg-transparent active:bg-transparent focus:bg-transparent">
+              {hasNotification && (
+                <span className="indicator-item status status-error" />
+              )}
+              <div className="dropdown dropdown-bottom dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-sm btn-ghost"
+                >
+                  <NotificationIcon color="base-300" />
+                </div>
+                <ul
+                  tabIndex={-1}
+                  className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+                >
+                  {notifications.map((notification) => (
+                    <li key={notification.message}>
+                      <p>{notification.message}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </ul>
         </nav>
         <nav className="navbar-end md:hidden">

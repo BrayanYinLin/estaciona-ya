@@ -1,6 +1,6 @@
 import { RequestGarageCard } from '@lessor/components/RequestGarageCard'
+// import { RequestAlert } from '@shared/components/RequestAlert'
 import { UserNavBar } from '@shared/components/UserNavBar'
-import { useSocket } from '@shared/hooks/useSocket'
 import { useUserStore } from '@user/context/user.context'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
@@ -8,17 +8,10 @@ import { useNavigate } from 'react-router'
 export function RequestsLessor() {
   const { user, loading, error, recoverUser } = useUserStore()
   const navigate = useNavigate()
-  const socket = useSocket()
+  // const [alertsData, setAlertsData] = useState<AlertData[]>([])
 
   useEffect(() => {
     recoverUser()
-    socket?.on('welcome', (data) => {
-      console.log(data)
-    })
-
-    socket?.on('notify-user', (data) => {
-      console.log(data)
-    })
   }, [])
 
   useEffect(() => {
@@ -35,6 +28,16 @@ export function RequestsLessor() {
     <main>
       <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
       <section className="flex flex-col gap-5 mx-4 lg:mx-6">
+        {/* {alertsData.map((alert) => (
+          <RequestAlert
+            key={alert.message}
+            status={alert.type}
+            garageName="Cochera en Miraflores"
+            rejectionReason="El sistema ha rechazado tu solicitud por conflicto con una nueva reserva"
+            onViewRequest={() => console.log('Ver solicitud')}
+            onClose={() => console.log('Cerrar alerta')}
+          />
+        ))} */}
         <RequestGarageCard
           tenantName="Juan Perez"
           rentalType="day"
