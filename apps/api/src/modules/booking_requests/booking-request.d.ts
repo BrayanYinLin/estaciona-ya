@@ -10,11 +10,13 @@ export interface BookingRequestRepository {
     endDate: Date
   ): Promise<BookingRequest[]>
   findAllByUserId(userId: number): Promise<BookingRequest[]>
+  findAllByOwner(userId: number): Promise<BookingRequest[]>
 }
 
 export interface BookingRequestService {
   createBookingRequest(dto: CreateBookingRequestDto): Promise<BookingRequest>
   findAllByUserId(userId: number): Promise<ResponseBookingRequest[]>
+  findAllByOwner(userId: number): Promise<BookingRequest[]>
 }
 
 export interface BookingRequestController {
@@ -24,6 +26,11 @@ export interface BookingRequestController {
     next: NextFunction
   ): Promise<Response | void>
   findAllByUserId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  findAllByOwner(
     req: Request,
     res: Response,
     next: NextFunction

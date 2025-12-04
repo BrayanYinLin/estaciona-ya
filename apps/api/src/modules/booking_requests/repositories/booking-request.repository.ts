@@ -8,6 +8,23 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
     private readonly bookingRequestRepository: Repository<BookingRequest>
   ) {}
 
+  async findAllByOwner(userId: number): Promise<BookingRequest[]> {
+    const requests = this.bookingRequestRepository.find({
+      where: {
+        garage: {
+          user: {
+            id: userId
+          }
+        }
+      },
+      relations: ['garage', 'user']
+    })
+
+    console.log('[Repository] ', requests)
+
+    return requests
+  }
+
   async findAllByUserId(userId: number): Promise<BookingRequest[]> {
     return this.bookingRequestRepository.find({
       where: {
