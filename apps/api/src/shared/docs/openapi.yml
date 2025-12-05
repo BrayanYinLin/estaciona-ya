@@ -416,6 +416,33 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
+  /api/garage/{id}:
+    delete:
+      summary: Deshabilita un estacionamiento
+      tags:
+        - Garage
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del estacionamiento a deshabilitar
+      responses:
+        '200':
+          description: Estacionamiento deshabilitado correctamente
+        '400':
+          description: Solicitud incorrecta
+        '401':
+          description: No autorizado
+        '403':
+          description: Prohibido - El usuario no es propietario del estacionamiento
+        '404':
+          description: Estacionamiento no encontrado
+        '409':
+          description: Conflicto - El estacionamiento tiene reservas pendientes
   /api/booking-requests:
     post:
       summary: Crea una nueva solicitud de reserva

@@ -4,6 +4,22 @@ import { Request, Response, NextFunction } from 'express'
 
 export class GarageControllerImpl implements GarageController {
   constructor(private readonly service: GarageService) {}
+
+  async disableGarage(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const { id } = req.params
+      await this.service.disableGarage(Number(id), req.body.user.id)
+
+      return res.status(200).end()
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async findAll(
     req: Request,
     res: Response,

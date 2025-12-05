@@ -1,5 +1,8 @@
-import { BookingRequest } from '@booking_requests/entities/booking-requests.entity'
-import { Repository, MoreThan, LessThan, In } from 'typeorm'
+import {
+  BookingRequest,
+  Status
+} from '@booking_requests/entities/booking-requests.entity'
+import { Repository, MoreThan, LessThan, In, MoreThanOrEqual } from 'typeorm'
 import { CreateBookingRequestDto } from '../schemas/create_booking_request.shcema'
 import { BookingRequestRepository } from '@booking_requests/booking-request'
 
@@ -7,6 +10,29 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
   constructor(
     private readonly bookingRequestRepository: Repository<BookingRequest>
   ) {}
+
+  async updateAllByEndDate(
+    garageId: number,
+    endDate: Date,
+    status: Status
+  ): Promise<BookingRequest[]> {
+    const requests = await this.bookingRequestRepository.find({
+      where: [
+        { startDate: MoreThanOrEqual(endDate), garage: { id: garageId } },
+        { endDate: MoreThanOrEqual(endDate), garage: { id: garageId } }
+      ],
+      relations: {
+        user: true
+      }
+    })
+
+    const rejected = requests.map((request) => ({
+      ...request,
+      status: status
+    }))
+
+    return await this.bookingRequestRepository.save(rejected)
+  }
 
   async findAllByOwner(userId: number): Promise<BookingRequest[]> {
     const requests = await this.bookingRequestRepository.find({

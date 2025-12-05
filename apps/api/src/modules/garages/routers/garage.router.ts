@@ -1,3 +1,7 @@
+import { BookingRequest } from '@booking_requests/entities/booking-requests.entity'
+import { BookingRequestRepositoryImpl } from '@booking_requests/repositories/booking-request.repository'
+import { BookingRepositoryImpl } from '@bookings/booking.repository'
+import { Booking } from '@bookings/entities/booking.entity'
 import { GarageControllerImpl } from '@garages/controllers/garage.controller'
 import { GaragePhoto } from '@garages/entities/garage-photo.entity'
 import { Garage } from '@garages/entities/garage.entity'
@@ -29,11 +33,22 @@ const fileStorageService = new LocalFileStorageService()
 const garagePhotoRepository = new GaragePhotoRepositoryImpl(
   AppDataSource.getRepository(GaragePhoto)
 )
+
+const bookingRepository = new BookingRepositoryImpl(
+  AppDataSource.getRepository(Booking)
+)
+
+const bookingRequestRepository = new BookingRequestRepositoryImpl(
+  AppDataSource.getRepository(BookingRequest)
+)
+
 const service = new GarageServiceImpl(
   garageRepository,
   locationRepository,
   fileStorageService,
-  garagePhotoRepository
+  garagePhotoRepository,
+  bookingRepository,
+  bookingRequestRepository
 )
 
 const controller = new GarageControllerImpl(service)
@@ -56,4 +71,11 @@ garageRouter.post(
   controller.saveGarage.bind(controller)
 )
 garageRouter.get('/', controller.findAll.bind(controller))
+
+garageRouter.delete(
+  '/:id',
+  inyectUserFromToken(),
+  controller.disableGarage.bind(controller)
+)
+
 export { garageRouter }

@@ -1,4 +1,4 @@
-import { BookingRequest } from './entities/booking-requests.entity'
+import { BookingRequest, Status } from './entities/booking-requests.entity'
 import { CreateBookingRequestDto } from './schemas/create_booking_request.schema'
 import { Request, Response } from 'express'
 
@@ -11,6 +11,11 @@ export interface BookingRequestRepository {
   ): Promise<BookingRequest[]>
   findAllByUserId(userId: number): Promise<BookingRequest[]>
   findAllByOwner(userId: number): Promise<BookingRequest[]>
+  updateAllByEndDate(
+    garageId: number,
+    endDate: Date,
+    status: Status
+  ): Promise<BookingRequest[]>
 }
 
 export interface BookingRequestService {
