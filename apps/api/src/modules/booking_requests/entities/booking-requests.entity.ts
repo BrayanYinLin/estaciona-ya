@@ -10,6 +10,8 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 
+export type Status = 'pending' | 'accepted' | 'rejected'
+
 @Entity('tb_booking_requests')
 export class BookingRequest {
   @PrimaryGeneratedColumn('increment', { name: 'booking_request_id' })

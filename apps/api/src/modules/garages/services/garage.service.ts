@@ -1,3 +1,5 @@
+import { BookingRequestRepository } from '@booking_requests/booking-request'
+import { BookingRepository } from '@bookings/booking'
 import {
   Filters,
   GaragePhotoRepository,
@@ -14,6 +16,7 @@ import {
 import { LocationRepository } from '@locations/location'
 import { ENDPOINTS } from '@shared/constants/endpoints'
 import { FileStorageService } from '@shared/services/file-storage'
+import { notificationEmitter, UserTarget } from '@shared/sockets/notify_event'
 import { DomainError } from '@shared/utils/error'
 import { randomUUID } from 'node:crypto'
 import { prettifyError } from 'zod'
@@ -23,7 +26,9 @@ export class GarageServiceImpl implements GarageService {
     private readonly garageRepository: GarageRepository,
     private readonly locationRepository: LocationRepository,
     private readonly fileStorageService: FileStorageService,
-    private readonly garagePhotoRepository: GaragePhotoRepository
+    private readonly garagePhotoRepository: GaragePhotoRepository,
+    private readonly bookingRepository: BookingRepository,
+    private readonly bookingRequestRepository: BookingRequestRepository
   ) {}
 
   async findAll({
@@ -168,7 +173,50 @@ export class GarageServiceImpl implements GarageService {
     return data
   }
 
-  async disableGarage(garageId: number): Promise<void> {
+  async disableGarage(garageId: number, userId: number): Promise<void> {
+    const garage = await this.garageRepository.findGarageById(garageId)
+
+    if (!garage) {
+      throw new DomainError({
+        code: 'ENTITY_NOT_FOUND',
+        message: 'Estacionamiento no encontrado.'
+      })
+    }
+
+    if (garage.user.id !== userId) {
+      throw new DomainError({
+        code: 'CONFLICT',
+        message: 'Este estacionamiento no te pertenece.'
+      })
+    }
+
+    const bookings = await this.bookingRepository.findAllByGarageIdAndMinDate(
+      garageId,
+      new Date(Date.now())
+    )
+
+    if (bookings.length > 0) {
+      throw new DomainError({
+        code: 'CONFLICT',
+        message:
+          'No puedes deshabilitar este estacionamiento. Tienes reservas pendientes.'
+      })
+    }
+
+    const updated = await this.bookingRequestRepository.updateAllByEndDate(
+      garageId,
+      new Date(Date.now()),
+      'rejected'
+    )
+
+    const reasonMapped: UserTarget[] = updated.map((request) => ({
+      id: String(request.user.id),
+      message:
+        'Solicitud rechazada. El arrendador ha deshabilitado su estacionamiento.'
+    }))
+
+    notificationEmitter.emit('notify', reasonMapped)
+
     await this.garageRepository.disableGarage(garageId)
   }
 }

@@ -87,6 +87,7 @@ export interface GarageService {
   findPhoto(id: string): Promise<string>
   findAll(filters: Filters): Promise<ResponseGarageDto[]>
   findGarageById(garageId: number): Promise<ResponseGarageByIdDto>
+  disableGarage(garageId: number, userId: number): Promise<void>
 }
 
 export interface GarageController {
@@ -106,6 +107,11 @@ export interface GarageController {
     next: NextFunction
   ): Promise<Response | void>
   findAll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  disableGarage(
     req: Request,
     res: Response,
     next: NextFunction
