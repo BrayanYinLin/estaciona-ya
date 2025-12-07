@@ -3,7 +3,6 @@ import {
   Status
 } from '@booking_requests/entities/booking-requests.entity'
 import { Repository, MoreThan, LessThan, In, MoreThanOrEqual } from 'typeorm'
-import { CreateBookingRequestDto } from '../schemas/create_booking_request.shcema'
 import { BookingRequestRepository } from '@booking_requests/booking-request'
 
 export class BookingRequestRepositoryImpl implements BookingRequestRepository {
@@ -61,15 +60,19 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
   }
 
   async createBookingRequest(
-    data: CreateBookingRequestDto
+    data: Partial<BookingRequest>
   ): Promise<BookingRequest> {
-    const bookingRequest = this.bookingRequestRepository.create({
-      garage: { id: data.garageId },
-      user: { id: data.tenantId },
-      startDate: data.startDate,
-      endDate: data.endDate,
-      status: 'pending'
-    })
+    // const bookingRequest = this.bookingRequestRepository.create({
+    //   garage: { id: data.garage!.id },
+    //   user: { id: data.user!.id },
+    //   startDate: data.startDate,
+    //   endDate: data.endDate,
+    //   cost: 0,
+    //   status: 'pending'
+    // })
+
+    // return await this.bookingRequestRepository.save(bookingRequest)
+    const bookingRequest = this.bookingRequestRepository.create(data)
     return await this.bookingRequestRepository.save(bookingRequest)
   }
 

@@ -26,6 +26,17 @@ export class BookingRequest {
   garage!: Garage
 
   @Column({
+    type: 'decimal',
+    name: 'cost_booking',
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => Number(value)
+    },
+    default: 0
+  })
+  cost!: number
+
+  @Column({
     type: 'datetime',
     name: 'start_dt',
     default: () => 'CURRENT_TIMESTAMP'

@@ -3,7 +3,7 @@ import { CreateBookingRequestDto } from './schemas/create_booking_request.schema
 import { Request, Response } from 'express'
 
 export interface BookingRequestRepository {
-  createBookingRequest(data: CreateBookingRequestDto): Promise<BookingRequest>
+  createBookingRequest(data: Partial<BookingRequest>): Promise<BookingRequest>
   findConlictingBookingRequests(
     garageId: number,
     startDate: Date,

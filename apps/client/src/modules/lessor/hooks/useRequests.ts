@@ -21,6 +21,7 @@ export interface Request {
     restrictions: string
     state: boolean
   }
+  cost: number
   startDate: string
   endDate: string
   status: 'pending' | 'approved' | 'rejected'

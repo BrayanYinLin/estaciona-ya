@@ -39,13 +39,13 @@ export function RequestsLessor() {
         initial={user.name![0]}
       />
       <section className="flex flex-col gap-5 mx-4 my-6 lg:mx-6">
-        {requests.map(({ user, startDate, endDate, status, garage }) => (
+        {requests.map(({ user, startDate, endDate, status, garage, cost }) => (
           <RequestGarageCard
             name={user.name}
             rentalType="day"
             startDate={new Date(startDate)}
             endDate={new Date(endDate)}
-            totalPrice={45.0}
+            totalPrice={cost}
             status={status}
             description={garage.description}
             image={garage.photos.length > 0 ? garage.photos[0].url : ''}

@@ -3,16 +3,18 @@ import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { Repository } from 'typeorm'
 import { User } from '@users/entities/user.entity'
 import { Garage } from '@garages/entities/garage.entity'
-import { CreateBookingRequestDto } from '../schemas/create_booking_request.shcema'
+import { CreateBookingRequestDto } from '../schemas/create_booking_request.schema'
 import { BookingRequestRepositoryImpl } from '../repositories/booking-request.repository'
 import { BookingRequestService } from '../booking-request'
-import { BookingRequest } from '../entities/booking-requests.entity'
+import { BookingRequest, Status } from '../entities/booking-requests.entity'
 import { prettifyError } from 'node_modules/zod/v4/core/errors'
 import {
   ResponseBookinRequest,
   ResponseBookingRequest
 } from '@booking_requests/schemas/response.schema'
 import { notificationEmitter } from '@shared/sockets/notify_event'
+import { getDiffTime } from '@shared/utils/get_diff_time'
+import { RENT_MODES } from '@shared/constants/rent_modes'
 
 export class BookingRequestServiceImpl implements BookingRequestService {
   constructor(
@@ -71,8 +73,9 @@ export class BookingRequestServiceImpl implements BookingRequestService {
 
     const garage = await this.garageRepository.findOne({
       where: { id: garageId },
-      relations: ['user']
+      relations: ['user', 'rentMode']
     })
+
     if (!garage) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
@@ -94,8 +97,29 @@ export class BookingRequestServiceImpl implements BookingRequestService {
       })
     }
 
+    const diff = getDiffTime(new Date(startDate), new Date(endDate))
+
+    let cost = 0
+
+    if (garage.rentMode.mode_name === RENT_MODES.DIARIO) {
+      cost = diff.days * garage.price
+    } else if (garage.rentMode.mode_name === RENT_MODES.HORA) {
+      cost = diff.hours * garage.price
+    } else {
+      cost = diff.months * garage.price
+    }
+
+    const bookingRequest = {
+      garage: { id: garage.id } as Garage,
+      user: { id: user.id } as User,
+      startDate,
+      endDate,
+      cost,
+      status: 'pending' as Status
+    }
+
     const newBookingRequest =
-      await this.bookingRequestRepository.createBookingRequest(dto)
+      await this.bookingRequestRepository.createBookingRequest(bookingRequest)
 
     notificationEmitter.emit('notify', [
       {
