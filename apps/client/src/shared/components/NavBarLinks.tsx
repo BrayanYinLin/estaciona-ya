@@ -25,32 +25,12 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
       setNotifications((prev) => [...prev, data])
     }
 
-    socket.on('notify-user', handleNotification)
+    socket.on('notify:user', handleNotification)
 
     return () => {
-      socket.off('notify-user', handleNotification)
+      socket.off('notify:user', handleNotification)
     }
   }, [socket])
-
-  // useEffect(() => {
-  //   if (!socket) return
-
-  //   const handleWelcome = (data: unknown) => {
-  //     console.log(data)
-  //   }
-
-  //   const handleNotifyUser = (data: AlertData) => {
-  //     console.log(data)
-  //   }
-
-  //   socket.on('welcome', handleWelcome)
-  //   socket.on('notify-user', handleNotifyUser)
-
-  //   return () => {
-  //     socket.off('welcome', handleWelcome)
-  //     socket.off('notify-user', handleNotifyUser)
-  //   }
-  // }, [socket])
 
   if (role.name === 'lessor') {
     return (
@@ -77,11 +57,7 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
                 <span className="indicator-item status status-error" />
               )}
               <div className="dropdown dropdown-bottom dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-sm btn-ghost"
-                >
+                <div tabIndex={0} role="button" className="cursor-pointer px-3">
                   <NotificationIcon color="base-300" />
                 </div>
                 <ul
@@ -90,7 +66,9 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
                 >
                   {notifications.map((notification) => (
                     <li key={notification.message}>
-                      <p>{notification.message}</p>
+                      <Link to="/lessor/requests" className="px-4">
+                        {notification.message}
+                      </Link>
                     </li>
                   ))}
                 </ul>

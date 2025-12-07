@@ -100,7 +100,10 @@ export class BookingRequestServiceImpl implements BookingRequestService {
     notificationEmitter.emit('notify', [
       {
         id: garage.user.id,
-        message: 'Tienes una solicitud pendiente'
+        message: `${user.name} ha solicitado un estacionamiento.`,
+        garage: {
+          id: garage.id
+        }
       }
     ])
 

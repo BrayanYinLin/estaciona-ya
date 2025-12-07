@@ -1,6 +1,6 @@
 import { socketAuth } from '@shared/middlewares/socket_auth.middleware'
 import { Server } from 'socket.io'
-import { notificationEmitter, UserTarget } from './notify_event'
+import { notificationEmitter, NotificationPayload } from './notify_event'
 import { socketStore } from '@shared/database/socket_store.inmemory'
 
 type IO = Server
@@ -8,14 +8,17 @@ type IO = Server
 export const socketManager = (io: IO) => {
   io.use(socketAuth())
 
-  const emitToUsers = (users: UserTarget[]) => {
-    for (const user of users) {
-      const sockets = socketStore.get(user.id)
+  const emitToUsers = (payloads: NotificationPayload[]) => {
+    for (const payload of payloads) {
+      const sockets = socketStore.get(payload.id)
 
       console.log(socketStore.debug())
 
       sockets.forEach((socket) =>
-        socket.emit('notify-user', { message: user.message })
+        socket.emit('notify:user', {
+          message: payload.message,
+          garage: payload.garage
+        })
       )
     }
   }

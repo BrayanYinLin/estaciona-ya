@@ -16,7 +16,7 @@ import {
 import { LocationRepository } from '@locations/location'
 import { ENDPOINTS } from '@shared/constants/endpoints'
 import { FileStorageService } from '@shared/services/file-storage'
-import { notificationEmitter, UserTarget } from '@shared/sockets/notify_event'
+import { notificationEmitter, NotificationPayload } from '@shared/sockets/notify_event'
 import { DomainError } from '@shared/utils/error'
 import { randomUUID } from 'node:crypto'
 import { prettifyError } from 'zod'
@@ -209,7 +209,7 @@ export class GarageServiceImpl implements GarageService {
       'rejected'
     )
 
-    const reasonMapped: UserTarget[] = updated.map((request) => ({
+    const reasonMapped: NotificationPayload[] = updated.map((request) => ({
       id: String(request.user.id),
       message:
         'Solicitud rechazada. El arrendador ha deshabilitado su estacionamiento.'

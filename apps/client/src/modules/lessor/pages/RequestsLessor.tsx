@@ -14,10 +14,10 @@ export function RequestsLessor() {
 
   useEffect(() => {
     recoverUser()
-    socket?.on('notify-user', getRequests)
+    socket?.on('notify:user', getRequests)
 
     return () => {
-      socket.off('notify-user', getRequests)
+      socket.off('notify:user', getRequests)
     }
   }, [])
 
