@@ -485,6 +485,37 @@ paths:
                   $ref: '#/components/schemas/BookingRequestResponse'
         '401':
           description: Unauthorized
+  /api/booking:
+    get:
+      summary: Obtiene todas las reservas de un arrendador
+      tags:
+        - Booking
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Reservas obtenidas correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingResponse'
+        '401':
+          description: Unauthorized
 
 components:
   securitySchemes:
@@ -494,6 +525,37 @@ components:
       bearerFormat: JWT
 
   schemas:
+    BookingResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        garage:
+          $ref: '#/components/schemas/GarageResponse'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - unpaid
+            - cancelled
+            - paid
+            - completed
+            - expired
+        total:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     BookingRequestResponse:
       type: object
       properties:
