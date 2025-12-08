@@ -74,6 +74,18 @@ export class BookingRequestServiceImpl implements BookingRequestService {
             'Tu solicitud fue rechazada por conflicto con una nueva reserva.'
         }))
       )
+
+      await this.bookingRepository.create({
+        user: {
+          id: bookingRequest.user.id
+        } as User,
+        garage: {
+          id: bookingRequest.garage.id
+        } as Garage,
+        startDate: bookingRequest.startDate,
+        endDate: bookingRequest.endDate,
+        total: bookingRequest.cost
+      })
     }
   }
 

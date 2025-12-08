@@ -485,6 +485,48 @@ paths:
                   $ref: '#/components/schemas/BookingRequestResponse'
         '401':
           description: Unauthorized
+  /api/booking-requests/{id}:
+    patch:
+      summary: Actualiza el estado de una solicitud de reserva
+      tags:
+        - Booking Requests
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la solicitud de reserva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - pending
+                    - accepted
+                    - rejected
+              required:
+                - status
+      responses:
+        '200':
+          description: Estado de la solicitud de reserva actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingRequestResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Solicitud de reserva no encontrada
   /api/booking:
     get:
       summary: Obtiene todas las reservas de un arrendador

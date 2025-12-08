@@ -21,6 +21,7 @@ export interface BookingRepository {
     page: number,
     size: number
   ): Promise<Booking[]>
+  create(booking: Partial<Booking>): Promise<void>
 }
 
 export interface BookingService {

@@ -1,5 +1,5 @@
 import { LessThan, MoreThan, MoreThanOrEqual, Repository } from 'typeorm'
-import { Booking } from './entities/booking.entity'
+import { Booking, BookingStatus } from './entities/booking.entity'
 import { BookingRepository } from './booking'
 
 export class BookingRepositoryImpl implements BookingRepository {
@@ -74,6 +74,21 @@ export class BookingRepositoryImpl implements BookingRepository {
         startDate: LessThan(endDate),
         endDate: MoreThan(startDate)
       }
+    })
+  }
+
+  async create(booking: Partial<Booking>): Promise<void> {
+    await this.repository.save({
+      user: {
+        id: booking.user!.id
+      },
+      garage: {
+        id: booking.garage!.id
+      },
+      startDate: booking.createdAt,
+      endDate: booking.endDate,
+      status: BookingStatus.PENDING_PAYMENT,
+      total: booking.total
     })
   }
 }
