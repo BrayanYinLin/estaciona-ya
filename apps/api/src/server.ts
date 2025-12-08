@@ -20,6 +20,7 @@ import BookingRequestrouter from '@booking_requests/routers/booking-request.rout
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
 import { socketManager } from '@shared/sockets/manager'
+import { bookingRouter } from '@bookings/booking.router'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -43,6 +44,7 @@ app.use(ENDPOINTS.LOCATION, locationRouter)
 app.use(ENDPOINTS.RENT_MODE, rentModeRouter)
 app.use(ENDPOINTS.GARAGES, garageRouter)
 app.use(ENDPOINTS.BOOKING_REQUESTS, BookingRequestrouter)
+app.use(ENDPOINTS.BOOKING, bookingRouter)
 
 app.use(errorMiddleware)
 
