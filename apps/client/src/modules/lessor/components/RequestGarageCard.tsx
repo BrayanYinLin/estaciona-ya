@@ -57,6 +57,7 @@ export function RequestGarageCard({
     })
 
     let dateContent
+
     if (rentalType === 'hour') {
       dateContent = (
         <>
@@ -67,26 +68,17 @@ export function RequestGarageCard({
         </>
       )
     } else if (rentalType === 'day') {
+      const isSameDay = start === end
       dateContent = (
-        <>
-          <span className="font-bold text-base-content block">
-            {start} - {end}
-          </span>
-          <span className="text-xs text-base-content/70 block">
-            Estadía completa
-          </span>
-        </>
+        <span className="font-bold text-base-content block">
+          {isSameDay ? start : `${start} - ${end}`}
+        </span>
       )
     } else {
       dateContent = (
-        <>
-          <span className="font-bold text-base-content block">
-            {start} - {end}
-          </span>
-          <span className="text-xs text-base-content/70 block">
-            Alquiler Mensual
-          </span>
-        </>
+        <span className="font-bold text-base-content block">
+          {start} - {end}
+        </span>
       )
     }
 

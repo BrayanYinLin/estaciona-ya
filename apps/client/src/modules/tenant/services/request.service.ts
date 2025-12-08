@@ -1,5 +1,5 @@
 import { api } from '@shared/api/api'
-import type { RangeDate } from '@tenant/pages/GarageDetail'
+import type { RangeDate } from '@tenant/types'
 
 export type CreateBookingRequest = {
   range: RangeDate
@@ -10,16 +10,12 @@ const createBookingRequest = async ({
   range,
   garageId
 }: CreateBookingRequest) => {
-  try {
-    const { data } = await api.post('/booking-requests', {
-      ...range,
-      garageId
-    })
+  const { data } = await api.post('/booking-requests', {
+    ...range,
+    garageId
+  })
 
-    return data
-  } catch (e) {
-    console.error((e as Error).message)
-  }
+  return data
 }
 
 const getBookingRequestsByUser = async () => {

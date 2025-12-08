@@ -16,6 +16,7 @@ export function NewGarageInfo() {
           labelContent="Precio"
           name="price"
           placeholder="Ingresar el precio de alquiler"
+          isRequired={true}
         />
 
         <InputTextArea
@@ -23,6 +24,7 @@ export function NewGarageInfo() {
           name="description"
           placeholder="Describe tu estacionamiento"
           inputClassName="w-full"
+          isRequired={true}
         />
 
         <InputTextArea
@@ -30,6 +32,7 @@ export function NewGarageInfo() {
           name="restrictions"
           placeholder="Ingresa todas las restricciones de tu estacionamiento"
           inputClassName="w-full"
+          isRequired={true}
         />
 
         <SelectRentMode
@@ -37,6 +40,7 @@ export function NewGarageInfo() {
           name="rentMode"
           options={rentModes}
           defaultValue="Selecciona una modalidad"
+          required={true}
         />
         <NewGarageCheckbox />
         <button className="btn btn-primary mt-4 hidden lg:block" type="submit">

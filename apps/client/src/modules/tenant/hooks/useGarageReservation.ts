@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router'
 import { BookingRequestService } from '@tenant/services/request.service'
 import { useBookingRequestsStore } from '@tenant/contexts/booking_requests.store'
@@ -16,6 +17,13 @@ export function useGarageReservation(
     startDate: null,
     endDate: null
   })
+  const [requestError, setRequestError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (requestError) {
+      setRequestError(null)
+    }
+  }, [rangeDate])
 
   const rentMode = useMemo(() => {
     return garage?.rentMode.mode_name.toLowerCase() || 'dia'
@@ -34,7 +42,7 @@ export function useGarageReservation(
     if (rentMode === 'hora') {
       quantity = Math.ceil(diffTime / (1000 * 60 * 60))
     } else if (rentMode === 'dia') {
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
       quantity = diffDays + 1
     } else if (rentMode === 'mes') {
       quantity =
@@ -49,16 +57,30 @@ export function useGarageReservation(
   }, [rangeDate, garage, rentMode])
 
   const handleRequest = async () => {
+    setRequestError(null)
     if (!rangeDate.startDate || !rangeDate.endDate) return
 
-    await BookingRequestService.createBookingRequest({
-      range: rangeDate,
-      garageId: garageId
-    })
+    try {
+      await BookingRequestService.createBookingRequest({
+        range: rangeDate,
+        garageId: garageId
+      })
 
-    await getAllRequests()
+      await getAllRequests()
+      navigate('/tenant/requests')
+    } catch (e) {
+      const error = e as AxiosError<{ message: string }>
 
-    navigate('/tenant/requests')
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setRequestError(error.response.data.message)
+      } else {
+        setRequestError('No se pudo crear la solicitud. Intenta más tarde.')
+      }
+    }
   }
 
   return {
@@ -67,6 +89,7 @@ export function useGarageReservation(
     rentMode,
     quantity,
     totalCost,
-    handleRequest
+    handleRequest,
+    requestError
   }
 }

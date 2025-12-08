@@ -15,7 +15,8 @@ export function SelectRentMode({
   name,
   defaultValue,
   options,
-  onChange
+  onChange,
+  ...props
 }: SelectProps) {
   return (
     <>
@@ -26,6 +27,7 @@ export function SelectRentMode({
           name={name}
           className="select w-full"
           onChange={onChange}
+          {...props}
         >
           <option disabled={true} value={defaultValue}>
             {defaultValue}

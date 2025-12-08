@@ -1,5 +1,6 @@
 import { GarageSpaceCard } from '@lessor/components/GarageSpaceCard'
 import { api } from '@shared/api/api'
+import { ErrorAlert } from '@shared/components/ErrorAlert'
 import { GhostIcon } from '@shared/components/GhostIcon'
 import { PaginationButton } from '@shared/components/PaginationButton'
 import { UserNavBar } from '@shared/components/UserNavBar'
@@ -38,12 +39,35 @@ export function GaragesLessor() {
   const { user, loading, error, recoverUser } = useUserStore()
   const [garages, setGarages] = useState<Garage[]>([])
   const [page, setPage] = useState<number>(1)
+  const [fetchError, setFetchError] = useState<string | null>(null)
   const navigate = useNavigate()
 
   const garagesData = async (page: number) => {
-    const res = await api.get<Garage[]>(`garage/me?page=${page}&size=10`)
-    setGarages(res.data ?? [])
-    console.log(res.data)
+    try {
+      setFetchError(null)
+      const res = await api.get<Garage[]>(`garage/me?page=${page}&size=10`)
+      setGarages(res.data ?? [])
+    } catch (e) {
+      setFetchError(
+        'No se pudieron cargar tus garajes. Intenta de nuevo más tarde.'
+      )
+      console.error(e)
+    }
+  }
+
+  const handleDisableGarage = async (id: number) => {
+    try {
+      await api.delete(`garage/${id}`)
+      // Optimistic update
+      setGarages((prev) =>
+        prev.map((garage) =>
+          garage.id === id ? { ...garage, state: false } : garage
+        )
+      )
+    } catch (e) {
+      console.error(e)
+      alert('No se pudo deshabilitar el garaje')
+    }
   }
 
   useEffect(() => {
@@ -62,7 +86,11 @@ export function GaragesLessor() {
 
   return (
     <main>
-      <UserNavBar profilePic={user?.photo ?? null} role={user?.role} />
+      <UserNavBar
+        profilePic={user?.photo ?? null}
+        role={user?.role}
+        initial={user.name?.[0] ?? 'U'}
+      />
 
       <section className="flex justify-end px-6 py-2">
         <Link to="/lessor/garages/new" className="btn btn-primary">
@@ -71,7 +99,9 @@ export function GaragesLessor() {
       </section>
 
       <section className="flex flex-col m-6 gap-6">
-        {garages.length === 0 && (
+        {fetchError && <ErrorAlert message={fetchError} />}
+
+        {!fetchError && garages.length === 0 && (
           <section className="flex flex-col items-center gap-4 text-gray-500">
             <p className="text-center text-2xl">
               No tienes espacios de garage aún.
@@ -85,12 +115,14 @@ export function GaragesLessor() {
             key={garage.id}
             address={garage.location.address}
             price={garage.price}
+            id={garage.id}
             photo={garage.photos}
             rating={3}
             rentMode={garage.rentMode.mode_name}
             isCovered={garage.covered}
             hasCameras={garage.hasCameras}
             onEdit={() => console.log('Editar')}
+            onDisable={() => handleDisableGarage(garage.id)}
             disabled={!garage.state}
           />
         ))}

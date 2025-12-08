@@ -13,6 +13,8 @@ type GarageSpaceCardProps = {
   hasCameras: boolean
   //   Funciones se pasan como prop o la lógica se puede agregar en este mismo card?s
   onEdit: () => void
+  onDisable: () => void
+  id: number
 }
 
 export function GarageSpaceCard({
@@ -24,7 +26,9 @@ export function GarageSpaceCard({
   rentMode,
   isCovered,
   hasCameras,
-  onEdit
+  onEdit,
+  onDisable,
+  id
 }: GarageSpaceCardProps) {
   return (
     <section
@@ -68,39 +72,53 @@ export function GarageSpaceCard({
           <button
             className="btn btn-warning btn-outline"
             onClick={() => {
-              document.getElementById('modal-disable')!.showModal()
+              ;(
+                document.getElementById(
+                  `modal-disable-${id}`
+                ) as HTMLDialogElement
+              ).showModal()
             }}
           >
             {disabled ? 'Habilitar' : 'Deshabilitar'}
           </button>
-          <dialog id="modal-disable" className="modal">
+          <dialog id={`modal-disable-${id}`} className="modal">
             <div className="modal-box">
               <form method="dialog">
                 {/* if there is a button in form, it will close the modal */}
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
                 </button>
+
+                <h3 className="font-bold text-lg">Deshabilitar garaje</h3>
+                <p className="py-4">
+                  ¿Desea deshabilitar este garaje? Presione el botón debajo para
+                  confirmar
+                </p>
+                <div className="flex justify-end w-full">
+                  <button
+                    className="btn btn-warning ml-auto"
+                    onClick={onDisable}
+                  >
+                    Deshabilitar
+                  </button>
+                </div>
               </form>
-              <h3 className="font-bold text-lg">Deshabilitar garaje</h3>
-              <p className="py-4">
-                ¿Desea deshabilitar este garaje? Presione el botón debajo para
-                confirmar
-              </p>
-              <div className="flex justify-end w-full">
-                <button className="btn btn-warning ml-auto">
-                  Deshabilitar
-                </button>
-              </div>
             </div>
           </dialog>
 
           <button
             className="btn btn-error btn-outline"
-            onClick={() => document.getElementById('my_modal_3')!.showModal()}
+            onClick={() =>
+              (
+                document.getElementById(
+                  `modal-delete-${id}`
+                ) as HTMLDialogElement
+              ).showModal()
+            }
           >
             Eliminar
           </button>
-          <dialog id="my_modal_3" className="modal">
+          <dialog id={`modal-delete-${id}`} className="modal">
             <div className="modal-box">
               <form method="dialog">
                 {/* if there is a button in form, it will close the modal */}

@@ -19,17 +19,14 @@ export function DayFilterForm({ setRangeDate }: DayFilterFormProps) {
     to: null
   })
 
-  const toCustomFormat = (dateInput: string) => {
+  const toCustomFormat = (dateInput: string, isEnd = false) => {
     const d = new Date(dateInput)
 
     const dd = String(d.getDate()).padStart(2, '0')
     const mm = String(d.getMonth() + 1).padStart(2, '0')
     const yyyy = d.getFullYear()
 
-    // const hh = String(d.getHours()).padStart(2, '0')
-    // const min = String(d.getMinutes()).padStart(2, '0')
-
-    return `${yyyy}-${mm}-${dd} 00:00`
+    return `${yyyy}-${mm}-${dd} ${isEnd ? '23:59' : '00:00'}`
   }
 
   const handleSelect = (range: DateRange | undefined) => {
@@ -37,7 +34,7 @@ export function DayFilterForm({ setRangeDate }: DayFilterFormProps) {
     if (range?.from) {
       setRangeDate({
         startDate: toCustomFormat(range.from.toString()),
-        endDate: range.to ? toCustomFormat(range.to.toString()) : null
+        endDate: range.to ? toCustomFormat(range.to.toString(), true) : null
       })
     } else {
       setRangeDate({
