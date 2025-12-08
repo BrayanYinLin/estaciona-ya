@@ -1,5 +1,5 @@
-import { LessThan, MoreThan, MoreThanOrEqual, Repository } from 'typeorm'
-import { Booking } from './entities/booking.entity'
+import { In, LessThan, MoreThan, MoreThanOrEqual, Repository } from 'typeorm'
+import { Booking, BookingStatus } from './entities/booking.entity'
 import { BookingRepository } from './booking'
 
 export class BookingRepositoryImpl implements BookingRepository {
@@ -49,16 +49,18 @@ export class BookingRepositoryImpl implements BookingRepository {
     return bookings
   }
 
-  async findAllByGarageIdAndMinDate(
+  async findAllByGarageIdAndMinDateAndStatus(
     garageId: number,
-    minDate: Date
+    minDate: Date,
+    status: BookingStatus[]
   ): Promise<Booking[]> {
     return this.repository.find({
       where: {
         garage: {
           id: garageId
         },
-        startDate: MoreThanOrEqual(minDate)
+        startDate: MoreThanOrEqual(minDate),
+        status: In(status)
       }
     })
   }
@@ -74,6 +76,21 @@ export class BookingRepositoryImpl implements BookingRepository {
         startDate: LessThan(endDate),
         endDate: MoreThan(startDate)
       }
+    })
+  }
+
+  async create(booking: Partial<Booking>): Promise<void> {
+    await this.repository.save({
+      user: {
+        id: booking.user!.id
+      },
+      garage: {
+        id: booking.garage!.id
+      },
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+      status: BookingStatus.PENDING_PAYMENT,
+      total: booking.total
     })
   }
 }

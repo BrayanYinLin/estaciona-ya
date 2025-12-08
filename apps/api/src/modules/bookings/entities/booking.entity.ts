@@ -10,6 +10,14 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 
+export enum BookingStatus {
+  PENDING_PAYMENT = 'pending_payment',
+  CANCELLED = 'cancelled',
+  PAID = 'paid',
+  COMPLETED = 'completed',
+  EXPIRED = 'expired'
+}
+
 @Entity('tb_bookings')
 export class Booking {
   @PrimaryGeneratedColumn('increment', { name: 'booking_id' })
@@ -21,7 +29,7 @@ export class Booking {
 
   @ManyToOne(() => Garage, (garage) => garage.bookingRequests)
   @JoinColumn({ name: 'garage_id' })
-  garage!: Garage[]
+  garage!: Garage
 
   @Column({ type: 'datetime', name: 'start_dt' })
   startDate!: Date
@@ -31,10 +39,10 @@ export class Booking {
 
   @Column({
     type: 'enum',
-    enum: ['unpaid', 'cancelled', 'paid', 'completed', 'expired'],
-    default: 'unpaid'
+    enum: BookingStatus,
+    default: BookingStatus.PENDING_PAYMENT
   })
-  status!: 'unpaid' | 'cancelled' | 'paid' | 'completed' | 'expired'
+  status!: BookingStatus
 
   @Column({
     type: 'decimal',

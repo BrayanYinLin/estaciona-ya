@@ -50,15 +50,18 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
       where: {
         id: bookingRequestId
       },
-      relations: ['garage', 'garage.user']
+      relations: ['garage', 'garage.user', 'user']
     })
 
     return bookingRequest
   }
 
   async update(bookingRequestId: number, status: StatusPayload): Promise<void> {
-    const bookingRequest = await this.bookingRequestRepository.findOneBy({
-      id: bookingRequestId
+    const bookingRequest = await this.bookingRequestRepository.findOne({
+      where: {
+        id: bookingRequestId
+      },
+      relations: ['garage', 'user', 'garage.user']
     })
 
     if (!bookingRequest) {
