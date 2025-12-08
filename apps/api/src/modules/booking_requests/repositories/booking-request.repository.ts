@@ -104,7 +104,7 @@ export class BookingRequestRepositoryImpl implements BookingRequestRepository {
           }
         }
       },
-      relations: ['garage', 'user', 'garage.photos']
+      relations: ['garage', 'user', 'garage.photos', 'garage.rentMode']
     })
 
     return requests
