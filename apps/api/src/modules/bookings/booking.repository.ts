@@ -5,6 +5,27 @@ import { BookingRepository } from './booking'
 export class BookingRepositoryImpl implements BookingRepository {
   constructor(private readonly repository: Repository<Booking>) {}
 
+  async findAllByTenant(
+    userId: number,
+    page: number,
+    size: number
+  ): Promise<Booking[]> {
+    const skip = (page - 1) * size
+
+    const bookings = await this.repository.find({
+      where: {
+        user: {
+          id: userId
+        }
+      },
+      skip,
+      take: size,
+      relations: ['garage', 'user']
+    })
+
+    return bookings
+  }
+
   async findAllByGarageOwner(
     ownerId: number,
     page: number,
@@ -12,7 +33,7 @@ export class BookingRepositoryImpl implements BookingRepository {
   ): Promise<Booking[]> {
     const skip = (page - 1) * size
 
-    const bookings = this.repository.find({
+    const bookings = await this.repository.find({
       where: {
         garage: {
           user: {

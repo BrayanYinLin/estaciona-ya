@@ -22,4 +22,10 @@ bookingRouter.get(
   controller.findAllByGarageOwner.bind(controller)
 )
 
+bookingRouter.get(
+  '/tenant/',
+  inyectUserFromToken(),
+  controller.findAllByTenant.bind(controller)
+)
+
 export { bookingRouter }
