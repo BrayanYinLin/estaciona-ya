@@ -1,12 +1,15 @@
 import { EventEmitter } from 'node:events'
 
-export type UserTarget = {
+export type NotificationPayload = {
   id: string
   message: string
+  garage: {
+    id: string
+  }
 }
 
 type NotificationEvent = {
-  notify: UserTarget[]
+  notify: NotificationPayload[]
 }
 
 type NotificationEmitter<T> = {

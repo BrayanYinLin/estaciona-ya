@@ -3,24 +3,79 @@ import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { Repository } from 'typeorm'
 import { User } from '@users/entities/user.entity'
 import { Garage } from '@garages/entities/garage.entity'
-import { CreateBookingRequestDto } from '../schemas/create_booking_request.shcema'
-import { BookingRequestRepositoryImpl } from '../repositories/booking-request.repository'
-import { BookingRequestService } from '../booking-request'
-import { BookingRequest } from '../entities/booking-requests.entity'
+import { CreateBookingRequestDto } from '../schemas/create_booking_request.schema'
+import {
+  BookingRequestRepository,
+  BookingRequestService,
+  StatusPayload
+} from '../booking-request'
+import { BookingRequest, Status } from '../entities/booking-requests.entity'
 import { prettifyError } from 'node_modules/zod/v4/core/errors'
 import {
   ResponseBookinRequest,
   ResponseBookingRequest
 } from '@booking_requests/schemas/response.schema'
 import { notificationEmitter } from '@shared/sockets/notify_event'
+import { getDiffTime } from '@shared/utils/get_diff_time'
+import { RENT_MODES } from '@shared/constants/rent_modes'
+import { BookingRepository } from '@bookings/booking'
 
 export class BookingRequestServiceImpl implements BookingRequestService {
   constructor(
-    private bookingRequestRepository: BookingRequestRepositoryImpl,
-
+    private bookingRequestRepository: BookingRequestRepository,
     private readonly userRepository: Repository<User>,
-    private readonly garageRepository: Repository<Garage>
+    private readonly garageRepository: Repository<Garage>,
+    private readonly bookingRepository: BookingRepository
   ) {}
+
+  async update(
+    bookingRequestId: number,
+    userId: number,
+    status: StatusPayload
+  ): Promise<void> {
+    const bookingRequest =
+      await this.bookingRequestRepository.findById(bookingRequestId)
+
+    if (!bookingRequest) {
+      throw new DomainError({
+        code: 'ENTITY_NOT_FOUND',
+        message: 'Booking request not found.'
+      })
+    }
+
+    if (bookingRequest.garage.user.id !== userId) {
+      throw new DomainError({
+        code: 'FORBIDDEN_ERROR',
+        message: 'El usuario no es el propietario del estacionamiento.'
+      })
+    }
+
+    if (bookingRequest.status === 'accepted') return
+
+    if (bookingRequest.status === 'rejected') return
+
+    await this.bookingRequestRepository.update(bookingRequestId, status)
+
+    if (status === 'accepted') {
+      const updated = await this.bookingRequestRepository.updatePendingRequests(
+        bookingRequest.garage.id,
+        bookingRequest.startDate,
+        bookingRequest.endDate
+      )
+
+      notificationEmitter.emit(
+        'notify',
+        updated.map(({ user, garage }) => ({
+          id: user.id,
+          garage: {
+            id: garage.id
+          },
+          message:
+            'Tu solicitud fue rechazada por conflicto con una nueva reserva.'
+        }))
+      )
+    }
+  }
 
   async findAllByOwner(userId: number): Promise<BookingRequest[]> {
     return this.bookingRequestRepository.findAllByOwner(userId)
@@ -71,8 +126,9 @@ export class BookingRequestServiceImpl implements BookingRequestService {
 
     const garage = await this.garageRepository.findOne({
       where: { id: garageId },
-      relations: ['user']
+      relations: ['user', 'rentMode']
     })
+
     if (!garage) {
       throw new DomainError({
         code: DOMAIN_ERRORS.ENTITY_NOT_FOUND.code,
@@ -80,27 +136,50 @@ export class BookingRequestServiceImpl implements BookingRequestService {
       })
     }
 
-    const conflicts =
-      await this.bookingRequestRepository.findConlictingBookingRequests(
-        garageId,
-        new Date(startDate),
-        new Date(endDate)
-      )
+    const conflicts = await this.bookingRepository.findConlictingBooking(
+      garageId,
+      new Date(startDate),
+      new Date(endDate)
+    )
 
     if (conflicts.length > 0) {
       throw new DomainError({
-        code: DOMAIN_ERRORS.CONFLICTING_BOOKING.code,
+        code: DOMAIN_ERRORS.CONFLICT.code,
         message: 'Ya existe una reserva aceptada o pendiente en ese horario'
       })
     }
 
+    const diff = getDiffTime(new Date(startDate), new Date(endDate))
+
+    let cost = 0
+
+    if (garage.rentMode.mode_name === RENT_MODES.DIARIO) {
+      cost = diff.days * garage.price
+    } else if (garage.rentMode.mode_name === RENT_MODES.HORA) {
+      cost = diff.hours * garage.price
+    } else {
+      cost = diff.months * garage.price
+    }
+
+    const bookingRequest = {
+      garage: { id: garage.id } as Garage,
+      user: { id: user.id } as User,
+      startDate,
+      endDate,
+      cost,
+      status: 'pending' as Status
+    }
+
     const newBookingRequest =
-      await this.bookingRequestRepository.createBookingRequest(dto)
+      await this.bookingRequestRepository.createBookingRequest(bookingRequest)
 
     notificationEmitter.emit('notify', [
       {
         id: garage.user.id,
-        message: 'Tienes una solicitud pendiente'
+        message: `${user.name} ha solicitado un estacionamiento.`,
+        garage: {
+          id: garage.id
+        }
       }
     ])
 
