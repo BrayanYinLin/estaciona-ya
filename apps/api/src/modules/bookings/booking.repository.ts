@@ -1,4 +1,4 @@
-import { MoreThanOrEqual, Repository } from 'typeorm'
+import { LessThan, MoreThan, MoreThanOrEqual, Repository } from 'typeorm'
 import { Booking } from './entities/booking.entity'
 import { BookingRepository } from './booking'
 
@@ -15,6 +15,20 @@ export class BookingRepositoryImpl implements BookingRepository {
           id: garageId
         },
         startDate: MoreThanOrEqual(minDate)
+      }
+    })
+  }
+
+  async findConlictingBooking(
+    garageId: number,
+    startDate: Date,
+    endDate: Date
+  ): Promise<Booking[]> {
+    return await this.repository.find({
+      where: {
+        garage: { id: garageId },
+        startDate: LessThan(endDate),
+        endDate: MoreThan(startDate)
       }
     })
   }

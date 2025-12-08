@@ -52,10 +52,29 @@ export async function seedUserTenant() {
   if (userFound) return
 
   await userRepository.save({
-    name: 'Tenant',
+    name: 'Arrendatario',
     email: 'test2@example.com',
     password: passwordHashed,
     dni: '12345679',
+    role: role,
+    state: true,
+    photo: null,
+    validatedAccount: true
+  })
+
+  const userFoundTwo = await userRepository.findOne({
+    where: {
+      email: 'test3@example.com'
+    }
+  })
+
+  if (userFoundTwo) return
+
+  await userRepository.save({
+    name: 'Tenant',
+    email: 'test3@example.com',
+    password: passwordHashed,
+    dni: '12345600',
     role: role,
     state: true,
     photo: null,

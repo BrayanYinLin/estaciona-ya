@@ -9,23 +9,28 @@ import { Router } from 'express'
 import { injectTenant } from '@booking_requests/middleware/inject_tenant.middleware'
 import { logPostBody } from '@shared/utils/log_body.utils'
 import { inyectUserFromToken } from '@shared/middlewares/inyect-user-from-token.middleware'
+import { BookingRepositoryImpl } from '@bookings/booking.repository'
+import { Booking } from '@bookings/entities/booking.entity'
 
 const userRepo = AppDataSource.getRepository(User)
 const garageRepo = AppDataSource.getRepository(Garage)
 const bookingRequestTypeOrmRepo = AppDataSource.getRepository(BookingRequest)
 
-const customBookingRepo = new BookingRequestRepositoryImpl(
+const bookingRequestRepo = new BookingRequestRepositoryImpl(
   bookingRequestTypeOrmRepo
 )
-const bookingService = new BookingRequestServiceImpl(
-  customBookingRepo,
-  userRepo,
-  garageRepo
+const bookingRepo = new BookingRepositoryImpl(
+  AppDataSource.getRepository(Booking)
 )
 
-export const bookingRequestController = new BookingRequestControllerImpl(
-  bookingService
+const bookingService = new BookingRequestServiceImpl(
+  bookingRequestRepo,
+  userRepo,
+  garageRepo,
+  bookingRepo
 )
+
+export const controller = new BookingRequestControllerImpl(bookingService)
 
 const BookingRequestrouter = Router()
 
@@ -33,19 +38,26 @@ BookingRequestrouter.post(
   '/',
   injectTenant(),
   logPostBody(),
-  bookingRequestController.createBookingRequest.bind(bookingRequestController)
+  controller.createBookingRequest.bind(controller)
+)
+
+BookingRequestrouter.patch(
+  '/:id',
+  inyectUserFromToken(),
+  logPostBody(),
+  controller.updateStatus.bind(controller)
 )
 
 BookingRequestrouter.get(
   '/by-user',
   inyectUserFromToken(),
-  bookingRequestController.findAllByUserId.bind(bookingRequestController)
+  controller.findAllByUserId.bind(controller)
 )
 
 BookingRequestrouter.get(
   '/owner',
   inyectUserFromToken(),
-  bookingRequestController.findAllByOwner.bind(bookingRequestController)
+  controller.findAllByOwner.bind(controller)
 )
 
 export default BookingRequestrouter

@@ -113,7 +113,7 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
   return (
     <>
       <nav className="hidden md:block flex-none">
-        <ul className="menu menu-horizontal px-1 gap-2">
+        <ul className="menu menu-horizontal px-1 gap-2 items-center">
           <li>
             <Link to="/tenant/requests" className="px-4">
               Solicitudes
@@ -124,6 +124,28 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
               Ver Catálogo
             </Link>
           </li>
+          <div className="indicator hover:bg-transparent active:bg-transparent focus:bg-transparent">
+            {hasNotification && (
+              <span className="indicator-item status status-error" />
+            )}
+            <div className="dropdown dropdown-bottom dropdown-end">
+              <div tabIndex={0} role="button" className="cursor-pointer px-3">
+                <NotificationIcon color="base-300" />
+              </div>
+              <ul
+                tabIndex={-1}
+                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+              >
+                {notifications.map((notification) => (
+                  <li key={notification.message}>
+                    <Link to="/lessor/requests" className="px-4">
+                      {notification.message}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </ul>
       </nav>
       <nav className="navbar-end md:hidden">

@@ -7,6 +7,25 @@ import { Request, Response, NextFunction } from 'express'
 export class BookingRequestControllerImpl implements BookingRequestController {
   constructor(private readonly service: BookingRequestService) {}
 
+  async updateStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      const { id } = req.params
+      const { status, user } = req.body
+      const bookingRequests = await this.service.update(
+        Number(id),
+        Number(user.id),
+        status
+      )
+      return res.status(200).json(bookingRequests)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findAllByOwner(
     req: Request,
     res: Response,

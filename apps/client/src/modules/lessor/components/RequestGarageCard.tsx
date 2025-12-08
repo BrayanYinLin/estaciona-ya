@@ -1,7 +1,11 @@
+import { useRequestStore } from '@lessor/contexts/request.store'
+import { api } from '@shared/api/api'
+
 type RentalType = 'hour' | 'day' | 'month'
 type RequestStatus = 'pending' | 'approved' | 'rejected'
 
 export interface RequestGarageCardProps {
+  id: number
   name: string
   photo?: string
   rentalType: RentalType
@@ -11,11 +15,10 @@ export interface RequestGarageCardProps {
   status: RequestStatus
   description: string
   image?: string
-  onAccept?: () => void
-  onReject?: () => void
 }
 
 export function RequestGarageCard({
+  id,
   name,
   photo,
   rentalType,
@@ -24,10 +27,10 @@ export function RequestGarageCard({
   totalPrice,
   status,
   description,
-  image,
-  onAccept,
-  onReject
+  image
 }: RequestGarageCardProps) {
+  const { getRequests } = useRequestStore()
+
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat('es-PE', {
       style: 'currency',
@@ -115,6 +118,22 @@ export function RequestGarageCard({
         {labels[status]}
       </div>
     )
+  }
+
+  const onAccept = async () => {
+    console.log(id)
+    await api.patch(`/booking-requests/${id}`, {
+      status: 'accepted'
+    })
+    await getRequests()
+  }
+
+  const onReject = async () => {
+    console.log(id)
+    await api.patch(`/booking-requests/${id}`, {
+      status: 'rejected'
+    })
+    await getRequests()
   }
 
   return (
