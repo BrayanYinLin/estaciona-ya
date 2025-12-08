@@ -32,6 +32,7 @@ export function PhotosGarages() {
         multiple
         className="file-input"
         onChange={handleUpload}
+        required
       />
       <div className="flex h-64 items-center justify-center rounded border border-base-content/40 bg-base-200/40 text-center">
         <div className="carousel w-full">

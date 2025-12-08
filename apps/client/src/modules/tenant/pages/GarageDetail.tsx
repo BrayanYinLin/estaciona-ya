@@ -16,6 +16,7 @@ import 'react-day-picker/style.css'
 import { useGarageReservation } from '@tenant/hooks/useGarageReservation'
 import { GarageRatingDetail } from '@tenant/components/GarageRatingDetail'
 import { RentalSummary } from '@tenant/components/RentalSummary'
+import { ErrorAlert } from '@shared/components/ErrorAlert'
 
 export function GarageDetail() {
   const { id } = useParams()
@@ -23,14 +24,19 @@ export function GarageDetail() {
   const modalRef = useRef<HTMLDialogElement>(null)
   const navigate = useNavigate()
 
-  const { garage, getGarageDetail } = useGarageDetail(Number(id))
+  const {
+    garage,
+    getGarageDetail,
+    error: detailError
+  } = useGarageDetail(Number(id))
   const {
     rangeDate,
     setRangeDate,
     rentMode,
     quantity,
     totalCost,
-    handleRequest
+    handleRequest,
+    requestError
   } = useGarageReservation(garage, Number(id))
 
   useEffect(() => {
@@ -58,6 +64,7 @@ export function GarageDetail() {
         initial={user.name![0]}
       />
       <section className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 lg:gap-10 lg:py-10">
+        {detailError && <ErrorAlert message={detailError} />}
         <GarageDetailHeader
           address={garage?.location.address}
           owner={garage?.user.name}
@@ -104,7 +111,7 @@ export function GarageDetail() {
             ) : (
               <img
                 src={`https://placehold.co/400x400/00bafe/FFF?text=${
-                  !garage?.location && !error
+                  !garage?.location && !detailError
                     ? 'Ingresa+tu+dirección'
                     : 'Dirección+no+encontrada'
                 }`}
@@ -177,7 +184,7 @@ export function GarageDetail() {
                   type="button"
                   className="btn btn-primary max-w-sm"
                   onClick={() => {
-                    document.getElementById('my_modal_1')!.showModal()
+                    modalRef.current?.showModal()
                   }}
                 >
                   Solicitar ahora
@@ -185,6 +192,11 @@ export function GarageDetail() {
                 <dialog ref={modalRef} className="modal" id="my_modal_1">
                   <div className="modal-box">
                     <h3 className="font-bold text-lg">Confirmar solicitud</h3>
+                    {requestError && (
+                      <div className="my-2">
+                        <ErrorAlert message={requestError} />
+                      </div>
+                    )}
                     <div className="modal-action">
                       <form method="dialog" className="flex gap-3">
                         <button className="btn">Close</button>
