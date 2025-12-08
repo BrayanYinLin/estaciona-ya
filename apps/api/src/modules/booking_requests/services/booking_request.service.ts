@@ -75,6 +75,8 @@ export class BookingRequestServiceImpl implements BookingRequestService {
         }))
       )
 
+      console.log('[Service] ', bookingRequest)
+
       await this.bookingRepository.create({
         user: {
           id: bookingRequest.user.id

@@ -10,7 +10,8 @@ export class BookingControllerImpl implements BookingController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const { user, page, size } = req.body
+      const { page, size } = req.query
+      const { user } = req.body
       const bookings = await this.service.findAllByTenant(
         Number(user.id),
         Number(page),
@@ -29,7 +30,8 @@ export class BookingControllerImpl implements BookingController {
     next: NextFunction
   ): Promise<Response | void> {
     try {
-      const { user, page, size } = req.body
+      const { page, size } = req.query
+      const { user } = req.body
       const bookings = await this.service.findAllByGarageOwner(
         Number(user.id),
         Number(page),

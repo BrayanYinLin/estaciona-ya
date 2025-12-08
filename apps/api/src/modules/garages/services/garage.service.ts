@@ -1,5 +1,6 @@
 import { BookingRequestRepository } from '@booking_requests/booking-request'
 import { BookingRepository } from '@bookings/booking'
+import { BookingStatus } from '@bookings/entities/booking.entity'
 import {
   Filters,
   GaragePhotoRepository,
@@ -16,7 +17,10 @@ import {
 import { LocationRepository } from '@locations/location'
 import { ENDPOINTS } from '@shared/constants/endpoints'
 import { FileStorageService } from '@shared/services/file-storage'
-import { notificationEmitter, NotificationPayload } from '@shared/sockets/notify_event'
+import {
+  notificationEmitter,
+  NotificationPayload
+} from '@shared/sockets/notify_event'
 import { DomainError } from '@shared/utils/error'
 import { randomUUID } from 'node:crypto'
 import { prettifyError } from 'zod'
@@ -190,10 +194,17 @@ export class GarageServiceImpl implements GarageService {
       })
     }
 
-    const bookings = await this.bookingRepository.findAllByGarageIdAndMinDate(
-      garageId,
-      new Date(Date.now())
-    )
+    const bookings =
+      await this.bookingRepository.findAllByGarageIdAndMinDateAndStatus(
+        garageId,
+        new Date(Date.now()),
+        [
+          BookingStatus.COMPLETED,
+          BookingStatus.PENDING_PAYMENT,
+          BookingStatus.PAID,
+          BookingStatus.COMPLETED
+        ]
+      )
 
     if (bookings.length > 0) {
       throw new DomainError({
@@ -211,6 +222,9 @@ export class GarageServiceImpl implements GarageService {
 
     const reasonMapped: NotificationPayload[] = updated.map((request) => ({
       id: String(request.user.id),
+      garage: {
+        id: String(request.garage.id)
+      },
       message:
         'Solicitud rechazada. El arrendador ha deshabilitado su estacionamiento.'
     }))

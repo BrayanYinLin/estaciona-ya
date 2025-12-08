@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
-import { Booking } from './entities/booking.entity'
+import { Booking, BookingStatus } from './entities/booking.entity'
 
 export interface BookingRepository {
-  findAllByGarageIdAndMinDate(
+  findAllByGarageIdAndMinDateAndStatus(
     garageId: number,
-    minDate: Date
+    minDate: Date,
+    status: BookingStatus[]
   ): Promise<Booking[]>
   findConlictingBooking(
     garageId: number,
