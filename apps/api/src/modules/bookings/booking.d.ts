@@ -16,6 +16,11 @@ export interface BookingRepository {
     page: number,
     size: number
   ): Promise<Booking[]>
+  findAllByTenant(
+    userId: number,
+    page: number,
+    size: number
+  ): Promise<Booking[]>
 }
 
 export interface BookingService {
@@ -24,10 +29,20 @@ export interface BookingService {
     page: number,
     size: number
   ): Promise<Booking[]>
+  findAllByTenant(
+    userId: number,
+    page: number,
+    size: number
+  ): Promise<Booking[]>
 }
 
 export interface BookingController {
   findAllByGarageOwner(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void>
+  findAllByTenant(
     req: Request,
     res: Response,
     next: NextFunction

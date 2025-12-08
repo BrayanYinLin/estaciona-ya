@@ -4,6 +4,14 @@ import { Booking } from './entities/booking.entity'
 export class BookingServiceImpl implements BookingService {
   constructor(private readonly repository: BookingRepository) {}
 
+  async findAllByTenant(
+    userId: number,
+    page: number,
+    size: number
+  ): Promise<Booking[]> {
+    return await this.repository.findAllByTenant(userId, page, size)
+  }
+
   async findAllByGarageOwner(
     ownerId: number,
     page: number,
