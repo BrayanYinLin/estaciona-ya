@@ -23,6 +23,7 @@ dist-ssr/
 .env.development
 .env.test.local
 .env.production
+*.pem
 
 # ===============================
 # Logs

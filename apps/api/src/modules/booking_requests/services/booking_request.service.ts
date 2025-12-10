@@ -10,7 +10,7 @@ import {
   StatusPayload
 } from '../booking-request'
 import { BookingRequest, Status } from '../entities/booking-requests.entity'
-import { prettifyError } from 'node_modules/zod/v4/core/errors'
+import { prettifyError } from 'zod'
 import {
   ResponseBookinRequest,
   ResponseBookingRequest

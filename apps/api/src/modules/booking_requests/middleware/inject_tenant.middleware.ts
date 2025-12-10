@@ -2,7 +2,7 @@ import { AuthorizationUtils } from '@shared/utils/authorization.utils'
 import { NextFunction, Request, Response } from 'express'
 
 export const injectTenant = () => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _: Response, next: NextFunction) => {
     try {
       const authorization = req.headers.authorization
 
