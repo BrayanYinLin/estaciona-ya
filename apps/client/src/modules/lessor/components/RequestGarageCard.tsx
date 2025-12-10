@@ -1,14 +1,13 @@
 import { useRequestStore } from '@lessor/contexts/request.store'
 import { api } from '@shared/api/api'
 
-type RentalType = 'hour' | 'day' | 'month'
 type RequestStatus = 'pending' | 'approved' | 'rejected'
 
 export interface RequestGarageCardProps {
   id: number
   name: string
   photo?: string
-  rentalType: RentalType
+  rentalType: string
   startDate: Date
   endDate: Date
   totalPrice: number
@@ -58,27 +57,40 @@ export function RequestGarageCard({
 
     let dateContent
 
-    if (rentalType === 'hour') {
+    if (rentalType === 'Hora') {
       dateContent = (
         <>
+          <span className="text-xs font-bold text-primary uppercase mb-1 block">
+            Estadía por hora
+          </span>
           <span className="font-bold text-base-content block">{start}</span>
           <span className="text-xs text-base-content/70 block">
             {startTime} - {endTime}
           </span>
         </>
       )
-    } else if (rentalType === 'day') {
+    } else if (rentalType === 'Dia') {
       const isSameDay = start === end
       dateContent = (
-        <span className="font-bold text-base-content block">
-          {isSameDay ? start : `${start} - ${end}`}
-        </span>
+        <>
+          <span className="text-xs font-bold text-primary uppercase mb-1 block">
+            Estadía completa
+          </span>
+          <span className="font-bold text-base-content block">
+            {isSameDay ? start : `${start} - ${end}`}
+          </span>
+        </>
       )
     } else {
       dateContent = (
-        <span className="font-bold text-base-content block">
-          {start} - {end}
-        </span>
+        <>
+          <span className="text-xs font-bold text-primary uppercase mb-1 block">
+            Estadía por mes
+          </span>
+          <span className="font-bold text-base-content block">
+            {start} - {end}
+          </span>
+        </>
       )
     }
 
@@ -93,15 +105,17 @@ export function RequestGarageCard({
     )
   }
   const getStatusBadge = () => {
-    const styles = {
+    const styles: Record<string, string> = {
       pending: 'badge-warning',
       approved: 'badge-success text-white',
+      accepted: 'badge-success text-white',
       rejected: 'badge-error text-white'
     }
 
-    const labels = {
+    const labels: Record<string, string> = {
       pending: 'Pendiente',
       approved: 'Aceptado',
+      accepted: 'Aceptado',
       rejected: 'Rechazado'
     }
 

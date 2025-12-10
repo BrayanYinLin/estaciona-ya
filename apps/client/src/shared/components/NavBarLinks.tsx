@@ -120,6 +120,11 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
             </Link>
           </li>
           <li>
+            <Link to="/tenant/bookings" className="px-4">
+              Reservas
+            </Link>
+          </li>
+          <li>
             <Link to="/tenant/catalog" className="px-4">
               Ver Catálogo
             </Link>
@@ -160,6 +165,11 @@ export function NavBarLinks({ role }: NavbarLinksProps) {
             <li>
               <Link to="/tenant/requests" className="px-4">
                 Solicitudes
+              </Link>
+            </li>
+            <li>
+              <Link to="/tenant/bookings" className="px-4">
+                Reservas
               </Link>
             </li>
             <li>

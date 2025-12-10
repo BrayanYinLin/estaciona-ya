@@ -12,6 +12,10 @@ export interface Request {
     id: number
     price: number
     description: string
+    rentMode: {
+      id: number
+      mode_name: string
+    }
     photos: {
       id: number
       url: string

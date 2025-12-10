@@ -12,6 +12,8 @@ export function RequestsLessor() {
   const navigate = useNavigate()
   const socket = useSocket()
 
+  console.log(requests)
+
   useEffect(() => {
     recoverUser()
     getRequests()
@@ -46,7 +48,7 @@ export function RequestsLessor() {
             <RequestGarageCard
               id={id}
               name={user.name}
-              rentalType="day"
+              rentalType={garage.rentMode.mode_name}
               startDate={new Date(startDate)}
               endDate={new Date(endDate)}
               totalPrice={cost}

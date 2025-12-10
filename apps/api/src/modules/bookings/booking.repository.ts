@@ -50,7 +50,7 @@ export class BookingRepositoryImpl implements BookingRepository {
       },
       skip,
       take: size,
-      relations: ['garage', 'user']
+      relations: ['garage', 'user', 'garage.photos', 'garage.location']
     })
 
     return bookings
@@ -73,7 +73,7 @@ export class BookingRepositoryImpl implements BookingRepository {
       },
       skip,
       take: size,
-      relations: ['user', 'garage']
+      relations: ['user', 'garage', 'garage.photos']
     })
 
     return bookings
