@@ -21,7 +21,7 @@ export async function seedGarage(
       const savedGarage = await repository.save({
         hasCameras: Boolean(fakerES.number.int({ min: 0, max: 1 })),
         covered: Boolean(fakerES.number.int({ min: 0, max: 1 })),
-        price: faker.number.float({ max: 999 }),
+        price: faker.number.float({ min: 1, max: 10 }),
         description: fakerES.commerce.productDescription(),
         restrictions: fakerES.commerce.productDescription(),
         rentMode: modes[faker.number.int({ min: 0, max: modes.length - 1 })],

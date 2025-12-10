@@ -37,17 +37,17 @@ export function TenantRequestCard({ request }: TenantRequestCardProps) {
           <div className="flex justify-between">
             <p>
               Desde{' '}
-              <div className="badge badge-accent text-white font-semibold">
+              <span className="badge badge-accent text-white font-semibold">
                 {new Date(request.startDate).toLocaleDateString()}
-              </div>{' '}
+              </span>{' '}
               hasta{' '}
-              <div className="badge badge-accent text-white font-semibold">
+              <span className="badge badge-accent text-white font-semibold">
                 {new Date(request.endDate).toLocaleDateString()}
-              </div>
+              </span>
             </p>
 
             {request.status === 'pending' && (
-              <div className="badge badge-soft badge-warning">Pendiente</div>
+              <span className="badge badge-soft badge-warning">Pendiente</span>
             )}
           </div>
         </section>
