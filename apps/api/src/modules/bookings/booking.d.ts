@@ -23,6 +23,7 @@ export interface BookingRepository {
     size: number
   ): Promise<Booking[]>
   create(booking: Partial<Booking>): Promise<void>
+  updateStatus(bookingId: number, status: BookingStatus): Promise<void>
 }
 
 export interface BookingService {

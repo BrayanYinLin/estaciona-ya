@@ -1,9 +1,28 @@
 import { In, LessThan, MoreThan, MoreThanOrEqual, Repository } from 'typeorm'
 import { Booking, BookingStatus } from './entities/booking.entity'
 import { BookingRepository } from './booking'
+import { DomainError } from '@shared/utils/error'
 
 export class BookingRepositoryImpl implements BookingRepository {
   constructor(private readonly repository: Repository<Booking>) {}
+
+  async updateStatus(bookingId: number, status: BookingStatus): Promise<void> {
+    const booking = await this.repository.findOne({
+      where: {
+        id: bookingId
+      }
+    })
+
+    if (!booking) {
+      throw new DomainError({
+        code: 'ENTITY_NOT_FOUND',
+        message: 'Booking not found.'
+      })
+    }
+
+    booking.status = status
+    await this.repository.save(booking)
+  }
 
   async findAllByTenant(
     userId: number,
