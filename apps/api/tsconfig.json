@@ -38,6 +38,7 @@
       "@bookings/*": ["./src/modules/bookings/*"],
       "@locations/*": ["./src/modules/locations/*"],
       "@garages/*": ["./src/modules/garages/*"],
+      "@payments/*": ["./src/modules/payments/*"],
       "@booking_requests/*": ["./src/modules/booking_requests/*"],
       "@reviews/*": ["./src/modules/reviews/*"],
       "@shared/*": ["./src/shared/*"],

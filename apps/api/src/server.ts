@@ -21,6 +21,7 @@ import { createServer } from 'node:http'
 import { Server } from 'socket.io'
 import { socketManager } from '@shared/sockets/manager'
 import { bookingRouter } from '@bookings/booking.router'
+import { paymentRouter } from '@payments/payment.router'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -45,6 +46,7 @@ app.use(ENDPOINTS.RENT_MODE, rentModeRouter)
 app.use(ENDPOINTS.GARAGES, garageRouter)
 app.use(ENDPOINTS.BOOKING_REQUESTS, BookingRequestrouter)
 app.use(ENDPOINTS.BOOKING, bookingRouter)
+app.use(ENDPOINTS.PAYMENT, paymentRouter)
 
 app.use(errorMiddleware)
 

@@ -22,6 +22,7 @@ export interface BookingRepository {
     page: number,
     size: number
   ): Promise<Booking[]>
+  findById(bookingId: number): Promsie<Booking | null>
   create(booking: Partial<Booking>): Promise<void>
   updateStatus(bookingId: number, status: BookingStatus): Promise<void>
 }

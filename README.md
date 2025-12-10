@@ -48,6 +48,9 @@ PASSWORD_DB=<tu password de la db (en caso tengas)>
 
 # Password para firmar los JWT
 JWT_SECRET=jEqanospuqasw17ustaw5trawrest8z27wad
+
+# Mercado Pago Token
+PAYMENT_API_TOKEN
 ```
 
 ## Contribuciones

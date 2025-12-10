@@ -5,6 +5,21 @@ info:
   description: API for the Estaciona-YA application
 servers:
   - url: http://localhost:3000
+tags:
+  - name: Auth
+    description: Operaciones de autenticación
+  - name: User
+    description: Operaciones de usuario
+  - name: Location
+    description: Operaciones de ubicación
+  - name: Garage
+    description: Operaciones de garage
+  - name: Booking Requests
+    description: Operaciones de solicitudes de reserva
+  - name: Bookings
+    description: Operaciones de reserva
+  - name: Payment
+    description: Operaciones de pago
 paths:
   /api/auth/tenant:
     post:
@@ -589,6 +604,33 @@ paths:
                   $ref: '#/components/schemas/BookingResponse'
         '401':
           description: Unauthorized
+  /api/payment/{id}:
+    post:
+      summary: Crea una preferencia de pago para una reserva
+      tags:
+        - Payment
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la reserva
+      responses:
+        '201':
+          description: Preferencia de pago creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Reserva no encontrada
 components:
   securitySchemes:
     cookieAuth:
@@ -601,6 +643,15 @@ components:
       bearerFormat: JWT
 
   schemas:
+    PaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID de la preferencia de pago
+        initPoint:
+          type: string
+          description: URL de pago
     BookingResponse:
       type: object
       properties:
