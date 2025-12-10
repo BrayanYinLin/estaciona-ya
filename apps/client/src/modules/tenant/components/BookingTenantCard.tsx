@@ -1,3 +1,4 @@
+import { useState } from 'react'
 interface BookingTenantCardProps {
   id: number
   garageImage?: string
@@ -9,7 +10,7 @@ interface BookingTenantCardProps {
   endDate: string
   totalPrice: number
   status: string
-  onPay: () => void
+  onPay: () => Promise<void>
 }
 
 export function BookingTenantCard({
@@ -25,6 +26,7 @@ export function BookingTenantCard({
   status,
   onPay
 }: BookingTenantCardProps) {
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat('es-PE', {
       style: 'currency',
@@ -138,12 +140,68 @@ export function BookingTenantCard({
               </div>
 
               {status === 'pending_payment' && (
-                <button
-                  className="btn btn-primary w-full md:w-auto"
-                  onClick={onPay}
-                >
-                  Pagar
-                </button>
+                <>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                      (
+                        document.getElementById(
+                          `modal-pay-${id}`
+                        ) as HTMLDialogElement
+                      ).showModal()
+                    }
+                  >
+                    Pagar
+                  </button>
+                  <dialog id={`modal-pay-${id}`} className="modal">
+                    <div className="modal-box">
+                      <form method="dialog">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
+                      <h3 className="font-bold text-lg">Pagar</h3>
+                      <p className="py-4">
+                        ¿Desea pagar esta reserva? Presione el botón debajo para
+                        confirmar
+                      </p>
+
+                      <div className="form-control mb-4">
+                        <label className="label cursor-pointer justify-start gap-4">
+                          <input
+                            type="checkbox"
+                            className="checkbox"
+                            checked={acceptedTerms}
+                            onChange={(e) => setAcceptedTerms(e.target.checked)}
+                          />
+                          <span className="label-text">
+                            Acepto los{' '}
+                            <a
+                              href="/terms"
+                              target="_blank"
+                              className="link link-primary"
+                            >
+                              términos y condiciones
+                            </a>
+                          </span>
+                        </label>
+                      </div>
+
+                      <div className="flex justify-end w-full">
+                        <button
+                          className="btn btn-primary ml-auto"
+                          onClick={() => {
+                            if (acceptedTerms) onPay()
+                          }}
+                          disabled={!acceptedTerms}
+                        >
+                          Pagar
+                        </button>
+                      </div>
+                    </div>
+                  </dialog>
+                </>
               )}
             </div>
           </div>

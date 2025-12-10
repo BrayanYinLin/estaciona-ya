@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { Landing } from '../modules/landing/pages/Landing'
 import ErrorPage from './pages/ErrorPage'
+import TermsAndConditions from './pages/TermsAndConditions'
 import { Register } from '../modules/auth/pages/Register'
 import { LogIn } from '../modules/auth/pages/LogIn'
 import { RequestsLessor } from '@lessor/pages/RequestsLessor'
@@ -34,7 +35,8 @@ export const FRONTEND_ROUTES = {
 
   LESSOR_BOOKINGS: 'bookings',
 
-  USER_PROFILE: 'profile'
+  USER_PROFILE: 'profile',
+  TERMS: 'terms'
 } as const
 
 export const routes = createBrowserRouter([
@@ -103,6 +105,10 @@ export const routes = createBrowserRouter([
       {
         path: FRONTEND_ROUTES.USER_PROFILE,
         element: <UserProfile />
+      },
+      {
+        path: FRONTEND_ROUTES.TERMS,
+        element: <TermsAndConditions />
       }
     ]
   }

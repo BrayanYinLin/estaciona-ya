@@ -1,3 +1,4 @@
+import { createPreference } from '@modules/payment/utils/Ticket'
 import { api } from '@shared/api/api'
 import { ErrorAlert } from '@shared/components/ErrorAlert'
 import { GhostIcon } from '@shared/components/GhostIcon'
@@ -56,15 +57,11 @@ export function BookingsTenant() {
         `/booking/tenant?page=${page}&size=10`
       )
       setBookings(res.data ?? [])
+      console.log(res.data)
     } catch (e) {
       setFetchError('No se pudieron cargar tus reservas.')
       console.error(e)
     }
-  }
-
-  const handlePay = (bookingId: number) => {
-    console.log(`Pagar reserva ${bookingId}`)
-    // Implement payment logic here
   }
 
   useEffect(() => {
@@ -122,7 +119,9 @@ export function BookingsTenant() {
             endDate={booking.endDate}
             totalPrice={Number(booking.total)}
             status={booking.status}
-            onPay={() => handlePay(booking.id)}
+            onPay={async () => {
+              await createPreference(booking.id)
+            }}
           />
         ))}
 

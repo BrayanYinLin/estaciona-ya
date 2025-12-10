@@ -15,6 +15,7 @@ export function Register() {
   const [showPassword, setShowPassword] = useState(false)
   const inputType = showPassword ? 'text' : 'password'
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -115,8 +116,27 @@ export function Register() {
             defaultValue="Escoge tu rol"
             options={ROLES}
           />
+          <label className="flex items-center gap-2 text-sm text-base-content/80 mt-4">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-sm"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
+            <span>
+              Acepto los{' '}
+              <a href="/terms" target="_blank" className="link link-primary">
+                términos y condiciones
+              </a>
+            </span>
+          </label>
+
           {errorMessage && <ErrorAlert message={errorMessage} />}
-          <button type="submit" className="btn btn-info">
+          <button
+            type="submit"
+            className="btn btn-info"
+            disabled={!acceptedTerms}
+          >
             Registrar
           </button>
         </form>
