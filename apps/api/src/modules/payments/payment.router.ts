@@ -15,7 +15,11 @@ const paymentService = new PaymentServiceImpl(bookingRepository)
 const controller = new PaymentControllerImpl(paymentService)
 const paymentRouter = Router()
 
-paymentRouter.post('/', logPostBody(), controller.makePayment.bind(controller))
+paymentRouter.post(
+  '/:id',
+  logPostBody(),
+  controller.makePayment.bind(controller)
+)
 paymentRouter.post(
   '/webhook',
   softCheckSchema(PaymentCreatedSchema),
