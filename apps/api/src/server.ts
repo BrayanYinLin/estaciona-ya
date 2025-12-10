@@ -22,6 +22,7 @@ import { Server } from 'socket.io'
 import { socketManager } from '@shared/sockets/manager'
 import { bookingRouter } from '@bookings/booking.router'
 import { paymentRouter } from '@payments/payment.router'
+import cors from 'cors'
 
 const app = express()
 const uploadDir = join(process.cwd(), FILES_ROUTE)
@@ -32,6 +33,7 @@ const io = new Server(server, { cors: { origin: '*' } })
 socketManager(io)
 
 app.use(express.json())
+app.use(cors({ origin: '*' }))
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(helmet())

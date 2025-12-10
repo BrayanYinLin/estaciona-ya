@@ -50,7 +50,13 @@ PASSWORD_DB=<tu password de la db (en caso tengas)>
 JWT_SECRET=jEqanospuqasw17ustaw5trawrest8z27wad
 
 # Mercado Pago Token
-PAYMENT_API_TOKEN
+PAYMENT_API_TOKEN=<el token>
+
+# URL de api desplegada
+API_BASE_URL=<url>
+
+# URL del cliente web
+WEB_CLIENT=<url>
 ```
 
 ## Contribuciones

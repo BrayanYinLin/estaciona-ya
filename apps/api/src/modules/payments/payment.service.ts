@@ -3,12 +3,26 @@ import { PaymentPayload, PaymentResponse, PaymentService } from './payment'
 import { DomainError } from '@shared/utils/error'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { PaymentClient } from '@shared/config/payment_platform.config'
-import { Preference } from 'mercadopago'
+import { Preference, Payment } from 'mercadopago'
 import { Items } from 'mercadopago/dist/clients/commonTypes'
-import { Booking } from '@bookings/entities/booking.entity'
+import { Booking, BookingStatus } from '@bookings/entities/booking.entity'
+import { env_api_base_url, env_web_client } from '@shared/config/env.config'
+import { PaymentCreatedDto } from './schemas/payment_created.schema'
 
 export class PaymentServiceImpl implements PaymentService {
   constructor(private readonly bookingRepository: BookingRepository) {}
+
+  async verifyPayment(payload: PaymentCreatedDto): Promise<void> {
+    const payment = new Payment(PaymentClient)
+
+    const paymentDone = await payment.get({ id: payload.data.id })
+    if (paymentDone.status === 'approved') {
+      await this.bookingRepository.updateStatus(
+        Number(paymentDone.external_reference),
+        BookingStatus.PAID
+      )
+    }
+  }
 
   async makePayment({ bookingId }: PaymentPayload): Promise<PaymentResponse> {
     const bookingFound = (await this.bookingRepository.findById(
@@ -36,11 +50,13 @@ export class PaymentServiceImpl implements PaymentService {
           } as Items
         ],
         back_urls: {
-          success: 'https://www.google.com',
-          failure: 'https://www.youtube.com',
-          pending: 'https://www.wikipedia.org'
+          success: env_web_client.concat('/payment?state=success'),
+          failure: env_web_client.concat('/payment?state=failure'),
+          pending: env_web_client.concat('payment?state=info')
         },
-        auto_return: 'approved'
+        auto_return: 'approved',
+        notification_url: env_api_base_url.concat('/api/payment/webhook'),
+        external_reference: String(bookingFound.id)
       }
     })
 
