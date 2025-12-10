@@ -38,6 +38,8 @@ export class PaymentServiceImpl implements PaymentService {
 
     const preference = new Preference(PaymentClient)
 
+    console.log(bookingFound)
+
     const paymentInfo = await preference.create({
       body: {
         // 1. ITEMS
@@ -45,7 +47,7 @@ export class PaymentServiceImpl implements PaymentService {
           {
             title: bookingFound.garage.location.address,
             quantity: 1,
-            unit_price: bookingFound.total,
+            unit_price: Number(bookingFound.total),
             currency_id: 'PEN'
           } as Items
         ],

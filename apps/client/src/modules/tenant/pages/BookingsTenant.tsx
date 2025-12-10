@@ -119,8 +119,8 @@ export function BookingsTenant() {
             endDate={booking.endDate}
             totalPrice={Number(booking.total)}
             status={booking.status}
-            onPay={async () => {
-              await createPreference(booking.id)
+            onPay={() => {
+              createPreference(booking.id)
             }}
           />
         ))}
