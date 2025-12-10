@@ -10,7 +10,7 @@ interface BookingTenantCardProps {
   endDate: string
   totalPrice: number
   status: string
-  onPay: () => Promise<void>
+  onPay: () => void
 }
 
 export function BookingTenantCard({
