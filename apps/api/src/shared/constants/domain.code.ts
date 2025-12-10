@@ -1,4 +1,8 @@
 export const DOMAIN_ERRORS = {
+  WRONG_DATA: {
+    code: 'WRONG_DATA',
+    message: 'La informacion enviada no es correcta.'
+  },
   ENTITY_NOT_FOUND: {
     code: 'ENTITY_NOT_FOUND',
     message: 'La entidad solicitada no fue encontrada'

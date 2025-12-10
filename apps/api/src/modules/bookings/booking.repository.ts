@@ -6,6 +6,17 @@ import { DomainError } from '@shared/utils/error'
 export class BookingRepositoryImpl implements BookingRepository {
   constructor(private readonly repository: Repository<Booking>) {}
 
+  async findById(bookingId: number): Promise<Booking | null> {
+    const booking = await this.repository.findOne({
+      where: {
+        id: bookingId
+      },
+      relations: ['garage', 'garage.location']
+    })
+
+    return booking
+  }
+
   async updateStatus(bookingId: number, status: BookingStatus): Promise<void> {
     const booking = await this.repository.findOne({
       where: {

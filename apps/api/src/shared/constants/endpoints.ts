@@ -6,5 +6,6 @@ export const ENDPOINTS = {
   RENT_MODE: '/api/rent-mode/',
   GARAGES: '/api/garage/',
   BOOKING_REQUESTS: '/api/booking-requests',
-  BOOKING: '/api/booking'
+  BOOKING: '/api/booking',
+  PAYMENT: '/api/payment'
 } as const

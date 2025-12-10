@@ -68,6 +68,26 @@ export const mapDomainToHttp = (error: DomainError): AppError => {
         message: error.message,
         httpCode: HTTP_CODES.BAD_REQUEST
       })
+    case 'CONFLICTING_BOOKING':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.CONFLICT
+      })
+    case 'PASTED_DATE_BOOKING':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.CONFLICT
+      })
+    case 'INVALID_DATES':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.CONFLICT
+      })
+    case 'WRONG_DATA':
+      return new AppError({
+        message: error.message,
+        httpCode: HTTP_CODES.BAD_REQUEST
+      })
     default:
       return new AppError({
         message: error.message,

@@ -22,5 +22,6 @@ export const envSchema = z.object({
   USERNAME_DB: z.string(),
   PASSWORD_DB: z.string(),
   JWT_SECRET: z.string(),
-  RESEND_API: z.string()
+  RESEND_API: z.string(),
+  PAYMENT_API_TOKEN: z.string()
 })
