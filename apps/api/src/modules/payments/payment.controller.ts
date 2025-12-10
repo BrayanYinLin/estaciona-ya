@@ -6,6 +6,20 @@ import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 export class PaymentControllerImpl implements PaymentController {
   constructor(private readonly service: PaymentService) {}
 
+  async verifyPayment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    try {
+      await this.service.verifyPayment(req.body)
+
+      return res.status(200).send()
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async makePayment(
     req: Request,
     res: Response,

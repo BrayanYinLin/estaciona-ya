@@ -18,5 +18,7 @@ export const {
   PASSWORD_DB: env_password_db,
   JWT_SECRET: env_jwt,
   RESEND_API: env_resend_api,
-  PAYMENT_API_TOKEN: env_payment_api_token
+  PAYMENT_API_TOKEN: env_payment_api_token,
+  API_BASE_URL: env_api_base_url,
+  WEB_CLIENT: env_web_client
 } = env
