@@ -38,18 +38,11 @@ export class PaymentServiceImpl implements PaymentService {
 
     const preference = new Preference(PaymentClient)
 
-    console.log(
-      '[back_urls.success]',
-      env_web_client.concat('/payment?state=success')
-    )
-    console.log(
-      '[back_urls.failure]',
-      env_web_client.concat('/payment?state=failure')
-    )
-    console.log(
-      '[back_urls.pending]',
-      env_web_client.concat('payment?state=info')
-    )
+    console.log('[back_urls]', {
+      success: env_web_client.concat('/payment?state=success'),
+      failure: env_web_client.concat('/payment?state=failure'),
+      pending: env_web_client.concat('/payment?state=info')
+    })
     console.log(
       '[notification_url]',
       env_api_base_url.concat('/api/payment/webhook')
@@ -69,7 +62,7 @@ export class PaymentServiceImpl implements PaymentService {
         back_urls: {
           success: env_web_client.concat('/payment?state=success'),
           failure: env_web_client.concat('/payment?state=failure'),
-          pending: env_web_client.concat('payment?state=info')
+          pending: env_web_client.concat('/payment?state=info')
         },
         auto_return: 'approved',
         notification_url: env_api_base_url.concat('/api/payment/webhook'),
