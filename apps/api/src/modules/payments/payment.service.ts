@@ -38,8 +38,22 @@ export class PaymentServiceImpl implements PaymentService {
 
     const preference = new Preference(PaymentClient)
 
-    console.log('[back_urls]', env_web_client)
-    console.log('[notification_url]', env_api_base_url)
+    console.log(
+      '[back_urls.success]',
+      env_web_client.concat('/payment?state=success')
+    )
+    console.log(
+      '[back_urls.failure]',
+      env_web_client.concat('/payment?state=failure')
+    )
+    console.log(
+      '[back_urls.pending]',
+      env_web_client.concat('payment?state=info')
+    )
+    console.log(
+      '[notification_url]',
+      env_api_base_url.concat('/api/payment/webhook')
+    )
 
     const paymentInfo = await preference.create({
       body: {
