@@ -1,6 +1,6 @@
 import { CameraIcon } from '@shared/components/CameraIcon'
 import { CoveredIcon } from '@shared/components/CoveredIcon'
-import { RatingStars } from '@shared/components/RatingStars'
+// import { RatingStars } from '@shared/components/RatingStars'
 
 type GarageCatalogCardProps = {
   id: number
@@ -17,7 +17,7 @@ export function GarageCatalogCard({
   id,
   address: title,
   price,
-  rating,
+  // rating,
   imageUrl,
   rentMode,
   covered = false,
@@ -69,9 +69,9 @@ export function GarageCatalogCard({
         </div>
 
         <div
-          className={`flex items-center ${rating !== undefined ? 'justify-between' : 'justify-end'}`}
+          className={`flex items-center justify-end`} // ${rating !== undefined ? 'justify-between' : 'justify-end'}
         >
-          {rating !== undefined && <RatingStars rating={rating} />}
+          {/* {rating !== undefined && <RatingStars rating={rating} />} */}
 
           <div className="card-actions">
             <a

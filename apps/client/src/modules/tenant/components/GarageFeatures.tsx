@@ -1,6 +1,6 @@
 import { CameraIcon } from '@shared/components/CameraIcon'
 import { CoveredIcon } from '@shared/components/CoveredIcon'
-import { RatingStars } from '@shared/components/RatingStars'
+// import { RatingStars } from '@shared/components/RatingStars'
 
 type GarageFeaturesProps = {
   covered: boolean
@@ -10,8 +10,8 @@ type GarageFeaturesProps = {
 
 export function GarageFeatures({
   covered,
-  hasCameras,
-  rating = 0
+  hasCameras
+  // rating = 0
 }: GarageFeaturesProps) {
   return (
     <div className="flex flex-wrap items-center gap-4">
@@ -23,10 +23,10 @@ export function GarageFeatures({
         <CameraIcon marked={hasCameras} />
         <span>{hasCameras ? 'Con cámaras' : 'Sin cámaras'}</span>
       </div>
-      <div className="flex items-center gap-2 text-sm text-base-content/80">
+      {/* <div className="flex items-center gap-2 text-sm text-base-content/80">
         <RatingStars rating={rating ?? 0} />
         <span>Calificación promedio</span>
-      </div>
+      </div> */}
     </div>
   )
 }

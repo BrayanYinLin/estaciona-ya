@@ -14,7 +14,7 @@ import { useGarageDetail } from '@tenant/hooks/useGarageDetail'
 import { GarageDetailHeader } from '@tenant/components/GarageDetailHeader'
 import 'react-day-picker/style.css'
 import { useGarageReservation } from '@tenant/hooks/useGarageReservation'
-import { GarageRatingDetail } from '@tenant/components/GarageRatingDetail'
+// import { GarageRatingDetail } from '@tenant/components/GarageRatingDetail'
 import { RentalSummary } from '@tenant/components/RentalSummary'
 import { ErrorAlert } from '@shared/components/ErrorAlert'
 
@@ -83,19 +83,19 @@ export function GarageDetail() {
               <GarageFeatures
                 covered={garage?.covered ?? false}
                 hasCameras={garage?.hasCameras ?? false}
-                rating={0}
+                // rating={0}
               />
               <GarageDescription description={garage?.description ?? ''} />
               <GarageRestrictions restrictions={garage?.restrictions ?? ''} />
             </div>
-            <div className="rounded-2xl bg-base-100 p-6 shadow-lg">
+            {/* <div className="rounded-2xl bg-base-100 p-6 shadow-lg">
               <div className="flex items-center justify-between flex-wrap justify-items-start md:justify-items-center">
                 <GarageRatingDetail rating={4.5} />
                 <button className="btn btn-outline btn-primary">
                   Escribe una opinión
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
           <aside className="lg:sticky lg:top-6">
             {/* IFRAME */}

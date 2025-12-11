@@ -117,7 +117,7 @@ export function GaragesLessor() {
             price={garage.price}
             id={garage.id}
             photo={garage.photos}
-            rating={3}
+            // rating={3}
             rentMode={garage.rentMode.mode_name}
             isCovered={garage.covered}
             hasCameras={garage.hasCameras}

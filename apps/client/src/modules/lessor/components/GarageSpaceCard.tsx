@@ -1,11 +1,11 @@
 import { CameraIcon } from '@shared/components/CameraIcon'
 import { CoveredIcon } from '@shared/components/CoveredIcon'
-import { RatingStars } from '@shared/components/RatingStars'
+// import { RatingStars } from '@shared/components/RatingStars'
 
 type GarageSpaceCardProps = {
   address: string
   photo: { url: string }[]
-  rating: number
+  // rating: number
   disabled: boolean
   price: number
   rentMode: string
@@ -20,13 +20,13 @@ type GarageSpaceCardProps = {
 export function GarageSpaceCard({
   address,
   photo,
-  rating = 0,
+  // rating = 0,
   disabled = false,
   price,
   rentMode,
   isCovered,
   hasCameras,
-  onEdit,
+  // onEdit,
   onDisable,
   id
 }: GarageSpaceCardProps) {
@@ -62,12 +62,12 @@ export function GarageSpaceCard({
           <CameraIcon marked={hasCameras} />
         </div>
 
-        <RatingStars rating={rating} />
+        {/* <RatingStars rating={rating} /> */}
 
         <div className="card-actions justify-end flex-nowrap pt-2">
-          <button className="btn btn-primary" onClick={onEdit}>
+          {/* <button className="btn btn-primary" onClick={onEdit}>
             Editar
-          </button>
+          </button> */}
 
           <button
             className="btn btn-warning btn-outline"
@@ -106,7 +106,7 @@ export function GarageSpaceCard({
             </div>
           </dialog>
 
-          <button
+          {/* <button
             className="btn btn-error btn-outline"
             onClick={() =>
               (
@@ -121,7 +121,6 @@ export function GarageSpaceCard({
           <dialog id={`modal-delete-${id}`} className="modal">
             <div className="modal-box">
               <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
                 </button>
@@ -135,7 +134,7 @@ export function GarageSpaceCard({
                 <button className="btn btn-error ml-auto">Eliminar</button>
               </div>
             </div>
-          </dialog>
+          </dialog> */}
         </div>
       </div>
     </section>
