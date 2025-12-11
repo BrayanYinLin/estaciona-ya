@@ -1,4 +1,4 @@
-import type { GarageDetail } from '@/types'
+import type { GarageDetail } from '@shared/types'
 import { api } from '@shared/api/api'
 import { useState } from 'react'
 
