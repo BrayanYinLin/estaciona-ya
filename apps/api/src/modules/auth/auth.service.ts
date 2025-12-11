@@ -89,7 +89,7 @@ export class AuthServiceImpl implements AuthService {
       code: authenticationCode.code,
       subject: 'Verifica tu correo',
       email: userFound.email,
-      from: 'Acme <onboarding@resend.dev>'
+      from: 'Acme <noreply@estacionaya.online>'
     })
   }
 
