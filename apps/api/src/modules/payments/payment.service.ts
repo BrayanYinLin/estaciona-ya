@@ -3,7 +3,7 @@ import { PaymentPayload, PaymentResponse, PaymentService } from './payment'
 import { DomainError } from '@shared/utils/error'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { PaymentClient } from '@shared/config/payment_platform.config'
-import { Preference, Payment } from 'mercadopago'
+import { Payment } from 'mercadopago'
 import { Booking, BookingStatus } from '@bookings/entities/booking.entity'
 import { env_api_base_url, env_web_client } from '@shared/config/env.config'
 import { PaymentCreatedDto } from './schemas/payment_created.schema'
@@ -35,7 +35,7 @@ export class PaymentServiceImpl implements PaymentService {
       })
     }
 
-    const preference = new Preference(PaymentClient)
+    // const preference = new Preference(PaymentClient)
 
     console.log('[back_urls]', {
       success: env_web_client.concat('/payment?state=success'),
@@ -51,7 +51,6 @@ export class PaymentServiceImpl implements PaymentService {
       // 1. ITEMS
       items: [
         {
-          id: String(bookingFound.id),
           title: bookingFound.garage.location.address,
           quantity: 1,
           unit_price: Number(bookingFound.total),
@@ -69,22 +68,36 @@ export class PaymentServiceImpl implements PaymentService {
     }
 
     console.log(
-      '[Payment Body a enviar a MercadoPago]',
+      '📦 BODY MANUAL QUE VAMOS A ENVIAR:\n',
       JSON.stringify(paymentBody, null, 2)
     )
 
-    const paymentInfo = await preference.create({
-      body: paymentBody
-    })
+    const response = await fetch(
+      'https://api.mercadopago.com/checkout/preferences',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}`
+        },
+        body: JSON.stringify(paymentBody)
+      }
+    )
 
-    if (!paymentInfo.id) {
+    const data = await response.json()
+    console.log(
+      '📬 RESPUESTA DE MERCADO PAGO:\n',
+      JSON.stringify(data, null, 2)
+    )
+
+    if (!data.id) {
       throw new DomainError({
         code: DOMAIN_ERRORS.INTERNAL_ERROR.code,
         message: 'La informacion de pago no se pudo crear correctamente'
       })
     }
 
-    if (!paymentInfo.init_point) {
+    if (!data.init_point) {
       throw new DomainError({
         code: DOMAIN_ERRORS.INTERNAL_ERROR.code,
         message: 'La informacion de pago no se pudo crear correctamente'
@@ -92,8 +105,8 @@ export class PaymentServiceImpl implements PaymentService {
     }
 
     return {
-      id: paymentInfo.id,
-      initPoint: paymentInfo.init_point
+      id: data.id,
+      initPoint: data.init_point
     }
   }
 }
