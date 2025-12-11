@@ -38,7 +38,8 @@ export class PaymentServiceImpl implements PaymentService {
 
     const preference = new Preference(PaymentClient)
 
-    console.log(bookingFound)
+    console.log('[back_urls]', env_web_client)
+    console.log('[notification_url]', env_api_base_url)
 
     const paymentInfo = await preference.create({
       body: {
