@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { BookingRequestService } from '@tenant/services/request.service'
 import { useBookingRequestsStore } from '@tenant/contexts/booking_requests.store'
 import type { RangeDate } from '@tenant/types'
-import type { GarageDetail } from '@/types'
+import type { GarageDetail } from '@shared/types'
 
 export function useGarageReservation(
   garage: GarageDetail | null,

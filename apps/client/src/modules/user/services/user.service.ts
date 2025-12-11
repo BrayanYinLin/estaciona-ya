@@ -1,4 +1,4 @@
-import { type UserResponseProfile } from '@/types'
+import { type UserResponseProfile } from '@shared/types'
 import { api } from '@shared/api/api'
 import { ENDPOINTS } from '@shared/api/endpoints'
 import { AxiosError } from 'axios'
