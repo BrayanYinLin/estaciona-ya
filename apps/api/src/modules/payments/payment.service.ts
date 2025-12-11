@@ -4,7 +4,6 @@ import { DomainError } from '@shared/utils/error'
 import { DOMAIN_ERRORS } from '@shared/constants/domain.code'
 import { PaymentClient } from '@shared/config/payment_platform.config'
 import { Preference, Payment } from 'mercadopago'
-import { Items } from 'mercadopago/dist/clients/commonTypes'
 import { Booking, BookingStatus } from '@bookings/entities/booking.entity'
 import { env_api_base_url, env_web_client } from '@shared/config/env.config'
 import { PaymentCreatedDto } from './schemas/payment_created.schema'
@@ -48,26 +47,34 @@ export class PaymentServiceImpl implements PaymentService {
       env_api_base_url.concat('/api/payment/webhook')
     )
 
+    const paymentBody = {
+      // 1. ITEMS
+      items: [
+        {
+          id: String(bookingFound.id),
+          title: bookingFound.garage.location.address,
+          quantity: 1,
+          unit_price: Number(bookingFound.total),
+          currency_id: 'PEN'
+        }
+      ],
+      back_urls: {
+        success: env_web_client.concat('/payment?state=success'),
+        failure: env_web_client.concat('/payment?state=failure'),
+        pending: env_web_client.concat('/payment?state=info')
+      },
+      auto_return: 'approved',
+      notification_url: env_api_base_url.concat('/api/payment/webhook'),
+      external_reference: String(bookingFound.id)
+    }
+
+    console.log(
+      '[Payment Body a enviar a MercadoPago]',
+      JSON.stringify(paymentBody, null, 2)
+    )
+
     const paymentInfo = await preference.create({
-      body: {
-        // 1. ITEMS
-        items: [
-          {
-            title: bookingFound.garage.location.address,
-            quantity: 1,
-            unit_price: Number(bookingFound.total),
-            currency_id: 'PEN'
-          } as Items
-        ],
-        back_urls: {
-          success: env_web_client.concat('/payment?state=success'),
-          failure: env_web_client.concat('/payment?state=failure'),
-          pending: env_web_client.concat('/payment?state=info')
-        },
-        auto_return: 'approved',
-        notification_url: env_api_base_url.concat('/api/payment/webhook'),
-        external_reference: String(bookingFound.id)
-      }
+      body: paymentBody
     })
 
     if (!paymentInfo.id) {
